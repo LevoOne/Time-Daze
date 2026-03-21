@@ -1,0 +1,7 @@
+*.exe
+*.obj
+*.err
+*.map
+*.sym
+*.bak
+dosbox-x.conf
