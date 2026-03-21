@@ -1,0 +1,36 @@
+{
+    "version": "2.0.0",
+    "tasks":
+    [
+        {
+            "label": "Compilar con Watcom DOS4GW",
+            "type": "shell",
+            "command": "wcl386",
+            "args": [
+                "-l=dos4g",
+                "${fileBasenameNoExtension}.c",
+                "engine.c",
+                "judas.lib"
+                    ],
+            "group":
+            {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Ejecutar en DOSBox-X",
+            "type": "shell",
+            "dependsOn": "Compilar con Watcom",
+            "command": "dosbox-x",
+            "args":
+            [
+                "-conf", "dosbox-x.conf",
+                "-c", "mount C .",
+                "-c", "C:",
+                "-c", "${fileBasenameNoExtension}.exe"
+            ],
+            "group": "test"
+        }
+    ]
+}
