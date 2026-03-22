@@ -1,5 +1,5 @@
 /* ----------------------------------------------------------------
- * Probamos vga_fade_out() y vga_fade_in()
+ * fade.c - Probamos vga_fade_out() y vga_fade_in()
  * ---------------------------------------------------------------- */
 
 #include "engine.h"

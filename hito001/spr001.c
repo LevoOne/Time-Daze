@@ -1,7 +1,7 @@
 
 
  /* ----------------------------------------------------------------------------
- * sprite.c - Prueba de animacion con spritesheet
+ * spr001.c - Prueba de animacion con spritesheet
  *
  * Mueve un sprite de 2 frames horizontalmente
  * alternando frames cada 0.5 segundos (~35 ticks a 70 Hz)

@@ -1,7 +1,6 @@
-/*
- * main3.c - Demo basica: cargar un bitmap con efectos
- *
- */
+/* ---------------------------------------------------------------------------------------------------------------
+ * bitmap.c - Demo basica: cargar un bitmap con efectos. Adaptado de los ejemplos de David Brackeen (http://www.brackeen.com/vga/) 
+ * ---------------------------------------------------------------------------------------------------------------/
 
 #include "engine.h"
 
@@ -22,8 +21,6 @@ int main(void)
     draw_bitmap(&bmp,(SCREEN_W-bmp.width) >>1,(SCREEN_H-bmp.height) >>1);
 
     timer_wait(100);
-
-    while(1);
 
     /* dibujar el fondo */
     for(i=0;i<SCREEN_H;i++)

@@ -1,5 +1,5 @@
 /*
- * anim_test.c - Prueba de animacion con spritesheet de spr002.bmp
+ * spr002.c - Prueba de animacion con spritesheet de spr002.bmp
  *
  * Spritesheet: 5 filas x 3 columnas de frames 32x32
  *   Fila 0: estatico (3 frames)
@@ -13,7 +13,7 @@
  *   ESC : salir
  *
  * Compilar:
- *   wcl386 -l=dos4g anim_test.c engine.c judas.lib
+ *   wcl386 -l=dos4g spr002.c engine.c judas.lib
  */
 
 #include "engine.h"

@@ -1,3 +1,7 @@
+/* ---------------------------------------------------------------------------------------------------------------
+ * lineas.c - Demo basica: dibujar lineas aleatorias en pantalla. Sustituir las llamadas a _setcolor(), _moveto() y _lineto() por draw_line()
+ * --------------------------------------------------------------------------------------------------------------- */
+
 #include "engine.h"
 
 void main(void)

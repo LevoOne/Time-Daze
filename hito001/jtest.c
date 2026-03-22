@@ -1,9 +1,6 @@
-/*
- * main4.c - Demo basica: probar JUDAS
- *
- */
- /*
- * judas_test.c - Ejemplo minimo de Judas
+
+ /* ---------------------------------------------------------------------------------------------------------------
+ *  judas_test.c - Ejemplo minimo de Judas
  *
  * Prueba en orden:
  *   1. Detecta e inicializa la Sound Blaster
