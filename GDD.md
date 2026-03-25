@@ -3,7 +3,7 @@
 **Version**: 0.1  
 **Fecha**: Marzo 2026  
 **Autor**: Javier  
-**Concurso**: C:\DOS\CONTEST II - MS-DOS Club 2026 (tema: viajes en el tiempo) 
+**Concurso**: C:\DOS\CONTEST II - MS-DOS Club 2026 (tema: viajes en el tiempo)  
 **Deadline**: 30 de septiembre de 2026  
 
 ---
@@ -269,7 +269,72 @@ Dificultad: alta, introduce la cadena temporal completa
 
 ### 7.5 Puzzles de Edad Media
 
-*Pendiente de definir.*
+#### Puzzle Simple: El puente levadizo
+
+**Objetivo**: bajar el puente levadizo para acceder a la zona baja de la Edad Media.
+
+```
+1. Eric llega al foso en Edad Media
+   El puente levadizo esta subido, mecanismo exterior sin manivela
+   Justificacion: alguien levanto el puente desde el interior
+   y nunca mas se bajo
+2. Viaje a Futuro: entre las ruinas del castillo Eric encuentra
+   la manivela original, oxidada pero intacta
+3. Eric coge la manivela
+4. Viaje a Edad Media: Eric acopla la manivela al mecanismo exterior
+   Acciona la polea, el puente baja
+   Zona baja de la Edad Media desbloqueada
+```
+
+Objetos: manivela (Futuro)
+Viajes temporales: 2 (Edad Media, Futuro, Edad Media)
+Dificultad: baja-media
+
+#### Puzzle Medio: El huevo y el guardia
+
+**Objetivo**: conseguir la llave de la torre espantando al guardia que la custodia.
+
+```
+1. Eric recoge el huevo de dinosaurio en zona baja de Prehistoria
+   (pantalla 8, junto al rio, donde estaban los nidos)
+2. Viaje a Edad Media: Eric deposita el huevo cerca del guardia
+   que patrulla frente a la puerta de la torre
+3. El guardia se acerca curioso al objeto extrano
+4. El huevo eclosiona (animacion): sale un dinosaurio cachorro
+5. El guardia huye despavorido, se le cae la llave
+6. Eric recoge la llave
+7. Eric abre la puerta de la torre
+   Acceso al interior desbloqueado
+```
+
+Objetos: huevo de dinosaurio (Prehistoria), llave (Edad Media)
+Viajes temporales: 2 (Prehistoria, Edad Media)
+Dificultad: media
+
+#### Puzzle Principal: La plataforma elevadora
+
+**Objetivo**: acceder a la cuspide de la torre donde esta el fragmento 2.
+
+```
+1. Eric entra a la torre (puerta abierta con la llave)
+   Interior oscuro, murcielagos bloquean la plataforma elevadora
+2. Eric encuentra la antorcha apagada en otra pantalla de Edad Media
+3. Eric enciende la antorcha en la forja medieval
+4. Eric vuelve a la torre con la antorcha encendida
+   El humo espanta a los murcielagos
+   La plataforma elevadora queda despejada pero inactiva
+5. Viaje a Futuro: entre las ruinas del castillo Eric encuentra
+   el artilugio de levitacion magnetica
+6. Eric coge el artilugio
+7. Viaje a Edad Media: Eric acopla el artilugio a la plataforma
+   La plataforma se eleva levitando
+8. Eric sube a la cuspide de la torre
+   Recoge el fragmento 2
+```
+
+Objetos: antorcha (Edad Media), artilugio de levitacion (Futuro)
+Viajes temporales: 2 (Edad Media, Futuro, Edad Media)
+Dificultad: alta, cadena de acciones multiple
 
 ### 7.6 Puzzles de Futuro
 
