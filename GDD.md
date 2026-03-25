@@ -376,7 +376,7 @@ El objeto de guardado manual en pantalla 5 es distinto en cada epoca:
 
 ## 9. Arte grafico
 
-*Pendiente de definir con la colaboradora artistica.*
+*A definir con Noe, usaré Aseprite.*
 
 Restricciones tecnicas: 320x200 pixeles, 256 colores indexados, paleta VGA.
 
@@ -417,7 +417,7 @@ Recursos graficos para conseguirlo:
 
 ## 10. Musica y sonido
 
-*Pendiente de definir con la colaboradora musical.*
+*También con Noe.*
 
 ### Musica
 
