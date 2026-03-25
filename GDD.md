@@ -3,7 +3,7 @@
 **Version**: 0.1  
 **Fecha**: Marzo 2026  
 **Autor**: Javier  
-**Concurso**: MS-DOS Club 2026 (tema: viajes en el tiempo)  
+**Concurso**: C:\DOS\CONTEST II - MS-DOS Club 2026 (tema: viajes en el tiempo) 
 **Deadline**: 30 de septiembre de 2026  
 
 ---
