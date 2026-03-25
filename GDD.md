@@ -338,7 +338,112 @@ Dificultad: alta, cadena de acciones multiple
 
 ### 7.6 Puzzles de Futuro
 
-*Pendiente de definir.*
+#### Puzzle Simple: La zona de radiacion
+
+**Objetivo**: descontaminar la zona de radiacion que bloquea el acceso a pantallas clave del Futuro.
+
+**Nota de diseno**: el alquimista y su laboratorio son visibles desde la primera visita
+a la Edad Media. En esa primera interaccion menciona que necesita mineral volcanico.
+El jugador no sabra para que hasta que llegue al Futuro y encuentre la zona de radiacion
+(foreshadowing).
+
+```
+1. Eric llega al Futuro, zona de radiacion bloquea el acceso
+2. Viaje a Edad Media: Eric localiza al alquimista
+   El alquimista puede crear el sellante pero necesita
+   mineral volcanico (lo pide desde la primera visita) y mercurio
+   El mercurio ya esta en su laboratorio
+3. Viaje a Prehistoria: Eric recoge el mineral volcanico
+   en la zona volcanica o geologica del mapa
+4. Viaje a Edad Media: Eric entrega el mineral volcanico al alquimista
+   El alquimista crea el sellante y se lo entrega a Eric
+5. Viaje a Futuro: Eric aplica el sellante a la fuente de radiacion
+   La zona queda descontaminada
+   Acceso a pantallas clave desbloqueado
+```
+
+Objetos: mineral volcanico (Prehistoria), sellante (Edad Media)
+Viajes temporales: 4 (Futuro, Edad Media, Prehistoria, Edad Media, Futuro)
+Dificultad: media-alta
+
+#### Puzzle Medio: La puerta hermetica y los portales
+
+**Objetivo**: acceder a la zona de escombros de pantalla 6 donde esta el fragmento 3.
+
+```
+1. Eric llega a pantalla 6 en Futuro
+   Puerta hermetica con dispositivo de portales inactivo
+   El dispositivo pide un codigo de activacion en dos partes
+2. Viaje a Prehistoria: Eric examina los grabados primitivos
+   en la roca junto al circulo de piedras (pantalla 1)
+   Los simbolos se muestran en pantalla, el jugador los anota
+   Primera mitad del codigo obtenida
+3. Viaje a Edad Media: Eric examina el manuscrito del alquimista
+   Una secuencia de simbolos aparece en pantalla
+   El jugador los anota
+   Segunda mitad del codigo obtenida
+4. Viaje a Futuro: Eric introduce el codigo completo
+   en el dispositivo de portales
+   El dispositivo se activa
+   Aparecen dos portales a ambos lados de la puerta hermetica
+   (todo visible en la misma pantalla)
+5. Eric entra por el portal izquierdo
+   Aparece por el portal derecho al otro lado de la puerta
+   Acceso a la zona de escombros desbloqueado
+```
+
+Objetos: ninguno, el codigo es informacion que el jugador anota
+Viajes temporales: 3 (Futuro, Prehistoria, Edad Media, Futuro)
+Dificultad: media-alta
+Nota: primera vez en el juego que la solucion es informacion, no un objeto fisico
+
+#### Puzzle Principal: El Mecha y el fragmento 3
+
+**Objetivo**: activar el Mecha de la mina de uranio para despejar los escombros
+y recuperar el fragmento 3.
+
+```
+1. Eric recoge el cristal de cuarzo en pantalla X de Prehistoria
+2. Eric lleva el cristal a la pantalla de tormentas electricas
+   Secuencia arcade: Eric esquiva rayos con patrones fijos
+   hasta que uno impacta en el cristal
+   El cristal queda cargado, aparece contador decreciente
+   encima del sprite (aprox. 35 segundos)
+3. Viaje INMEDIATO al Futuro con el cristal cargado
+   El contador sigue decreciendo durante el fade de transicion
+4. Eric corre hasta el Mecha en pantalla 9
+   Inserta el cristal en el reactor
+   El Mecha arranca (animacion: luces, sonido de motor)
+   El contador sigue decreciendo alimentando al Mecha
+5. Eric se sube al Mecha
+   El control cambia de Eric al Mecha
+   HUD especial muestra estado del Mecha (3 impactos max)
+   y contador del cristal
+6. Pantalla 9 a 8: drones en patrones fijos atacan al Mecha
+   Maximo 3 impactos antes de destruccion del Mecha
+7. Pantalla 8 a 7: escombros caen desde arriba
+   El jugador avanza rapido calculando el timing
+8. Pantalla 7 a 6: drones Y escombros simultaneamente
+   Tramo mas dificil, maxima tension
+   Dos presiones simultaneas: drones y contador decreciente
+9. El Mecha llega a pantalla 6
+   Brazo mecanico desplaza los escombros (animacion)
+   El fragmento 3 queda visible y accesible
+10. Eric baja del Mecha
+    Camina hasta el fragmento
+    Recoge el fragmento 3
+    Guardado automatico
+    Secuencia de fin del juego
+```
+
+Objetos: cristal de cuarzo (Prehistoria)
+Viajes temporales: 1 (Prehistoria, Futuro)
+Mecanicas nuevas: contador decreciente, conduccion del Mecha,
+                  HUD especial, escombros cayendo desde arriba
+Dificultad: maxima, culminacion del juego
+
+Nota tecnica: el contador del cristal se define como constante ajustable:
+CRISTAL_CARGA_TICKS (35 * 70) -- 35 segundos a 70 Hz, ajustable en pruebas
 
 ---
 
@@ -376,7 +481,7 @@ El objeto de guardado manual en pantalla 5 es distinto en cada epoca:
 
 ## 9. Arte grafico
 
-*A definir con Noe, usaré Aseprite.*
+*Pendiente de definir con la colaboradora artistica.*
 
 Restricciones tecnicas: 320x200 pixeles, 256 colores indexados, paleta VGA.
 
@@ -417,7 +522,7 @@ Recursos graficos para conseguirlo:
 
 ## 10. Musica y sonido
 
-*También con Noe.*
+*Pendiente de definir con la colaboradora musical.*
 
 ### Musica
 
