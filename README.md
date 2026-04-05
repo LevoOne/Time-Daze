@@ -1,45 +1,44 @@
 # Tempus Fugit
 
 Juego de plataformas para MS-DOS desarrollado en C con OpenWatcom 2.0.
-Presentado a la segunda edición del concurso de programacion C:\DOS\CONTEST del MS-DOS Club.
+Mi intención es presenstarlo a la segunda edición del concurso de programación C:\DOS\CONTEST del MS-DOS Club.
 
-## Descripcion
+## Sinopsis
 
-Tempus Fugit es un juego de plataformas 2D en el que el protagonista
-viaja entre tres epocas distintas (prehistoria, edad media y futuro)
-para recuperar las piezas de un artefacto temporal. Cada epoca
-comparte el mismo mapa geografico pero en momentos distintos de la
-historia, y las acciones realizadas en una epoca tienen consecuencias
-en las demas.
+Eric pensaba que volver a su antiguo colegio para una reunion de ex-alumnos seria una tarde tranquila.
+
+Se equivocaba.
+
+Lo que empezó como una visita nostálgica se convirtio en algo mucho mas grande cuando encontró un misterioso artilugio escondido durante decadas. En el momento en que lo tocó, todo cambió. El artilugio se fragmentó en tres piezas, cada una desapareciendo en un momento distinto de la historia. Y Eric fue con ellas.
+Atrapado entre tres epocas del mismo lugar, desde la naturaleza salvaje de la prehistoria hasta las frias ruinas de un futuro post-apocalíptico, Eric debe recuperar los fragmentos y encontrar el camino de vuelta. Pero el tiempo no es tan simple como parece. Cada acción deja una huella. Cada decisión resuena a traves de los siglos. Y en algun lugar del pasado, alguien está esperando a que Eric lo descubra.
+
+Tempus Fugit es un juego de plataformas 2D para MS-DOS que combina la jugabilidad arcade clasica de 8 bits con puzzles de viajes en el tiempo inspirados en la edad de oro de las aventuras graficas de los 90. Desarrollado desde cero para correr en equipos MS-DOS originales, es una carta de amor a los juegos que definieron una generación.
+
+Algunas puertas solo se abren desde el otro lado de la historia.
 
 ## Requisitos
 
 - MS-DOS 6.22 o compatible
-- PC 486DX66 con 16MB de RAM
+- PC 486DX2 con 16MB de RAM
 - Tarjeta VGA
 - Sound Blaster (opcional)
-- DOSBox-X para emulacion
+- DOSBox-X y PCem para emulacion
 
-## Compilacion
 
-wcl386 -l=dos4g main.c engine.c judas.lib
-
-## Tecnologia
+## Tecnología
 
 - Compilador: OpenWatcom 2.0
 - Grafico: VGA modo 13h (320x200, 256 colores)
 - Sonido: Judas Sound System (Sound Blaster, XM/WAV)
 - Extensor DOS: DOS/4GW
 
-## Estructura del repositorio
+## Estructura del repositorio (pendiente)
 
-- hito01/ Motor base, subsistemas y pruebas
-- juego/  Codigo fuente del juego
 
-## Creditos
+## Créditos
 
-- Desarrollo: Javier
-- Motor grafico: basado en tutoriales de David Brackeen
+- Desarrollo: Javier (LevoOne)
+- Motor gráfico: basado en tutoriales de David Brackeen
 - Sonido: Judas Sound System por Cadaver/Yehar
-- Musica: (pendiente)
-- Efectos: (pendiente)
+- Música: Noe (@zhoe_vall)
+- Efectos: Noe (@zhoe_vall)
