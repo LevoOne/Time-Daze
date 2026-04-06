@@ -1,6 +1,6 @@
 # Tempus Fugit
 
-Juego de plataformas para MS-DOS desarrollado en C con OpenWatcom 2.0.
+Juego de plataformas para MS-DOS desarrollado en C con OpenWatcom 2.0 por H3 software.
 Mi intención es presenstarlo a la segunda edición del concurso de programación C:\DOS\CONTEST del MS-DOS Club.
 
 ## Sinopsis
