@@ -19,7 +19,8 @@
 #include "puzzles.h"
 
 
-
+/* Prototipo interno */
+static int try_load_bmp(char *file, BITMAP *b);
 
 
 /* ----------------------------------------------------------------
@@ -338,8 +339,63 @@ void screen_init(void)
     /* Inicializar screen_data */
     g_screen_data.platform_count = 0;
 
-    /* Cargar el spritesheet de Eric */
-    load_bmp("PLAYER.BMP", &g_spritesheet);
+    /* Cargar el spritesheet de Eric si existe */
+    if (!try_load_bmp("PLAYER.BMP", &g_spritesheet))
+        g_spritesheet.data = NULL;
+}
+
+/* ----------------------------------------------------------------
+ * TRY LOAD BMP
+ * Intenta cargar un BMP sin terminar el programa si no existe.
+ * Devuelve 1 si OK, 0 si el fichero no existe o es invalido.
+ * ---------------------------------------------------------------- */
+static int try_load_bmp(char *file, BITMAP *b)
+{
+    FILE *fp;
+    long  index;
+    word  num_colors;
+    int   x;
+
+    fp = fopen(file, "rb");
+    if (fp == NULL) return 0;
+
+    if (fgetc(fp) != 'B' || fgetc(fp) != 'M')
+    {
+        fclose(fp);
+        return 0;
+    }
+
+    fskip(fp, 16);
+    fread(&b->width,  sizeof(word), 1, fp);
+    fskip(fp, 2);
+    fread(&b->height, sizeof(word), 1, fp);
+    fskip(fp, 22);
+    fread(&num_colors, sizeof(word), 1, fp);
+    fskip(fp, 6);
+
+    if (num_colors == 0) num_colors = 256;
+
+    b->data = (byte *)malloc((word)(b->width * b->height));
+    if (b->data == NULL)
+    {
+        fclose(fp);
+        return 0;
+    }
+
+    for (index = 0; index < num_colors; index++)
+    {
+        b->palette[(int)(index * 3 + 2)] = fgetc(fp) >> 2;
+        b->palette[(int)(index * 3 + 1)] = fgetc(fp) >> 2;
+        b->palette[(int)(index * 3 + 0)] = fgetc(fp) >> 2;
+        x = fgetc(fp);
+    }
+
+    for (index = (b->height - 1) * b->width; index >= 0; index -= b->width)
+        for (x = 0; x < b->width; x++)
+            b->data[(word)(index + x)] = (byte)fgetc(fp);
+
+    fclose(fp);
+    return 1;
 }
 
 /* ----------------------------------------------------------------
@@ -373,18 +429,25 @@ void screen_load(int epoch, int screen)
     g_game.screen.current_epoch  = epoch;
     g_game.screen.current_screen = screen;
 
-    /* Cargar BMP de fondo bajo demanda */
+    /* Cargar BMP de fondo bajo demanda si no esta cargado */
     if (!g_bg_loaded[epoch][screen])
     {
-        /* Intentar cargar el BMP */
-        /* Si no existe usa el placeholder de color */
-        load_bmp((char *)bg_names[epoch][screen],
-                 &g_backgrounds[epoch][screen]);
-        g_bg_loaded[epoch][screen] = 1;
+        if (try_load_bmp((char *)bg_names[epoch][screen],
+                         &g_backgrounds[epoch][screen]))
+        {
+            g_bg_loaded[epoch][screen] = 1;
+        }
+        else
+        {
+            /* BMP no disponible: usar placeholder de color */
+            g_backgrounds[epoch][screen].data = NULL;
+            g_bg_loaded[epoch][screen] = 1;
+        }
     }
 
-    /* Aplicar la paleta del fondo actual */
-    if (g_bg_loaded[epoch][screen])
+    /* Aplicar paleta solo si el BMP esta cargado */
+    if (g_bg_loaded[epoch][screen] &&
+        g_backgrounds[epoch][screen].data != NULL)
         set_palette(g_backgrounds[epoch][screen].palette);
 }
 

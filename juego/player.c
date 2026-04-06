@@ -162,6 +162,22 @@ void player_draw(void)
     int sx, sy, dx, dy;
     unsigned char c;
 
+    /* Si no hay spritesheet dibujar placeholder */
+    if (g_spritesheet.data == NULL)
+    {
+        dx = (int)g_game.player.x;
+        dy = (int)g_game.player.y;
+        draw_line(dx,                  dy,
+                  dx + PLAYER_WIDTH,   dy,                  14);
+        draw_line(dx + PLAYER_WIDTH,   dy,
+                  dx + PLAYER_WIDTH,   dy + PLAYER_HEIGHT,  14);
+        draw_line(dx + PLAYER_WIDTH,   dy + PLAYER_HEIGHT,
+                  dx,                  dy + PLAYER_HEIGHT,  14);
+        draw_line(dx,                  dy + PLAYER_HEIGHT,
+                  dx,                  dy,                  14);
+        return;
+    }
+
     frame = (!g_game.player.on_ground) ? FRAME_JUMP :
              g_game.player.anim_frame;
 

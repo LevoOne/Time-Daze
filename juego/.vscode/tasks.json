@@ -19,6 +19,7 @@
                 "hud.c",
                 "logic.c",
                 "engine.c",
+                "game.c",
                 "judas.lib"
             ],
             "group":
