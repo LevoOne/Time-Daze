@@ -3,8 +3,13 @@
  * C89: todas las variables declaradas al inicio del bloque.
  */
 
+#include "engine.h"
 #include "game.h"
 #include "puzzles.h"
+
+
+
+
 
 /* ----------------------------------------------------------------
  * INIT

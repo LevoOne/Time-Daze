@@ -3,7 +3,7 @@
     "tasks":
     [
         {
-            "label": "Compilar con Watcom DOS4GW",
+            "label": "Compilar Tempus-Fugit con Watcom DOS4GW",
             "type": "shell",
             "command": "wcl386",
             "args": [

@@ -3,10 +3,14 @@
  * C89: todas las variables declaradas al inicio del bloque.
  */
 
-#include "game.h"
-#include "player.h"
-#include "screen.h"
 #include "engine.h"
+#include "game.h"
+#include "screen.h"
+#include "player.h"
+
+
+
+
 
 /* Spritesheet global de Eric, cargado en screen.c */
 extern BITMAP g_spritesheet;
@@ -47,14 +51,14 @@ static void resolve_collisions(void)
         px   = (int)g_game.player.x;
         py   = (int)g_game.player.y;
 
-        if (px + PLAYER_W <= plat->x) continue;
+        if (px + PLAYER_WIDTH <= plat->x) continue;
         if (px >= plat->x + plat->w)  continue;
-        if (py + PLAYER_H <= plat->y) continue;
+        if (py + PLAYER_HEIGHT <= plat->y) continue;
         if (py >= plat->y + plat->h)  continue;
 
-        ov_top    = (py + PLAYER_H) - plat->y;
+        ov_top    = (py + PLAYER_HEIGHT) - plat->y;
         ov_bottom = (plat->y + plat->h) - py;
-        ov_left   = (px + PLAYER_W) - plat->x;
+        ov_left   = (px + PLAYER_WIDTH) - plat->x;
         ov_right  = (plat->x + plat->w) - px;
 
         min = ov_top; axis = 0;
@@ -65,7 +69,7 @@ static void resolve_collisions(void)
         switch (axis)
         {
             case 0:
-                g_game.player.y         = (float)(plat->y - PLAYER_H);
+                g_game.player.y         = (float)(plat->y - PLAYER_HEIGHT);
                 g_game.player.vel_y     = 0.0f;
                 g_game.player.on_ground = 1;
                 break;
@@ -74,7 +78,7 @@ static void resolve_collisions(void)
                 g_game.player.vel_y = 0.0f;
                 break;
             case 2:
-                g_game.player.x     = (float)(plat->x - PLAYER_W);
+                g_game.player.x     = (float)(plat->x - PLAYER_WIDTH);
                 g_game.player.vel_x = 0.0f;
                 break;
             case 3:
@@ -142,7 +146,7 @@ int player_update(void)
 
     /* Comprobar si Eric ha salido por algun borde */
     if (g_game.player.x < 0)                    return PLAYER_LEFT;
-    if (g_game.player.x > SCREEN_W - PLAYER_W)  return PLAYER_RIGHT;
+    if (g_game.player.x > SCREEN_W - PLAYER_WIDTH)  return PLAYER_RIGHT;
     if (g_game.player.y < 0)                     return PLAYER_UP;
     if (g_game.player.y > SCREEN_H)              return PLAYER_DEAD;
 
@@ -164,22 +168,22 @@ void player_draw(void)
     if (g_game.player.facing == 1)
     {
         bmp_draw_tile(&g_spritesheet, frame, 0,
-                      PLAYER_W, PLAYER_H,
+                      PLAYER_WIDTH, PLAYER_HEIGHT,
                       (int)g_game.player.x,
                       (int)g_game.player.y);
     }
     else
     {
-        for (sy = 0; sy < PLAYER_H; sy++)
+        for (sy = 0; sy < PLAYER_HEIGHT; sy++)
         {
             dy = (int)g_game.player.y + sy;
             if (dy < 0 || dy >= SCREEN_H) continue;
-            for (sx = 0; sx < PLAYER_W; sx++)
+            for (sx = 0; sx < PLAYER_WIDTH; sx++)
             {
-                dx = (int)g_game.player.x + (PLAYER_W - 1 - sx);
+                dx = (int)g_game.player.x + (PLAYER_WIDTH - 1 - sx);
                 if (dx < 0 || dx >= SCREEN_W) continue;
                 c = g_spritesheet.data[sy * g_spritesheet.width +
-                    frame * PLAYER_W + sx];
+                    frame * PLAYER_WIDTH + sx];
                 if (c == 0) continue;
                 back_buffer[dy * SCREEN_W + dx] = c;
             }

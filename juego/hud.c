@@ -4,10 +4,14 @@
  */
 
 #include <string.h>
+#include "engine.h"
 #include "game.h"
 #include "hud.h"
 #include "puzzles.h"
-#include "engine.h"
+
+
+
+
 
 /* ----------------------------------------------------------------
  * VARIABLE GLOBAL
@@ -85,7 +89,7 @@ static void hud_draw_normal(void)
     unsigned char color;
 
     /* Fondo negro de la franja del HUD */
-    for (i = HUD_Y; i < HUD_Y + HUD_H; i++)
+    for (i = HUD_Y; i < HUD_Y + HUD_HEIGHT; i++)
         memset(&back_buffer[i * SCREEN_W], 0, SCREEN_W);
 
     /* Vidas: rectangulos blancos */
@@ -140,7 +144,7 @@ static void hud_draw_mecha(void)
     unsigned char color;
 
     /* Fondo azul oscuro para el HUD del Mecha */
-    for (i = HUD_Y; i < HUD_Y + HUD_H; i++)
+    for (i = HUD_Y; i < HUD_Y + HUD_HEIGHT; i++)
         memset(&back_buffer[i * SCREEN_W], 1, SCREEN_W);
 
     /* Estado del Mecha: tres iconos */

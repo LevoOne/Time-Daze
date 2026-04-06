@@ -20,9 +20,19 @@
 #define EPOCH_COUNT        3
 
 /* ----------------------------------------------------------------
- * PANTALLAS
+ * PANTALLAS Y PLATAFORMAS
  * ---------------------------------------------------------------- */
 #define SCREEN_COUNT       9
+#define MAX_PLATFORMS      16
+
+typedef struct {
+    int x, y, w, h;
+} Platform;
+
+typedef struct {
+    Platform platforms[MAX_PLATFORMS];
+    int      platform_count;
+} ScreenData;
 
 /* ----------------------------------------------------------------
  * DIRECCIONES
@@ -130,5 +140,10 @@ typedef struct {
  * Definida en game.c, accesible desde todos los sistemas
  * ---------------------------------------------------------------- */
 extern GameState g_game;
+
+/* ----------------------------------------------------------------
+ * INDICES DE EFECTOS DE SONIDO
+ * ---------------------------------------------------------------- */
+#define SFX_JUMP   0
 
 #endif /* GAME_H */

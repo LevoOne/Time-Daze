@@ -12,14 +12,18 @@
 
 #include "engine.h"
 #include "game.h"
+#include "screen.h"
 #include "player.h"
 #include "enemies.h"
 #include "puzzles.h"
-#include "screen.h"
 #include "inventory.h"
 #include "save.h"
 #include "hud.h"
 #include "logic.h"
+
+
+
+
 
 /* ----------------------------------------------------------------
  * DEFINICION DE LA VARIABLE GLOBAL
@@ -39,7 +43,6 @@ static int g_state = STATE_TITLE;
 /* ----------------------------------------------------------------
  * INDICE DE EFECTOS DE SONIDO
  * ---------------------------------------------------------------- */
-#define SFX_JUMP   0
 
 /* ----------------------------------------------------------------
  * PROTOTIPOS

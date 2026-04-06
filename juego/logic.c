@@ -7,16 +7,20 @@
  * Todas las variables se declaran al inicio del bloque (C89).
  */
 
+#include "engine.h"
 #include "game.h"
-#include "logic.h"
-#include "inventory.h"
-#include "puzzles.h"
 #include "screen.h"
 #include "player.h"
 #include "enemies.h"
+#include "puzzles.h"
+#include "inventory.h"
 #include "save.h"
 #include "hud.h"
-#include "engine.h"
+#include "logic.h"
+
+
+
+
 
 /* ----------------------------------------------------------------
  * ESTADO INTERNO
@@ -60,8 +64,8 @@ int eric_near(int x, int y)
 {
     int ex, ey, dx, dy;
 
-    ex = (int)g_game.player.x + PLAYER_W / 2;
-    ey = (int)g_game.player.y + PLAYER_H / 2;
+    ex = (int)g_game.player.x + PLAYER_WIDTH / 2;
+    ey = (int)g_game.player.y + PLAYER_HEIGHT / 2;
     dx = ex - x;
     dy = ey - y;
     if (dx < 0) dx = -dx;

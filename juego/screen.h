@@ -2,24 +2,10 @@
  * screen.h - Sistema de pantallas de Tempus Fugit
  */
 
-#ifndef SCREEN_H
-#define SCREEN_H
+#ifndef SCREEN_SYS_H
+#define SCREEN_SYS_H
 
 #include "game.h"
-
-/* ----------------------------------------------------------------
- * PLATAFORMAS
- * ---------------------------------------------------------------- */
-#define MAX_PLATFORMS   16
-
-typedef struct {
-    int x, y, w, h;
-} Platform;
-
-typedef struct {
-    Platform platforms[MAX_PLATFORMS];
-    int      platform_count;
-} ScreenData;
 
 /* Datos de la pantalla actual, accesibles desde player.c */
 extern ScreenData g_screen_data;
@@ -84,4 +70,4 @@ void screen_travel(int new_epoch);
  * -----------------------------------------------------------------------------------------*/
 int screen_get_connection(int dir);
 
-#endif /* SCREEN_H */
+#endif /* SCREEN_SYS_H */

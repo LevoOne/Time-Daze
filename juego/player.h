@@ -10,8 +10,8 @@
 /* ----------------------------------------------------------------
  * CONSTANTES DE FISICA Y ANIMACION
  * ---------------------------------------------------------------- */
-#define PLAYER_W        16
-#define PLAYER_H        16
+#define PLAYER_WIDTH    16
+#define PLAYER_HEIGHT   16
 #define PLAYER_GRAVITY  0.35f
 #define PLAYER_JUMP    -5.5f
 #define PLAYER_SPEED    1.2f

@@ -12,11 +12,15 @@
  */
 
 #include <string.h>
+#include "engine.h"
 #include "game.h"
 #include "screen.h"
 #include "player.h"
 #include "puzzles.h"
-#include "engine.h"
+
+
+
+
 
 /* ----------------------------------------------------------------
  * VARIABLES GLOBALES
@@ -471,13 +475,13 @@ int screen_change(int dir)
     switch (dir)
     {
         case DIR_LEFT:
-            player_place(SCREEN_W - PLAYER_W - 4, py);
+            player_place(SCREEN_W - PLAYER_WIDTH - 4, py);
             break;
         case DIR_RIGHT:
             player_place(4, py);
             break;
         case DIR_UP:
-            player_place((int)g_game.player.x, SCREEN_H - PLAYER_H - 8);
+            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 8);
             break;
         case DIR_DOWN:
             player_place((int)g_game.player.x, 8);

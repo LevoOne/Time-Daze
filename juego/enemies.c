@@ -3,10 +3,15 @@
  * C89: todas las variables declaradas al inicio del bloque.
  */
 
+#include "engine.h"
 #include "game.h"
 #include "enemies.h"
-#include "engine.h"
+#include "player.h"
 #include "puzzles.h"
+
+
+
+
 
 /* ----------------------------------------------------------------
  * VARIABLE GLOBAL
@@ -279,10 +284,10 @@ int enemies_check_collision(void)
         ex = (int)e->x;
         ey = (int)e->y;
 
-        if (px + PLAYER_W - 4 <= ex)     continue;
-        if (px + 4 >= ex + PLAYER_W)     continue;
-        if (py + PLAYER_H - 4 <= ey)     continue;
-        if (py + 4 >= ey + PLAYER_H)     continue;
+        if (px + PLAYER_WIDTH - 4 <= ex)     continue;
+        if (px + 4 >= ex + PLAYER_WIDTH)     continue;
+        if (py + PLAYER_HEIGHT - 4 <= ey)     continue;
+        if (py + 4 >= ey + PLAYER_HEIGHT)     continue;
 
         return 1;
     }
@@ -307,9 +312,9 @@ void enemies_draw(void)
         x = (int)e->x;
         y = (int)e->y;
 
-        draw_line(x,            y,            x + PLAYER_W, y,            4);
-        draw_line(x + PLAYER_W, y,            x + PLAYER_W, y + PLAYER_H, 4);
-        draw_line(x + PLAYER_W, y + PLAYER_H, x,            y + PLAYER_H, 4);
-        draw_line(x,            y + PLAYER_H, x,            y,            4);
+        draw_line(x,            y,            x + PLAYER_WIDTH, y,            4);
+        draw_line(x + PLAYER_WIDTH, y,            x + PLAYER_WIDTH, y + PLAYER_HEIGHT, 4);
+        draw_line(x + PLAYER_WIDTH, y + PLAYER_HEIGHT, x,            y + PLAYER_HEIGHT, 4);
+        draw_line(x,            y + PLAYER_HEIGHT, x,            y,            4);
     }
 }
