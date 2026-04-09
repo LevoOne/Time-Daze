@@ -363,6 +363,71 @@ void pixel_plot_fast(int x, int y, int color)
     VGA[SCREEN_W * y + x] = (byte)color;
 }
 
+/* ----------------------------------------------------------------
+ * TEXTO EN MODO GRAFICO - FUENTE 8x8 DEL BIOS
+ * ---------------------------------------------------------------- */
+
+static unsigned char *bios_font = NULL;
+
+void font_init(void)
+{
+    /* El vector 0x43 apunta a la fuente de caracteres del BIOS        */
+    /* En DOS/4GW el primer megabyte esta mapeado en el espacio flat   */
+    /* El vector esta en 0x0000:0x010C (0x43 * 4 = 0x10C)             */
+    unsigned long seg;
+    unsigned long off;
+    unsigned long *ivt;
+
+    ivt = (unsigned long *)0x0000010CUL;
+    off = (*ivt) & 0x0000FFFFUL;
+    seg = ((*ivt) >> 16) & 0x0000FFFFUL;
+
+    bios_font = (unsigned char *)(seg * 16 + off);
+}
+
+void draw_char(char c, int x, int y, unsigned char color)
+{
+    int           row, col;
+    unsigned char *glyph;
+    unsigned char bits;
+    int           px, py;
+
+    if (bios_font == NULL) return;
+
+    glyph = bios_font + (unsigned char)c * 8;
+
+    for (row = 0; row < 8; row++)
+    {
+        bits = glyph[row];
+        py   = y + row;
+        if (py < 0 || py >= SCREEN_H) continue;
+
+        for (col = 0; col < 8; col++)
+        {
+            if (bits & (0x80 >> col))
+            {
+                px = x + col;
+                if (px >= 0 && px < SCREEN_W)
+                    back_buffer[py * SCREEN_W + px] = color;
+            }
+        }
+    }
+}
+
+void draw_string(const char *s, int x, int y, unsigned char color)
+{
+    int i;
+    for (i = 0; s[i] != '\0'; i++)
+        draw_char(s[i], x + i * 8, y, color);
+}
+
+void draw_int(int n, int x, int y, unsigned char color)
+{
+    char buf[12];
+    itoa(n, buf, 10);
+    draw_string(buf, x, y, color);
+}
+
 /* Dibuja en VRAM directamente (sin back buffer) */
 void draw_bitmap(BITMAP *bmp, int x, int y)
 {

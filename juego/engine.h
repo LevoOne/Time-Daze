@@ -294,8 +294,10 @@ void bmp_draw_tile_opaque(const BITMAP *bmp,
                           int tile_w, int tile_h,
                           int dst_x,  int dst_y);
 
-/* -----------------------------------------------------------------------------------------                          
- * Los valores deben estar en rango 0..63 (6 bits por componente).
+/* -----------------------------------------------------------------------------------------
+ * set_palette()
+ *   Aplica una paleta de 256 colores al hardware VGA.
+ *   Los valores deben estar en rango 0..63 (6 bits por componente).
  * Entrada: palette (byte*) = array de 256*3 bytes en formato R,G,B
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
@@ -353,6 +355,52 @@ void pixel_plot(int x, int y, int color);
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void pixel_plot_fast(int x, int y, int color);
+
+/* ----------------------------------------------------------------
+ * TEXTO EN MODO GRAFICO
+ * Usa la fuente 8x8 del BIOS para dibujar texto en el back buffer.
+ * Llamar a font_init() una vez antes de usar draw_char/draw_string.
+ * ---------------------------------------------------------------- */
+
+/* -----------------------------------------------------------------------------------------
+ * font_init()
+ *   Obtiene el puntero a la fuente 8x8 del BIOS via INT 10h.
+ *   Llamar una sola vez al inicio del programa, despues de vga_set_mode13h().
+ * Entrada: ninguna
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void font_init(void);
+
+/* -----------------------------------------------------------------------------------------
+ * draw_char()
+ *   Dibuja un caracter ASCII en el back buffer usando la fuente 8x8 del BIOS.
+ * Entrada: c     (char)  = caracter ASCII a dibujar
+ *          x, y  (int)   = posicion destino en pixels
+ *          color (byte)  = indice de color VGA (0..255)
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void draw_char(char c, int x, int y, unsigned char color);
+
+/* -----------------------------------------------------------------------------------------
+ * draw_string()
+ *   Dibuja una cadena de texto en el back buffer usando la fuente 8x8 del BIOS.
+ *   Cada caracter ocupa 8 pixels de ancho.
+ * Entrada: s     (char*) = cadena de texto terminada en '\0'
+ *          x, y  (int)   = posicion destino en pixels
+ *          color (byte)  = indice de color VGA (0..255)
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void draw_string(const char *s, int x, int y, unsigned char color);
+
+/* -----------------------------------------------------------------------------------------
+ * draw_int()
+ *   Dibuja un numero entero en el back buffer usando la fuente 8x8 del BIOS.
+ * Entrada: n     (int)   = numero a dibujar
+ *          x, y  (int)   = posicion destino en pixels
+ *          color (byte)  = indice de color VGA (0..255)
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void draw_int(int n, int x, int y, unsigned char color);
 
 /* ----------------------------------------------------------------
  * TECLADO

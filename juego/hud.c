@@ -132,6 +132,12 @@ static void hud_draw_normal(void)
         draw_line(x + 8, HUD_Y + 11, x,     HUD_Y + 11, color);
         draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  color);
     }
+
+    /* Sólo para DEBUG */
+    draw_string("EP:", 2, 2, 15);
+    draw_int(g_game.screen.current_epoch, 26, 2, 14);
+    draw_string("SC:", 50, 2, 15);
+    draw_int(g_game.screen.current_screen + 1, 74, 2, 14);
 }
 
 /* ----------------------------------------------------------------

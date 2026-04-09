@@ -174,6 +174,7 @@ static void game_loop(void)
 int main(void)
 {
     engine_init();
+    font_init();   
     sound_init();
 
     sfx_load(SFX_JUMP, "jump.wav");
