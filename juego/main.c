@@ -72,6 +72,7 @@ static void new_game(void)
 static void draw_frame(void)
 {
     screen_draw();
+    screen_draw_platforms_debug();  /* TEMP: debug */
     inv_draw();
     enemies_draw();
     player_draw();
@@ -102,6 +103,8 @@ static void game_loop(void)
         player_event = player_update();
 
         /* 4. COLISION CON ENEMIGOS */
+        /* TEMP: desactivado para pruebas de navegacion */
+        /*
         if (enemies_check_collision())
         {
             player_hit();
@@ -110,19 +113,40 @@ static void game_loop(void)
             if (g_game.player.lives <= 0)
                 g_state = STATE_GAMEOVER;
         }
-
+        */
+        
         /* 5. EVENTO DE ERIC */
         switch (player_event)
         {
             case PLAYER_LEFT:
-            case PLAYER_RIGHT:
-            case PLAYER_UP:
-            case PLAYER_DOWN:
-                if (screen_change(player_event))
-                {
+                if (!screen_change(DIR_LEFT))
+                    player_place(0, (int)g_game.player.y);
+                else
                     enemies_load(g_game.screen.current_epoch,
                                  g_game.screen.current_screen);
-                }
+                break;
+            case PLAYER_RIGHT:
+                if (!screen_change(DIR_RIGHT))
+                    player_place(SCREEN_W - PLAYER_WIDTH - 1,
+                                 (int)g_game.player.y);
+                else
+                    enemies_load(g_game.screen.current_epoch,
+                                 g_game.screen.current_screen);
+                break;
+            case PLAYER_UP:
+                if (!screen_change(DIR_UP))
+                    player_place((int)g_game.player.x, 0);
+                else
+                    enemies_load(g_game.screen.current_epoch,
+                                 g_game.screen.current_screen);
+                break;
+            case PLAYER_DOWN:
+                if (!screen_change(DIR_DOWN))
+                    player_place((int)g_game.player.x,
+                                 SCREEN_H - PLAYER_HEIGHT - 1);
+                else
+                    enemies_load(g_game.screen.current_epoch,
+                                 g_game.screen.current_screen);
                 break;
 
             case PLAYER_DEAD:
@@ -174,7 +198,7 @@ static void game_loop(void)
 int main(void)
 {
     engine_init();
-    font_init();   
+    font_init();
     sound_init();
 
     sfx_load(SFX_JUMP, "jump.wav");

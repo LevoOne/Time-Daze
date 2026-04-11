@@ -73,6 +73,18 @@ int eric_near(int x, int y)
     return (dx < INTERACT_DIST && dy < INTERACT_DIST);
 }
 
+/* ----------------------------------------------------------------
+ * LOGIC SCREEN CHANGE
+ * Cambia de pantalla y recarga enemigos.
+ * Usar siempre en lugar de screen_change directo desde logic.c
+ * ---------------------------------------------------------------- */
+static void logic_screen_change(int dir)
+{
+    if (screen_change(dir))
+        enemies_load(g_game.screen.current_epoch,
+                     g_game.screen.current_screen);
+}
+
 /* ================================================================
  * LOGIC UPDATE - PREHISTORIA
  * ================================================================ */
@@ -87,6 +99,7 @@ static void logic_prehistory(int screen)
     int log_x,      log_y;
     int egg_x,      egg_y;
     int fire_x,     fire_y;
+    int liana_x,    liana_y;
 
     /* Pantalla 2 (indice 1): ladera, colmena */
     beehive_x  = 160; beehive_y  = 100;
@@ -102,7 +115,26 @@ static void logic_prehistory(int screen)
     egg_x      = 270; egg_y      = 160;
     /* Pantalla 5 (indice 4): hoguera */
     fire_x     = 160; fire_y     = 150;
+    /* Liana: P4 (indice 3) baja a P7, P7 (indice 6) sube a P4 */
+    liana_x    = 40;  liana_y    = 160;
 
+    /* --------------------------------------------------------
+     * P3: liana que baja a pantalla 5
+     * -------------------------------------------------------- */
+    if (screen == 2)
+    {
+        if (eric_near(295, 159) && eric_action())
+            logic_screen_change(DIR_DOWN);
+    }
+
+    /* --------------------------------------------------------
+     * P5: liana que sube a pantalla 3
+     * -------------------------------------------------------- */
+    if (screen == 4 && !eric_near(fire_x, fire_y))
+    {
+        if (eric_near(295, 159) && eric_action())
+            logic_screen_change(DIR_UP);
+    }
     /* --------------------------------------------------------
      * P2: ladera, colmena
      * -------------------------------------------------------- */
@@ -198,6 +230,24 @@ static void logic_prehistory(int screen)
     }
 
     /* --------------------------------------------------------
+     * P4: liana que baja a pantalla 7
+     * -------------------------------------------------------- */
+    if (screen == 3)
+    {
+        if (eric_near(liana_x, liana_y) && eric_action())
+            logic_screen_change(DIR_DOWN);
+    }
+
+    /* --------------------------------------------------------
+     * P7: liana que sube a pantalla 4
+     * -------------------------------------------------------- */
+    if (screen == 6)
+    {
+        if (eric_near(liana_x, liana_y) && eric_action())
+            logic_screen_change(DIR_UP);
+    }
+
+    /* --------------------------------------------------------
      * P5: hoguera, punto de guardado
      * -------------------------------------------------------- */
     if (screen == 4)
@@ -225,6 +275,7 @@ static void logic_medieval(int screen)
     int chapel_x,   chapel_y;
     int alch_x,     alch_y;
     int torch_x,    torch_y;
+    int liana_x,    liana_y;
 
     /* P3: casa, taza */
     cup_x      = 180; cup_y      = 150;
@@ -242,6 +293,26 @@ static void logic_medieval(int screen)
     chapel_x   = 160; chapel_y   = 150;
     /* Alquimista (pantalla pendiente de definir) */
     alch_x     = 200; alch_y     = 150;
+    /* Escalera: P4 (indice 3) baja a P7, P7 (indice 6) sube a P4 */
+    liana_x    = 40;  liana_y    = 160;
+
+    /* --------------------------------------------------------
+     * P3: escalera que baja a pantalla 5
+     * -------------------------------------------------------- */
+    if (screen == 2)
+    {
+        if (eric_near(295, 159) && eric_action())
+            logic_screen_change(DIR_DOWN);
+    }
+
+    /* --------------------------------------------------------
+     * P5: escalera que sube a pantalla 3
+     * -------------------------------------------------------- */
+    if (screen == 4 && !eric_near(chapel_x, chapel_y))
+    {
+        if (eric_near(295, 159) && eric_action())
+            logic_screen_change(DIR_UP);
+    }
 
     /* --------------------------------------------------------
      * P3: casa, taza en el alfeizar
@@ -345,6 +416,24 @@ static void logic_medieval(int screen)
     }
 
     /* --------------------------------------------------------
+     * P4: escalera que baja a pantalla 7
+     * -------------------------------------------------------- */
+    if (screen == 3)
+    {
+        if (eric_near(liana_x, liana_y) && eric_action())
+            logic_screen_change(DIR_DOWN);
+    }
+
+    /* --------------------------------------------------------
+     * P7: escalera que sube a pantalla 4
+     * -------------------------------------------------------- */
+    if (screen == 6)
+    {
+        if (eric_near(liana_x, liana_y) && eric_action())
+            logic_screen_change(DIR_UP);
+    }
+
+    /* --------------------------------------------------------
      * P5: capilla, punto de guardado
      * -------------------------------------------------------- */
     if (screen == 4)
@@ -381,6 +470,7 @@ static void logic_future(int screen)
     int mecha_x,     mecha_y;
     int terminal_x,  terminal_y;
     int fragment_x,  fragment_y;
+    int liana_x,     liana_y;
 
     /* P8: zona de radiacion */
     radiation_x = 160; radiation_y = 160;
@@ -394,6 +484,26 @@ static void logic_future(int screen)
     terminal_x  = 160; terminal_y  = 150;
     /* Fragmento 3 */
     fragment_x  = 160; fragment_y  = 160;
+    /* Escalera metalica: P4 (indice 3) baja a P7, P7 (indice 6) sube a P4 */
+    liana_x     = 40;  liana_y     = 160;
+
+    /* --------------------------------------------------------
+     * P3: escalera metalica que baja a pantalla 5
+     * -------------------------------------------------------- */
+    if (screen == 2)
+    {
+        if (eric_near(295, 159) && eric_action())
+            logic_screen_change(DIR_DOWN);
+    }
+
+    /* --------------------------------------------------------
+     * P5: escalera metalica que sube a pantalla 3
+     * -------------------------------------------------------- */
+    if (screen == 4 && !eric_near(terminal_x, terminal_y))
+    {
+        if (eric_near(295, 159) && eric_action())
+            logic_screen_change(DIR_UP);
+    }
 
     /* --------------------------------------------------------
      * P8: zona de radiacion
@@ -463,6 +573,24 @@ static void logic_future(int screen)
                 /* TODO: iniciar secuencia de conduccion      */
             }
         }
+    }
+
+    /* --------------------------------------------------------
+     * P4: escalera metalica que baja a pantalla 7
+     * -------------------------------------------------------- */
+    if (screen == 3)
+    {
+        if (eric_near(liana_x, liana_y) && eric_action())
+            logic_screen_change(DIR_DOWN);
+    }
+
+    /* --------------------------------------------------------
+     * P7: escalera metalica que sube a pantalla 4
+     * -------------------------------------------------------- */
+    if (screen == 6)
+    {
+        if (eric_near(liana_x, liana_y) && eric_action())
+            logic_screen_change(DIR_UP);
     }
 
     /* --------------------------------------------------------

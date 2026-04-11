@@ -138,6 +138,11 @@ static void hud_draw_normal(void)
     draw_int(g_game.screen.current_epoch, 26, 2, 14);
     draw_string("SC:", 50, 2, 15);
     draw_int(g_game.screen.current_screen + 1, 74, 2, 14);
+    draw_string("X:", 2, 12, 15);
+    draw_int((int)g_game.player.x, 18, 12, 14);
+    draw_string("Y:", 50, 12, 15);
+    draw_int((int)g_game.player.y, 66, 12, 14);
+    /* *********************** */
 }
 
 /* ----------------------------------------------------------------

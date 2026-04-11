@@ -19,9 +19,11 @@
 #include "puzzles.h"
 
 
+
+
+
 /* Prototipo interno */
 static int try_load_bmp(char *file, BITMAP *b);
-
 
 /* ----------------------------------------------------------------
  * VARIABLES GLOBALES
@@ -150,7 +152,7 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     },
     /* P6: zona baja izquierda */
     {
-        { 0,   175, 160, 8 },
+        { 0,   175, 320, 8 },
         { 30,  155,  40, 8 },
         { 0, 0, 0, 0 }
     },
@@ -496,10 +498,12 @@ int screen_get_connection(int dir)
     /* Bloqueos por puzzles */
 
     /* Prehistoria: zona baja bloqueada hasta cruzar el rio */
+    /*
     if (epoch == EPOCH_PREHISTORY &&
         screen == 7 && dir == DIR_RIGHT &&
         !puzzle_is_solved(PUZZLE_RIVER))
         return NO_SCREEN;
+       */ 
 
     /* Edad Media: p9 bloqueada hasta bajar el puente */
     if (epoch == EPOCH_MEDIEVAL &&
@@ -544,7 +548,7 @@ int screen_change(int dir)
             player_place(4, py);
             break;
         case DIR_UP:
-            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 8);
+            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 24);
             break;
         case DIR_DOWN:
             player_place((int)g_game.player.x, 8);
@@ -570,4 +574,24 @@ void screen_travel(int new_epoch)
     vga_fade_out(16, 4);
     screen_load(new_epoch, screen);
     vga_fade_in(16, 4);
+}
+void screen_draw_platforms_debug(void)
+{
+    int i;
+    int x1, y1, x2, y2;
+    Platform *p;
+
+    for (i = 0; i < g_screen_data.platform_count; i++)
+    {
+        p  = &g_screen_data.platforms[i];
+        x1 = p->x;
+        y1 = p->y;
+        x2 = p->x + p->w - 1;
+        y2 = p->y + p->h - 1;
+
+        draw_line(x1, y1, x2, y1, 10);   /* verde: borde superior */
+        draw_line(x1, y2, x2, y2, 10);   /* verde: borde inferior */
+        draw_line(x1, y1, x1, y2, 10);   /* verde: borde izquierdo */
+        draw_line(x2, y1, x2, y2, 10);   /* verde: borde derecho */
+    }
 }

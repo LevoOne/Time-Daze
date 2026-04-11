@@ -70,4 +70,13 @@ void screen_travel(int new_epoch);
  * -----------------------------------------------------------------------------------------*/
 int screen_get_connection(int dir);
 
+/* -----------------------------------------------------------------------------------------
+ * screen_draw_platforms_debug()
+ *   Dibuja las plataformas de la pantalla actual como rectangulos semitransparentes.
+ *   Solo para debug, no usar en el juego final.
+ * Entrada: ninguna
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void screen_draw_platforms_debug(void);
+
 #endif /* SCREEN_SYS_H */
