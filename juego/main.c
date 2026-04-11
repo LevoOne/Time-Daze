@@ -103,8 +103,6 @@ static void game_loop(void)
         player_event = player_update();
 
         /* 4. COLISION CON ENEMIGOS */
-        /* TEMP: desactivado para pruebas de navegacion */
-        /*
         if (enemies_check_collision())
         {
             player_hit();
@@ -113,8 +111,7 @@ static void game_loop(void)
             if (g_game.player.lives <= 0)
                 g_state = STATE_GAMEOVER;
         }
-        */
-        
+
         /* 5. EVENTO DE ERIC */
         switch (player_event)
         {

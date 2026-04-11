@@ -498,13 +498,11 @@ int screen_get_connection(int dir)
     /* Bloqueos por puzzles */
 
     /* Prehistoria: zona baja bloqueada hasta cruzar el rio */
-    /*
     if (epoch == EPOCH_PREHISTORY &&
         screen == 7 && dir == DIR_RIGHT &&
         !puzzle_is_solved(PUZZLE_RIVER))
         return NO_SCREEN;
-       */ 
-
+    
     /* Edad Media: p9 bloqueada hasta bajar el puente */
     if (epoch == EPOCH_MEDIEVAL &&
         screen == 7 && dir == DIR_RIGHT &&
