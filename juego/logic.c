@@ -611,6 +611,7 @@ static void logic_future(int screen)
  * ================================================================ */
 void logic_update(void)
 {
+    static int alt_was_pressed = 0;
     int epoch;
     int screen;
     int next_epoch;
@@ -633,12 +634,20 @@ void logic_update(void)
 
     /* --------------------------------------------------------
      * VIAJE TEMPORAL
-     * ALT + ACCION para viajar entre epocas
+     * ALT cicla entre epocas con deteccion de flanco
      * -------------------------------------------------------- */
-    if (key_pressed(KEY_ALT) && eric_action())
+    if (key_pressed(KEY_ALT))
     {
-        next_epoch = (epoch + 1) % EPOCH_COUNT;
-        screen_travel(next_epoch);
-        enemies_load(next_epoch, screen);
+        if (!alt_was_pressed)
+        {
+            alt_was_pressed = 1;
+            next_epoch = (epoch + 1) % EPOCH_COUNT;
+            screen_travel(next_epoch);
+            enemies_load(next_epoch, screen);
+        }
+    }
+    else
+    {
+        alt_was_pressed = 0;
     }
 }
