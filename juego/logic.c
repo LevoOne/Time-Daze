@@ -18,10 +18,6 @@
 #include "hud.h"
 #include "logic.h"
 
-
-
-
-
 /* ----------------------------------------------------------------
  * ESTADO INTERNO
  * ---------------------------------------------------------------- */
@@ -88,34 +84,29 @@ static void logic_screen_change(int dir)
 /* ================================================================
  * LOGIC UPDATE - PREHISTORIA
  * ================================================================ */
-static void logic_prehistory(int screen)
+static int logic_prehistory(int screen)
 {
-    /* Coordenadas de todos los elementos interactivos */
-    int beehive_x,  beehive_y;
-    int honey_x,    honey_y;
-    int shaman_x,   shaman_y;
+    int handled;
+    int beehive_x, beehive_y;
+    int honey_x,   honey_y;
+    int shaman_x,  shaman_y;
     int fragment_x, fragment_y;
     int monolith_x, monolith_y;
-    int log_x,      log_y;
-    int egg_x,      egg_y;
-    int fire_x,     fire_y;
-    int liana_x,    liana_y;
+    int log_x,     log_y;
+    int egg_x,     egg_y;
+    int fire_x,    fire_y;
+    int liana_x,   liana_y;
+    ItemInstance  *inst;
 
-    /* Pantalla 2 (indice 1): ladera, colmena */
-    beehive_x  = 160; beehive_y  = 100;
-    /* Pantalla 3 (indice 2): pie colina, oso */
+    handled    = 0;
+    beehive_x  = 160; beehive_y  = 130;
     honey_x    = 200; honey_y    = 160;
-    /* Pantalla 1 (indice 0): cima, chaman */
     shaman_x   = 160; shaman_y   = 140;
     fragment_x = 160; fragment_y = 130;
-    /* Pantalla 9 (indice 8): monolito */
     monolith_x = 160; monolith_y = 100;
     log_x      = 240; log_y      = 165;
-    /* Pantalla 8 (indice 7): cruce del rio */
     egg_x      = 270; egg_y      = 160;
-    /* Pantalla 5 (indice 4): hoguera */
     fire_x     = 160; fire_y     = 150;
-    /* Liana: P4 (indice 3) baja a P7, P7 (indice 6) sube a P4 */
     liana_x    = 40;  liana_y    = 160;
 
     /* --------------------------------------------------------
@@ -135,6 +126,7 @@ static void logic_prehistory(int screen)
         if (eric_near(295, 159) && eric_action())
             logic_screen_change(DIR_UP);
     }
+
     /* --------------------------------------------------------
      * P2: ladera, colmena
      * -------------------------------------------------------- */
@@ -145,27 +137,48 @@ static void logic_prehistory(int screen)
             if (inv_is_carrying(ITEM_STICK))
             {
                 inv_transform(ITEM_NONE);
+                handled = 1;
                 /* TODO: activar animacion de goteo */
             }
             else if (inv_is_carrying(ITEM_CUP))
             {
                 inv_transform(ITEM_CUP_HONEY);
+                handled = 1;
             }
         }
     }
 
     /* --------------------------------------------------------
-     * P3: pie colina, oso
+     * P3: pie colina, oso y palo
      * -------------------------------------------------------- */
-    if (screen == 2 && !puzzle_is_solved(PUZZLE_BEAR))
+    if (screen == 2)
     {
-        if (eric_near(honey_x, honey_y) && eric_action())
+        /* Recoger el palo del suelo */
+        if (inv_is_carrying(ITEM_NONE))
         {
-            if (inv_is_carrying(ITEM_CUP_HONEY))
+            if (eric_near(80, 159) && eric_action())
             {
-                inv_drop(EPOCH_PREHISTORY, screen, honey_x, honey_y);
-                puzzle_solve(PUZZLE_BEAR);
-                g_enemies.enemies[0].active = 0;
+                inst = inv_get_at(EPOCH_PREHISTORY, screen,
+                                  80, 159);
+                if (inst != NULL)
+                    inv_remove_instance(inst);
+                inv_pick(ITEM_STICK);
+                handled = 1;
+            }
+        }
+
+        /* Depositar taza con miel para ahuyentar al oso */
+        if (!puzzle_is_solved(PUZZLE_BEAR))
+        {
+            if (eric_near(honey_x, honey_y) && eric_action())
+            {
+                if (inv_is_carrying(ITEM_CUP_HONEY))
+                {
+                    inv_drop(EPOCH_PREHISTORY, screen, honey_x, honey_y);
+                    puzzle_solve(PUZZLE_BEAR);
+                    g_enemies.enemies[0].active = 0;
+                    handled = 1;
+                }
             }
         }
     }
@@ -183,7 +196,7 @@ static void logic_prehistory(int screen)
                 {
                     inv_transform(ITEM_NONE);
                     puzzle_solve(PUZZLE_SHAMAN);
-                    /* TODO: animacion del chaman apartandose */
+                    handled = 1;
                 }
             }
         }
@@ -195,7 +208,7 @@ static void logic_prehistory(int screen)
             {
                 fragment_collect(FRAGMENT_1);
                 save_game();
-                /* TODO: animacion de recogida del fragmento */
+                handled = 1;
             }
         }
     }
@@ -208,12 +221,16 @@ static void logic_prehistory(int screen)
         if (eric_near(monolith_x, monolith_y) && eric_action())
         {
             /* TODO: mostrar simbolos del codigo en pantalla */
+            handled = 1;
         }
 
         if (eric_near(log_x, log_y) && eric_action())
         {
             if (inv_is_carrying(ITEM_NONE))
+            {
                 inv_pick(ITEM_LOG);
+                handled = 1;
+            }
         }
     }
 
@@ -225,7 +242,10 @@ static void logic_prehistory(int screen)
         if (eric_near(egg_x, egg_y) && eric_action())
         {
             if (inv_is_carrying(ITEM_NONE))
+            {
                 inv_pick(ITEM_DINO_EGG);
+                handled = 1;
+            }
         }
     }
 
@@ -254,17 +274,20 @@ static void logic_prehistory(int screen)
     {
         if (eric_near(fire_x, fire_y) && eric_action())
         {
-            /* TODO: mostrar mensaje de confirmacion S/N */
             save_game();
+            handled = 1;
         }
     }
+
+    return handled;
 }
 
 /* ================================================================
  * LOGIC UPDATE - EDAD MEDIA
  * ================================================================ */
-static void logic_medieval(int screen)
+static int logic_medieval(int screen)
 {
+    int handled;
     int cup_x,      cup_y;
     int crank_x,    crank_y;
     int guard_x,    guard_y;
@@ -277,23 +300,17 @@ static void logic_medieval(int screen)
     int torch_x,    torch_y;
     int liana_x,    liana_y;
 
-    /* P3: casa, taza */
-    cup_x      = 180; cup_y      = 150;
-    /* P8: puente levadizo, manivela */
+    handled    = 0;
+    cup_x      = 180; cup_y      = 159;
     crank_x    = 80;  crank_y    = 155;
-    /* P9: torre, guardia */
     guard_x    = 140; guard_y    = 160;
     key_x      = 140; key_y      = 168;
     forge_x    = 60;  forge_y    = 155;
     platform_x = 160; platform_y = 140;
     fragment_x = 160; fragment_y = 20;
-    /* Antorcha apagada en la torre */
     torch_x    = 100; torch_y    = 160;
-    /* P5: capilla */
     chapel_x   = 160; chapel_y   = 150;
-    /* Alquimista (pantalla pendiente de definir) */
     alch_x     = 200; alch_y     = 150;
-    /* Escalera: P4 (indice 3) baja a P7, P7 (indice 6) sube a P4 */
     liana_x    = 40;  liana_y    = 160;
 
     /* --------------------------------------------------------
@@ -322,7 +339,10 @@ static void logic_medieval(int screen)
         if (eric_near(cup_x, cup_y) && eric_action())
         {
             if (inv_is_carrying(ITEM_NONE))
+            {
                 inv_pick(ITEM_CUP);
+                handled = 1;
+            }
         }
     }
 
@@ -337,7 +357,7 @@ static void logic_medieval(int screen)
             {
                 inv_transform(ITEM_NONE);
                 puzzle_solve(PUZZLE_BRIDGE);
-                /* TODO: animacion del puente bajando */
+                handled = 1;
             }
         }
     }
@@ -347,7 +367,6 @@ static void logic_medieval(int screen)
      * -------------------------------------------------------- */
     if (screen == 8)
     {
-        /* Depositar huevo cerca del guardia */
         if (!puzzle_is_solved(PUZZLE_GUARD))
         {
             if (eric_near(guard_x, guard_y) && eric_action())
@@ -357,52 +376,57 @@ static void logic_medieval(int screen)
                     inv_transform(ITEM_NONE);
                     puzzle_solve(PUZZLE_GUARD);
                     g_enemies.enemies[0].active = 0;
-                    /* TODO: animacion de eclosion del huevo */
+                    handled = 1;
                 }
             }
         }
 
-        /* Recoger la llave */
         if (puzzle_is_solved(PUZZLE_GUARD) &&
             inv_is_carrying(ITEM_NONE))
         {
             if (eric_near(key_x, key_y) && eric_action())
+            {
                 inv_pick(ITEM_KEY);
+                handled = 1;
+            }
         }
 
-        /* Recoger la antorcha apagada */
         if (inv_is_carrying(ITEM_NONE))
         {
             if (eric_near(torch_x, torch_y) && eric_action())
+            {
                 inv_pick(ITEM_TORCH);
+                handled = 1;
+            }
         }
 
-        /* Encender la antorcha en la forja */
         if (eric_near(forge_x, forge_y) && eric_action())
         {
             if (inv_is_carrying(ITEM_TORCH))
+            {
                 inv_transform(ITEM_TORCH_LIT);
+                handled = 1;
+            }
         }
 
-        /* Espantar murcielagos y activar plataforma */
         if (!puzzle_is_solved(PUZZLE_ELEVATOR))
         {
             if (eric_near(platform_x, platform_y) && eric_action())
             {
                 if (inv_is_carrying(ITEM_TORCH_LIT))
                 {
-                    /* TODO: animacion de murcielagos huyendo */
+                    /* TODO: animacion murcielagos */
+                    handled = 1;
                 }
                 else if (inv_is_carrying(ITEM_LEVITATOR))
                 {
                     inv_transform(ITEM_NONE);
                     puzzle_solve(PUZZLE_ELEVATOR);
-                    /* TODO: animacion de plataforma subiendo */
+                    handled = 1;
                 }
             }
         }
 
-        /* Recoger el fragmento 2 */
         if (puzzle_is_solved(PUZZLE_ELEVATOR) &&
             !fragment_is_collected(FRAGMENT_2))
         {
@@ -410,7 +434,7 @@ static void logic_medieval(int screen)
             {
                 fragment_collect(FRAGMENT_2);
                 save_game();
-                /* TODO: animacion de recogida del fragmento */
+                handled = 1;
             }
         }
     }
@@ -440,30 +464,32 @@ static void logic_medieval(int screen)
     {
         if (eric_near(chapel_x, chapel_y) && eric_action())
         {
-            /* TODO: mostrar mensaje de confirmacion S/N */
             save_game();
+            handled = 1;
         }
     }
 
     /* --------------------------------------------------------
-     * Alquimista: entrega mineral volcanico -> crea sellante
-     * Pantalla pendiente de definir en el GDD
+     * Alquimista
      * -------------------------------------------------------- */
     if (eric_near(alch_x, alch_y) && eric_action())
     {
         if (inv_is_carrying(ITEM_VOLCANIC_MIN))
         {
             inv_transform(ITEM_SEALANT);
-            /* TODO: animacion del alquimista creando el sellante */
+            handled = 1;
         }
     }
+
+    return handled;
 }
 
 /* ================================================================
  * LOGIC UPDATE - FUTURO
  * ================================================================ */
-static void logic_future(int screen)
+static int logic_future(int screen)
 {
+    int handled;
     int radiation_x, radiation_y;
     int device_x,    device_y;
     int portal_l_x,  portal_r_x, portal_y;
@@ -472,19 +498,14 @@ static void logic_future(int screen)
     int fragment_x,  fragment_y;
     int liana_x,     liana_y;
 
-    /* P8: zona de radiacion */
+    handled     = 0;
     radiation_x = 160; radiation_y = 160;
-    /* P6: puerta hermetica y portales */
     device_x    = 140; device_y    = 150;
     portal_l_x  = 80;  portal_r_x  = 220;
     portal_y    = 140;
-    /* P9: Mecha */
     mecha_x     = 200; mecha_y     = 140;
-    /* P5: terminal */
     terminal_x  = 160; terminal_y  = 150;
-    /* Fragmento 3 */
     fragment_x  = 160; fragment_y  = 160;
-    /* Escalera metalica: P4 (indice 3) baja a P7, P7 (indice 6) sube a P4 */
     liana_x     = 40;  liana_y     = 160;
 
     /* --------------------------------------------------------
@@ -516,7 +537,7 @@ static void logic_future(int screen)
             {
                 inv_transform(ITEM_NONE);
                 puzzle_solve(PUZZLE_RADIATION);
-                /* TODO: animacion de sellado de la radiacion */
+                handled = 1;
             }
         }
     }
@@ -530,21 +551,17 @@ static void logic_future(int screen)
         {
             if (eric_near(device_x, device_y) && eric_action())
             {
-                /* TODO: mostrar teclado de codigo en pantalla */
-                /* TODO: comprobar codigo introducido          */
                 puzzle_solve(PUZZLE_PORTAL);
-                /* TODO: animacion de activacion de portales   */
+                handled = 1;
             }
         }
 
-        /* Eric entra por el portal izquierdo */
         if (puzzle_is_solved(PUZZLE_PORTAL))
         {
             if (eric_near(portal_l_x, portal_y))
                 player_place(portal_r_x, portal_y);
         }
 
-        /* Recoger el fragmento 3 tras despejar el Mecha */
         if (puzzle_is_solved(PUZZLE_MECHA) &&
             !fragment_is_collected(FRAGMENT_3))
         {
@@ -552,7 +569,7 @@ static void logic_future(int screen)
             {
                 fragment_collect(FRAGMENT_3);
                 save_game();
-                /* TODO: secuencia de fin del juego */
+                handled = 1;
             }
         }
     }
@@ -569,8 +586,7 @@ static void logic_future(int screen)
                 inv_transform(ITEM_NONE);
                 hud_cristal_activate();
                 hud_set_mode(HUD_MECHA);
-                /* TODO: animacion de arranque del Mecha      */
-                /* TODO: iniciar secuencia de conduccion      */
+                handled = 1;
             }
         }
     }
@@ -600,10 +616,12 @@ static void logic_future(int screen)
     {
         if (eric_near(terminal_x, terminal_y) && eric_action())
         {
-            /* TODO: mostrar mensaje de confirmacion S/N */
             save_game();
+            handled = 1;
         }
     }
+
+    return handled;
 }
 
 /* ================================================================
@@ -615,21 +633,59 @@ void logic_update(void)
     int epoch;
     int screen;
     int next_epoch;
+    int handled;
+    ItemInstance *inst;
 
-    epoch  = g_game.screen.current_epoch;
-    screen = g_game.screen.current_screen;
+    epoch   = g_game.screen.current_epoch;
+    screen  = g_game.screen.current_screen;
+    handled = 0;
 
     switch (epoch)
     {
         case EPOCH_PREHISTORY:
-            logic_prehistory(screen);
+            handled = logic_prehistory(screen);
             break;
         case EPOCH_MEDIEVAL:
-            logic_medieval(screen);
+            handled = logic_medieval(screen);
             break;
         case EPOCH_FUTURE:
-            logic_future(screen);
+            handled = logic_future(screen);
             break;
+    }
+
+    /* --------------------------------------------------------
+     * RECOGIDA GENERAL DE OBJETOS DEL SUELO
+     * Si Eric no lleva nada y pulsa ENTER cerca de un objeto
+     * depositado, lo recoge y elimina la instancia del mapa.
+     * -------------------------------------------------------- */
+    if (!handled &&
+        inv_is_carrying(ITEM_NONE) &&
+        eric_action())
+    {
+        inst = inv_get_at(epoch, screen,
+                          (int)g_game.player.x + PLAYER_WIDTH / 2,
+                          (int)g_game.player.y + PLAYER_HEIGHT / 2);
+        if (inst != NULL)
+        {
+            inv_pick(inst->item_id);
+            inv_remove_instance(inst);
+            handled = 1;
+        }
+    }
+
+    /* --------------------------------------------------------
+     * DEPOSITO GENERAL DE OBJETOS
+     * Si Eric lleva un objeto, esta sobre el suelo y pulsa
+     * ENTER sin interaccion especifica activa, lo deposita.
+     * -------------------------------------------------------- */
+    if (!handled &&
+        g_game.player.on_ground &&
+        g_game.inv.carried != ITEM_NONE &&
+        eric_action())
+    {
+        inv_drop(epoch, screen,
+                 (int)g_game.player.x,
+                 (int)g_game.player.y);
     }
 
     /* --------------------------------------------------------
