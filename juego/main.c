@@ -63,7 +63,8 @@ static void new_game(void)
     logic_init();
     screen_load(EPOCH_PREHISTORY, 0);
     enemies_load(EPOCH_PREHISTORY, 0);
-    player_place(20, 140);
+    player_place(20, 155);
+    screen_apply_palette();
 }
 
 /* ----------------------------------------------------------------
@@ -72,7 +73,6 @@ static void new_game(void)
 static void draw_frame(void)
 {
     screen_draw();
-    screen_draw_platforms_debug();  /* TEMP: debug */
     inv_draw();
     enemies_draw();
     player_draw();
@@ -103,7 +103,6 @@ static void game_loop(void)
         player_event = player_update();
 
         /* 4. COLISION CON ENEMIGOS */
-        /*
         if (enemies_check_collision())
         {
             player_hit();
@@ -112,7 +111,6 @@ static void game_loop(void)
             if (g_game.player.lives <= 0)
                 g_state = STATE_GAMEOVER;
         }
-        */
 
         /* 5. EVENTO DE ERIC */
         switch (player_event)
@@ -197,7 +195,6 @@ static void game_loop(void)
 int main(void)
 {
     engine_init();
-    font_init();
     sound_init();
 
     sfx_load(SFX_JUMP, "jump.wav");

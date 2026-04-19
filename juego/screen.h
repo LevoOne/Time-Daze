@@ -36,6 +36,15 @@ void screen_init(void);
 void screen_load(int epoch, int screen);
 
 /* -----------------------------------------------------------------------------------------
+ * screen_apply_palette()
+ *   Aplica la paleta de la pantalla actual al hardware VGA directamente.
+ *   Usar al arrancar o cargar partida, cuando no hay transicion de fade.
+ * Entrada: ninguna
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void screen_apply_palette(void);
+
+/* -----------------------------------------------------------------------------------------
  * screen_draw()
  *   Dibuja el BMP de fondo de la pantalla actual en el back buffer.
  * Entrada: ninguna
@@ -69,14 +78,5 @@ void screen_travel(int new_epoch);
  * Salida:  indice de pantalla conectada (0..8), o NO_SCREEN si no hay conexion
  * -----------------------------------------------------------------------------------------*/
 int screen_get_connection(int dir);
-
-/* -----------------------------------------------------------------------------------------
- * screen_draw_platforms_debug()
- *   Dibuja las plataformas de la pantalla actual como rectangulos semitransparentes.
- *   Solo para debug, no usar en el juego final.
- * Entrada: ninguna
- * Salida:  ninguna
- * -----------------------------------------------------------------------------------------*/
-void screen_draw_platforms_debug(void);
 
 #endif /* SCREEN_SYS_H */

@@ -1,3 +1,5 @@
+
+
 /*
  * screen.c - Sistema de pantallas de Tempus Fugit
  *
@@ -450,6 +452,25 @@ void screen_load(int epoch, int screen)
     /* Aplicar paleta solo si el BMP esta cargado */
     if (g_bg_loaded[epoch][screen] &&
         g_backgrounds[epoch][screen].data != NULL)
+        set_palette_silent(g_backgrounds[epoch][screen].palette);
+}
+
+/* ----------------------------------------------------------------
+ * SCREEN APPLY PALETTE
+ * Aplica la paleta de la pantalla actual al hardware VGA.
+ * Usar al arrancar el juego o cargar una partida guardada,
+ * cuando no hay transicion de fade.
+ * ---------------------------------------------------------------- */
+void screen_apply_palette(void)
+{
+    int epoch;
+    int screen;
+
+    epoch  = g_game.screen.current_epoch;
+    screen = g_game.screen.current_screen;
+
+    if (g_bg_loaded[epoch][screen] &&
+        g_backgrounds[epoch][screen].data != NULL)
         set_palette(g_backgrounds[epoch][screen].palette);
 }
 
@@ -502,7 +523,7 @@ int screen_get_connection(int dir)
         screen == 7 && dir == DIR_RIGHT &&
         !puzzle_is_solved(PUZZLE_RIVER))
         return NO_SCREEN;
-    
+
     /* Edad Media: p9 bloqueada hasta bajar el puente */
     if (epoch == EPOCH_MEDIEVAL &&
         screen == 7 && dir == DIR_RIGHT &&
@@ -532,9 +553,16 @@ int screen_change(int dir)
 
     py = (int)g_game.player.y;
 
+    /* Fade out de la pantalla actual */
     vga_fade_out(16, 4);
+
+    /* Limpiar el back buffer antes de cargar la nueva pantalla */
+    /* para evitar parpadeo durante el cambio de paleta         */
+    vga_clear(0);
+    vga_flip();
+
+    /* Cargar la nueva pantalla y su paleta */
     screen_load(g_game.screen.current_epoch, next);
-    vga_fade_in(16, 4);
 
     /* Reposicionar a Eric segun la direccion de entrada */
     switch (dir)
@@ -555,6 +583,14 @@ int screen_change(int dir)
             break;
     }
 
+    /* Dibujar el nuevo fondo en el back buffer y hacer flip */
+    /* antes del fade in para que se vea la nueva pantalla   */
+    screen_draw();
+    vga_flip();
+
+    /* Fade in de la nueva pantalla */
+    vga_fade_in(16, 4);
+
     return 1;
 }
 
@@ -570,9 +606,14 @@ void screen_travel(int new_epoch)
     screen = g_game.screen.current_screen;
 
     vga_fade_out(16, 4);
+    vga_clear(0);
+    vga_flip();
     screen_load(new_epoch, screen);
+    screen_draw();
+    vga_flip();
     vga_fade_in(16, 4);
 }
+
 void screen_draw_platforms_debug(void)
 {
     int i;

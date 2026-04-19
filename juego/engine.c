@@ -286,9 +286,22 @@ void bmp_draw_tile_opaque(const BITMAP *bmp,
 void set_palette(byte *palette)
 {
     int i;
+    /* Guardar en saved_palette para que vga_fade_in use la paleta correcta */
+    for (i = 0; i < 256 * 3; i++)
+        saved_palette[i] = palette[i];
     outp(0x3C8, 0);
     for (i = 0; i < 256 * 3; i++)
         outp(0x3C9, palette[i]);
+}
+
+/* Guarda la paleta en saved_palette sin aplicarla al hardware VGA.
+ * Usar durante transiciones para que vga_fade_in use la paleta correcta
+ * sin causar parpadeo. */
+void set_palette_silent(byte *palette)
+{
+    int i;
+    for (i = 0; i < 256 * 3; i++)
+        saved_palette[i] = palette[i];
 }
 
 void rotate_palette(byte *palette)

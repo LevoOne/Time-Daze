@@ -302,6 +302,7 @@ void bmp_draw_tile_opaque(const BITMAP *bmp,
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void set_palette(byte *palette);
+void set_palette_silent(byte *palette);
 
 /* -----------------------------------------------------------------------------------------
  * rotate_palette()
