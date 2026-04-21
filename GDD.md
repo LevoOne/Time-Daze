@@ -1236,3 +1236,45 @@ Distribucion de izquierda a derecha:
 ---
 
 *Documento vivo. Se actualiza a medida que avanza el desarrollo.*
+
+---
+
+## TODO - Arte pendiente
+
+### Indicadores visuales de transicion vertical
+
+Todas las pantallas con conexion vertical necesitan un elemento visual
+que indique al jugador que puede subir o bajar:
+
+**Prehistoria (liana):**
+- P3 borde derecho (x=295): liana colgando, baja a P5
+- P5 borde derecho (x=295): liana colgando, sube a P3
+- P4 borde izquierdo (x=40): liana colgando, baja a P7
+- P7 borde izquierdo (x=40): liana colgando, sube a P4
+
+**Edad Media (escalera de madera):**
+- P3 borde derecho (x=295): escalera de madera, baja a P5
+- P5 borde derecho (x=295): escalera de madera, sube a P3
+- P4 borde izquierdo (x=40): escalera de madera, baja a P7
+- P7 borde izquierdo (x=40): escalera de madera, sube a P4
+
+**Futuro (escalera metalica):**
+- P3 borde derecho (x=295): escalera metalica, baja a P5
+- P5 borde derecho (x=295): escalera metalica, sube a P3
+- P4 borde izquierdo (x=40): escalera metalica, baja a P7
+- P7 borde izquierdo (x=40): escalera metalica, sube a P4
+
+### Objetos interactivos visibles en el escenario
+
+Los siguientes objetos deben ser visibles en el fondo o como sprites separados:
+
+**Prehistoria:**
+- P2: colmena accesible desde la plataforma central (x=160, y=130)
+- P3: palo en el suelo junto a la roca izquierda (x=80, y=159)
+
+**Edad Media:**
+- P3: taza en el alfeizar de la casa (x=180, y=159)
+- P9: antorcha apagada en la torre (x=100, y=160)
+
+**Pendiente de revisar:** resto de objetos interactivos por pantalla
+al integrar el arte final de cada epoca.
