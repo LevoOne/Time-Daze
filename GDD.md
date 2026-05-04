@@ -1,4 +1,4 @@
-# Tempus Fugit - Game Design Document
+# Time Daze - Game Design Document
 
 **Version**: 1.0  
 **Fecha**: Abril 2026  
@@ -10,11 +10,15 @@
 
 ## 1. Concepto
 
-**Tempus Fugit** es un juego de plataformas 2D para MS-DOS en el que el protagonista
+**Time Daze** es un juego de plataformas 2D para MS-DOS en el que el protagonista
 viaja entre tres epocas historicas distintas para recuperar los fragmentos de un
 artefacto temporal. La mecanica central combina plataformas clasicas de 8 bits con
 puzzles basados en el paso del tiempo al estilo Day of the Tentacle: las acciones
 realizadas en una epoca tienen consecuencias en las epocas futuras.
+
+El nombre es un homenaje a "Skool Daze" (ZX Spectrum, 1984), juego del que toma
+prestado al protagonista Eric, un estudiante universitario atrapado esta vez no en
+el colegio sino entre el tiempo mismo.
 
 ---
 
@@ -1236,3 +1240,62 @@ Distribucion de izquierda a derecha:
 ---
 
 *Documento vivo. Se actualiza a medida que avanza el desarrollo.*
+
+---
+
+## TODO - Arte pendiente
+
+### Indicadores visuales de transicion vertical
+
+Todas las pantallas con conexion vertical necesitan un elemento visual
+que indique al jugador que puede subir o bajar:
+
+**Prehistoria (liana):**
+- P3 borde derecho (x=295): liana colgando, baja a P5
+- P5 borde derecho (x=295): liana colgando, sube a P3
+- P4 borde izquierdo (x=40): liana colgando, baja a P7
+- P7 borde izquierdo (x=40): liana colgando, sube a P4
+
+**Edad Media (escalera de madera):**
+- P3 borde derecho (x=295): escalera de madera, baja a P5
+- P5 borde derecho (x=295): escalera de madera, sube a P3
+- P4 borde izquierdo (x=40): escalera de madera, baja a P7
+- P7 borde izquierdo (x=40): escalera de madera, sube a P4
+
+**Futuro (escalera metalica):**
+- P3 borde derecho (x=295): escalera metalica, baja a P5
+- P5 borde derecho (x=295): escalera metalica, sube a P3
+- P4 borde izquierdo (x=40): escalera metalica, baja a P7
+- P7 borde izquierdo (x=40): escalera metalica, sube a P4
+
+### Objetos interactivos visibles en el escenario
+
+Los siguientes objetos deben ser visibles en el fondo o como sprites separados:
+
+**Prehistoria:**
+- P2: colmena accesible desde la plataforma central (x=160, y=130)
+- P3: palo en el suelo junto a la roca izquierda (x=80, y=159)
+
+**Edad Media:**
+- P3: taza en el alfeizar de la casa (x=180, y=159)
+- P9: antorcha apagada en la torre (x=100, y=160)
+
+**Pendiente de revisar:** resto de objetos interactivos por pantalla
+al integrar el arte final de cada epoca.
+
+### Secuencia de intro
+
+Implementar una secuencia de intro animada que introduzca al jugador en la historia
+antes de que comience el juego. La secuencia debe narrar brevemente:
+
+- La reunion de ex-alumnos en el colegio
+- Eric descubriendo la caja fuerte y el artefacto
+- La activacion accidental del artefacto y su fragmentacion
+- Eric atrapado entre las tres epocas
+
+Formato sugerido: serie de pantallas estaticas de 320x200 con texto superpuesto
+y fade entre ellas, al estilo de las intros de juegos DOS de la epoca.
+La secuencia debe ser saltable con cualquier tecla.
+
+La intro se insertaria en show_presentation() en tempus.c, despues de los logos
+y antes de que comience el juego.

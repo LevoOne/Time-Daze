@@ -1,44 +1,56 @@
-# Tempus Fugit
+# Time Daze
 
-Juego de plataformas para MS-DOS desarrollado en C con OpenWatcom 2.0 por H3 software.
-Mi intención es presenstarlo a la segunda edición del concurso de programación C:\DOS\CONTEST del MS-DOS Club.
+**Concurso**: MS-DOS Club 2026 (tema: viajes en el tiempo)
+**Deadline**: 30 de septiembre de 2026
+
+---
 
 ## Sinopsis
 
-Eric pensaba que volver a su antiguo colegio para una reunion de ex-alumnos seria una tarde tranquila.
+Eric es un estudiante universitario que acude a una reunion de ex-alumnos en su
+antiguo colegio. Mientras explora el edificio, descubre una vieja caja fuerte
+olvidada. Al abrirla encuentra un extrano artefacto que activa sin querer,
+fragmentandolo en tres partes que se dispersan por el tiempo.
 
-Se equivocaba.
+Atrapado entre la Prehistoria, la Edad Media y un futuro post-apocaliptico, Eric
+debe recuperar los tres fragmentos del artefacto para poder regresar a su epoca.
 
-Lo que empezó como una visita nostálgica se convirtio en algo mucho mas grande cuando encontró un misterioso artilugio escondido durante decadas. En el momento en que lo tocó, todo cambió. El artilugio se fragmentó en tres piezas, cada una desapareciendo en un momento distinto de la historia. Y Eric fue con ellas.
-Atrapado entre tres epocas del mismo lugar, desde la naturaleza salvaje de la prehistoria hasta las frias ruinas de un futuro post-apocalíptico, Eric debe recuperar los fragmentos y encontrar el camino de vuelta. Pero el tiempo no es tan simple como parece. Cada acción deja una huella. Cada decisión resuena a traves de los siglos. Y en algun lugar del pasado, alguien está esperando a que Eric lo descubra.
+## Controles
 
-Tempus Fugit es un juego de plataformas 2D para MS-DOS que combina la jugabilidad arcade clasica de 8 bits con puzzles de viajes en el tiempo inspirados en la edad de oro de las aventuras graficas de los 90. Desarrollado desde cero para correr en equipos MS-DOS originales, es una carta de amor a los juegos que definieron una generación.
+- Flechas izquierda/derecha: mover a Eric
+- SPACE: saltar
+- ENTER: accion (recoger objeto, hablar, usar mecanismo, usar liana)
+- ALT: viajar a la siguiente epoca
+- ESC: salir
 
-Algunas puertas solo se abren desde el otro lado de la historia.
+## Compilar
 
-## Requisitos
+Requiere OpenWatcom 2.0 y DOS/4GW.
 
-- MS-DOS 6.22 o compatible
-- PC 486DX2 con 16MB de RAM
-- Tarjeta VGA
-- Sound Blaster (opcional)
-- DOSBox-X y PCem para emulacion
+```
+wcl386 -l=dos4g tempus.c game.c player.c enemies.c puzzles.c
+        screen.c inventory.c save.c hud.c logic.c engine.c judas.lib
+```
 
+Para compilar con mensajes de debug:
 
-## Tecnología
+```
+wcl386 -l=dos4g -dDEBUG tempus.c game.c ...
+```
 
-- Compilador: OpenWatcom 2.0
-- Grafico: VGA modo 13h (320x200, 256 colores)
-- Sonido: Judas Sound System (Sound Blaster, XM/WAV)
-- Extensor DOS: DOS/4GW
+## Ejecutar
 
-## Estructura del repositorio (pendiente)
+Requiere DOSBox-X o un PC con MS-DOS. Todos los assets deben estar
+en el mismo directorio que el ejecutable.
 
+## Creditos
 
-## Créditos
+- Desarrollo: Javier
+- Arte: en progreso
+- Motor: engine propio sobre OpenWatcom 2.0 + Judas Sound System
+- Inspirado en: Skool Daze (ZX Spectrum, 1984)
 
-- Desarrollo: Javier (LevoOne)
-- Motor gráfico: basado en tutoriales de David Brackeen
-- Sonido: Judas Sound System por Cadaver/Yehar
-- Música: Noe (@zhoe_vall)
-- Efectos: Noe (@zhoe_vall)
+---
+
+*Time Daze es un homenaje a "Skool Daze", clasico del ZX Spectrum,
+del que toma prestado a su protagonista Eric.*
