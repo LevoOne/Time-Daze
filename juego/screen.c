@@ -1,7 +1,5 @@
-
-
 /*
- * screen.c - Sistema de pantallas de Tempus Fugit
+ * screen.c - Sistema de pantallas de Time Daze
  *
  * Gestiona:
  *   - Tabla de conexiones entre pantallas
@@ -26,6 +24,43 @@
 
 /* Prototipo interno */
 static int try_load_bmp(char *file, BITMAP *b);
+
+/* ----------------------------------------------------------------
+ * PALETA DE ERIC
+ * Indices 238-255 reservados para los colores de Eric.
+ * Se inyectan en la paleta activa despues de cada cambio de fondo.
+ * Formato: R,G,B en rango 0..63 para VGA.
+ * ---------------------------------------------------------------- */
+static const byte eric_palette[18 * 3] =
+{
+     0,  0,  0,  /* indice 238: negro */
+    11, 13, 48,  /* indice 239: azul oscuro jersey */
+     0,  5, 34,  /* indice 240: azul muy oscuro */
+     0, 36, 63,  /* indice 241: azul claro */
+    21, 11,  8,  /* indice 242: marron muy oscuro piel */
+    26, 14, 11,  /* indice 243: marron oscuro piel */
+    33, 18, 14,  /* indice 244: marron piel */
+    33, 26, 29,  /* indice 245: gris rosado */
+    59, 50, 47,  /* indice 246: piel clara */
+    44, 25, 21,  /* indice 247: marron rojizo */
+    48, 33, 26,  /* indice 248: marron medio */
+    56, 36, 30,  /* indice 249: salmon */
+    58, 41, 36,  /* indice 250: salmon claro */
+    63, 49, 45,  /* indice 251: rosa claro */
+    59, 44, 38,  /* indice 252: salmon medio */
+    50, 50, 50,  /* indice 253: gris claro */
+    58, 57, 50,  /* indice 254: blanco hueso */
+     0,  0,  0,  /* indice 255: negro */
+};
+
+/* Inyecta los colores de Eric en la paleta VGA activa */
+static void screen_inject_eric_palette(void)
+{
+    int i;
+    outp(0x3C8, 238);
+    for (i = 0; i < 18 * 3; i++)
+        outp(0x3C9, eric_palette[i]);
+}
 
 /* ----------------------------------------------------------------
  * VARIABLES GLOBALES
@@ -117,69 +152,67 @@ static const int connections[EPOCH_COUNT][SCREEN_COUNT][DIR_COUNT] =
  * ---------------------------------------------------------------- */
 static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
 {
-    /* P1: cima, circulo de megalitos */
+    /* P1: cima, megalitos */
     {
-        { 0,   175, 320, 8 },
-        { 40,  150,  60, 8 },
-        { 180, 140,  80, 8 },
-        { 260, 155,  50, 8 },
+        { 0,   148, 320, 1 },   /* suelo principal */
+        { 29,  116,  50, 2 },   /* dolmen izquierdo */
+        { 136, 110,  60, 2 },   /* roca plana central, chaman */
         { 0, 0, 0, 0 }
     },
     /* P2: ladera, colmena */
     {
-        { 0,   175, 320, 8 },
-        { 20,  155,  50, 8 },
-        { 100, 135,  60, 8 },
-        { 200, 115,  70, 8 },
+        { 0,   148, 320, 1 },   /* suelo principal */
+        { 27,  115,  54, 2 },   /* roca izquierda */
+        { 134, 110,  64, 2 },   /* roca central, colmena */
+        { 245, 133,  59, 2 },   /* roca derecha */
         { 0, 0, 0, 0 }
     },
-    /* P3: pie colina, oso */
+    /* P3: pie colina, oso - coordenadas pendiente de ajustar con BMP */
     {
-        { 0,   175, 320, 8 },
-        { 60,  155,  40, 8 },
-        { 200, 160,  60, 8 },
+        { 0,   148, 320, 1 },   /* suelo principal */
+        { 5,  105,  73, 1 },   /* roca izquierda */
         { 0, 0, 0, 0 }
     },
-    /* P4: nivel medio, jabali */
+    /* P4: nivel medio - coordenadas pendiente de ajustar con BMP */
     {
-        { 0,   175, 320, 8 },
-        { 50,  145,  60, 8 },
-        { 180, 150,  70, 8 },
+        { 0,   148, 320, 8 },   /* suelo principal */
+        { 50,  120,  60, 2 },   /* plataforma izquierda */
+        { 180, 125,  70, 2 },   /* plataforma derecha */
         { 0, 0, 0, 0 }
     },
     /* P5: hoguera */
     {
-        { 0,   175, 320, 8 },
+        { 0,   148, 320, 8 },   /* suelo principal */
         { 0, 0, 0, 0 }
     },
-    /* P6: zona baja izquierda */
+    /* P6: zona baja izquierda - coordenadas pendiente de ajustar con BMP */
     {
-        { 0,   175, 320, 8 },
-        { 30,  155,  40, 8 },
+        { 0,   148, 320, 8 },   /* suelo principal */
+        { 30,  130,  40, 2 },   /* plataforma izquierda */
         { 0, 0, 0, 0 }
     },
-    /* P7: zona baja centro */
+    /* P7: zona baja centro - coordenadas pendiente de ajustar con BMP */
     {
-        { 0,   175, 320, 8 },
-        { 40,  150,  50, 8 },
-        { 180, 145,  60, 8 },
+        { 0,   148, 320, 8 },   /* suelo principal */
+        { 40,  125,  50, 2 },   /* plataforma izquierda */
+        { 180, 120,  60, 2 },   /* plataforma derecha */
         { 0, 0, 0, 0 }
     },
-    /* P8: cruce del rio */
+    /* P8: cruce del rio - coordenadas pendiente de ajustar con BMP */
     {
-        { 0,   175,  60, 8 },
-        { 260, 175,  60, 8 },
-        { 80,  160,  30, 8 },
-        { 130, 155,  30, 8 },
-        { 180, 160,  30, 8 },
-        { 230, 158,  25, 8 },
+        { 0,   148,  60, 8 },   /* orilla izquierda */
+        { 260, 148,  60, 8 },   /* orilla derecha */
+        { 80,  133,  30, 2 },   /* roca 1 */
+        { 130, 128,  30, 2 },   /* roca 2 */
+        { 180, 133,  30, 2 },   /* roca 3 */
+        { 230, 131,  25, 2 },   /* roca 4 */
         { 0, 0, 0, 0 }
     },
-    /* P9: monolito */
+    /* P9: monolito - coordenadas pendiente de ajustar con BMP */
     {
-        { 0,   175, 320, 8 },
-        { 100, 145,  40, 8 },
-        { 220, 155,  60, 8 },
+        { 0,   148, 320, 8 },   /* suelo principal */
+        { 100, 120,  40, 2 },   /* plataforma monolito */
+        { 220, 130,  60, 2 },   /* tronco caido */
         { 0, 0, 0, 0 }
     }
 };
@@ -472,6 +505,8 @@ void screen_apply_palette(void)
     if (g_bg_loaded[epoch][screen] &&
         g_backgrounds[epoch][screen].data != NULL)
         set_palette(g_backgrounds[epoch][screen].palette);
+
+    screen_inject_eric_palette();
 }
 
 /* ----------------------------------------------------------------
@@ -588,6 +623,10 @@ int screen_change(int dir)
     screen_draw();
     vga_flip();
 
+    /* Inyectar paleta de Eric en saved_palette y en el hardware */
+    palette_inject(238, eric_palette, 18);
+    screen_inject_eric_palette();
+
     /* Fade in de la nueva pantalla */
     vga_fade_in(16, 4);
 
@@ -611,6 +650,8 @@ void screen_travel(int new_epoch)
     screen_load(new_epoch, screen);
     screen_draw();
     vga_flip();
+    palette_inject(238, eric_palette, 18);
+    screen_inject_eric_palette();
     vga_fade_in(16, 4);
 }
 

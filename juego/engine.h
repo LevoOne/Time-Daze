@@ -122,6 +122,7 @@ void vga_flip(void);
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void vga_clear(unsigned char color);
+void vga_clear_screen(unsigned char color);
 
 /* -----------------------------------------------------------------------------------------
  * vga_put_pixel()
@@ -303,6 +304,7 @@ void bmp_draw_tile_opaque(const BITMAP *bmp,
  * -----------------------------------------------------------------------------------------*/
 void set_palette(byte *palette);
 void set_palette_silent(byte *palette);
+void palette_inject(int start_index, const byte *colors, int count);
 
 /* -----------------------------------------------------------------------------------------
  * rotate_palette()

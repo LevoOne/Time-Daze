@@ -1,5 +1,5 @@
 /*
- * save.c - Sistema de guardado de Tempus Fugit
+ * save.c - Sistema de guardado de Time Daze
  * C89: todas las variables declaradas al inicio del bloque.
  */
 

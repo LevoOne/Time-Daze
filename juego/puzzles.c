@@ -1,5 +1,5 @@
 /*
- * puzzles.c - Sistema de estado de puzzles de Tempus Fugit
+ * puzzles.c - Sistema de estado de puzzles de Time Daze
  * C89: todas las variables declaradas al inicio del bloque.
  */
 

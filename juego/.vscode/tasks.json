@@ -9,6 +9,7 @@
             "args": [
                 "-l=dos4g",
                 "-w4",
+                "-dDEBUG",
                 "${fileBasenameNoExtension}.c",
                 "player.c",
                 "enemies.c",

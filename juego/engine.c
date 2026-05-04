@@ -4,6 +4,9 @@
 
 #include "engine.h"
 
+/* Declaracion externa para evitar distorsion de musica durante fades */
+extern void sound_update(void);
+
 /* ----------------------------------------------------------------
  * VARIABLES GLOBALES
  * ---------------------------------------------------------------- */
@@ -67,6 +70,11 @@ void vga_clear(unsigned char color)
     memset(back_buffer, color, SCREEN_SIZE);
 }
 
+void vga_clear_screen(unsigned char color)
+{
+    memset(VGA, color, SCREEN_SIZE);
+}
+
 void vga_put_pixel(int x, int y, unsigned char color)
 {
     if (x < 0 || x >= SCREEN_W || y < 0 || y >= SCREEN_H) return;
@@ -104,6 +112,7 @@ void vga_fade_out(int steps, unsigned long ticks_per_step)
     {
         wait_for_retrace();
         vga_write_palette_scaled(s);
+        sound_update();
         timer_wait(ticks_per_step);
     }
     vga_write_palette_scaled(0);
@@ -120,6 +129,7 @@ void vga_fade_in(int steps, unsigned long ticks_per_step)
     {
         wait_for_retrace();
         vga_write_palette_scaled(s);
+        sound_update();
         timer_wait(ticks_per_step);
     }
     vga_write_palette_scaled(64);
@@ -294,9 +304,20 @@ void set_palette(byte *palette)
         outp(0x3C9, palette[i]);
 }
 
-/* Guarda la paleta en saved_palette sin aplicarla al hardware VGA.
- * Usar durante transiciones para que vga_fade_in use la paleta correcta
- * sin causar parpadeo. */
+/* Inyecta colores en saved_palette sin tocar el hardware.
+ * start_index: indice de inicio (0..255)
+ * colors: array de bytes en formato R,G,B (0..63)
+ * count: numero de colores a inyectar */
+void palette_inject(int start_index, const byte *colors, int count)
+{
+    int i;
+    int base;
+
+    base = start_index * 3;
+    for (i = 0; i < count * 3; i++)
+        saved_palette[base + i] = colors[i];
+}
+
 void set_palette_silent(byte *palette)
 {
     int i;

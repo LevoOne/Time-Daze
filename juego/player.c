@@ -1,5 +1,5 @@
 /*
- * player.c - Sistema de Eric (jugador) en Tempus Fugit
+ * player.c - Sistema de Eric (jugador) en Time Daze
  * C89: todas las variables declaradas al inicio del bloque.
  */
 
@@ -39,8 +39,6 @@ static void resolve_collisions(void)
 {
     int i;
     int px, py;
-    int ov_top, ov_bottom, ov_left, ov_right;
-    int min, axis;
     Platform *plat;
 
     g_game.player.on_ground = 0;
@@ -51,41 +49,18 @@ static void resolve_collisions(void)
         px   = (int)g_game.player.x;
         py   = (int)g_game.player.y;
 
-        if (px + PLAYER_WIDTH <= plat->x) continue;
-        if (px >= plat->x + plat->w)  continue;
-        if (py + PLAYER_HEIGHT <= plat->y) continue;
-        if (py >= plat->y + plat->h)  continue;
+        /* Solo colision por arriba:                          */
+        /* El borde inferior de Eric toca el borde superior   */
+        /* de la plataforma, viniendo desde arriba            */
+        if (px + PLAYER_WIDTH  <= plat->x) continue;
+        if (px >= plat->x + plat->w)       continue;
+        if (py + PLAYER_HEIGHT <  plat->y) continue;
+        if (py + PLAYER_HEIGHT >  plat->y + plat->h + 4) continue;
+        if (g_game.player.vel_y < 0.0f)   continue;
 
-        ov_top    = (py + PLAYER_HEIGHT) - plat->y;
-        ov_bottom = (plat->y + plat->h) - py;
-        ov_left   = (px + PLAYER_WIDTH) - plat->x;
-        ov_right  = (plat->x + plat->w) - px;
-
-        min = ov_top; axis = 0;
-        if (ov_bottom < min) { min = ov_bottom; axis = 1; }
-        if (ov_left   < min) { min = ov_left;   axis = 2; }
-        if (ov_right  < min) { min = ov_right;  axis = 3; }
-
-        switch (axis)
-        {
-            case 0:
-                g_game.player.y         = (float)(plat->y - PLAYER_HEIGHT);
-                g_game.player.vel_y     = 0.0f;
-                g_game.player.on_ground = 1;
-                break;
-            case 1:
-                g_game.player.y     = (float)(plat->y + plat->h);
-                g_game.player.vel_y = 0.0f;
-                break;
-            case 2:
-                g_game.player.x     = (float)(plat->x - PLAYER_WIDTH);
-                g_game.player.vel_x = 0.0f;
-                break;
-            case 3:
-                g_game.player.x     = (float)(plat->x + plat->w);
-                g_game.player.vel_x = 0.0f;
-                break;
-        }
+        g_game.player.y         = (float)(plat->y - PLAYER_HEIGHT);
+        g_game.player.vel_y     = 0.0f;
+        g_game.player.on_ground = 1;
     }
 }
 
@@ -214,7 +189,7 @@ void player_draw(void)
 void player_hit(void)
 {
     g_game.player.lives--;
-    player_place(20, 140);
+    player_place(20, 100);
 }
 
 /* ----------------------------------------------------------------

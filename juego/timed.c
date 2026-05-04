@@ -1,9 +1,9 @@
 /*
- * main.c - Tempus Fugit
+ * tempus.c - Time Daze
  * MS-DOS Club 2026
  *
  * Compilar:
- *   wcl386 -l=dos4g main.c player.c enemies.c puzzles.c
+ *   wcl386 -l=dos4g tempus.c game.c player.c enemies.c puzzles.c
  *           screen.c inventory.c save.c hud.c logic.c
  *           engine.c judas.lib
  *
@@ -20,9 +20,6 @@
 #include "save.h"
 #include "hud.h"
 #include "logic.h"
-
-
-
 
 
 /* ----------------------------------------------------------------
@@ -50,12 +47,14 @@ static int g_state = STATE_TITLE;
 static void new_game(void);
 static void game_loop(void);
 static void draw_frame(void);
+static void show_presentation(void);
 
 /* ----------------------------------------------------------------
  * NEW GAME
  * ---------------------------------------------------------------- */
 static void new_game(void)
 {
+    screen_init();
     puzzle_init();
     inv_init();
     player_init();
@@ -63,7 +62,7 @@ static void new_game(void)
     logic_init();
     screen_load(EPOCH_PREHISTORY, 0);
     enemies_load(EPOCH_PREHISTORY, 0);
-    player_place(20, 155);
+    player_place(20, 100);
     screen_apply_palette();
 }
 
@@ -77,6 +76,18 @@ static void draw_frame(void)
     enemies_draw();
     player_draw();
     hud_draw();
+
+#ifdef DEBUG
+    draw_string("EP:", 2, 2, 15);
+    draw_int(g_game.screen.current_epoch, 26, 2, 14);
+    draw_string("SC:", 50, 2, 15);
+    draw_int(g_game.screen.current_screen + 1, 74, 2, 14);
+    draw_string("X:", 2, 12, 15);
+    draw_int((int)g_game.player.x, 18, 12, 14);
+    draw_string("Y:", 50, 12, 15);
+    draw_int((int)g_game.player.y, 66, 12, 14);
+#endif
+
     vga_flip();
 }
 
@@ -148,7 +159,7 @@ static void game_loop(void)
 
             case PLAYER_DEAD:
                 player_hit();
-                player_place(20, 140);
+                player_place(20, 100);
                 if (g_game.player.lives <= 0)
                     g_state = STATE_GAMEOVER;
                 break;
@@ -174,7 +185,7 @@ static void game_loop(void)
                 hud_set_mode(HUD_NORMAL);
                 screen_load(g_game.screen.current_epoch,
                             g_game.screen.current_screen);
-                player_place(20, 140);
+                player_place(20, 100);
             }
         }
 
@@ -190,18 +201,75 @@ static void game_loop(void)
 }
 
 /* ----------------------------------------------------------------
+ * PRESENTATION
+ * ---------------------------------------------------------------- */
+static void show_presentation(void)
+{
+    BITMAP bmp;
+
+    /* Logo del concurso */
+    load_bmp("contest.bmp", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(140);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    /* Logo del grupo de programacion */
+    load_bmp("h3logo.bmp", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(140);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    /* Logo Time Daze */
+    load_bmp("timed.bmp", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(210);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    /* TODO: secuencia de intro */
+    load_bmp("intro.bmp", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(140);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+}
+
+/* ----------------------------------------------------------------
  * MAIN
  * ---------------------------------------------------------------- */
 int main(void)
 {
+    BITMAP bmp;
+
     engine_init();
+    font_init();
     sound_init();
 
     sfx_load(SFX_JUMP, "jump.wav");
     music_load_xm("music.xm");
 
-    /* TODO: pantalla de titulo */
+    /* Presentación */
+    show_presentation();
 
+    /* Comprueba si existe una partida salvada */
     if (save_exists())
         load_game();
     else

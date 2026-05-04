@@ -1,5 +1,5 @@
 /*
- * inventory.c - Sistema de inventario de Tempus Fugit
+ * inventory.c - Sistema de inventario de Time Daze
  *
  * Gestiona el objeto que lleva Eric y los objetos
  * depositados en el mapa.

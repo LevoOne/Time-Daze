@@ -10,8 +10,8 @@
 /* ----------------------------------------------------------------
  * CONSTANTES DE FISICA Y ANIMACION
  * ---------------------------------------------------------------- */
-#define PLAYER_WIDTH    16
-#define PLAYER_HEIGHT   16
+#define PLAYER_WIDTH    32
+#define PLAYER_HEIGHT   32
 #define PLAYER_GRAVITY  0.35f
 #define PLAYER_JUMP    -5.5f
 #define PLAYER_SPEED    1.2f
@@ -29,6 +29,16 @@
 #define PLAYER_UP       3   /* salio por arriba            */
 #define PLAYER_DOWN     4   /* salio por abajo             */
 #define PLAYER_DEAD     5   /* cayo al vacio               */
+
+/* ----------------------------------------------------------------
+ * Filas del spritesheet
+ * ---------------------------------------------------------------- */
+#define ROW_IDLE        0
+#define ROW_WALK_LEFT   1
+#define ROW_WALK_RIGHT  2
+#define ROW_JUMP_RIGHT  2   /* provisional: misma fila que walk right */
+#define ROW_JUMP_LEFT   1   /* provisional: misma fila que walk left  */
+
 
 /* ----------------------------------------------------------------
  * FUNCIONES

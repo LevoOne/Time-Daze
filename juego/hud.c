@@ -1,5 +1,5 @@
 /*
- * hud.c - Sistema de HUD de Tempus Fugit
+ * hud.c - Sistema de HUD de Time Daze
  * C89: todas las variables declaradas al inicio del bloque.
  */
 

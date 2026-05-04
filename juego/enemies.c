@@ -1,5 +1,5 @@
 /*
- * enemies.c - Sistema de enemigos de Tempus Fugit
+ * enemies.c - Sistema de enemigos de Time Daze
  * C89: todas las variables declaradas al inicio del bloque.
  */
 
@@ -34,13 +34,13 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
     { END_ENEMY },
     /* P3: pie colina, oso */
     {
-        { ENEMY_BEAR, 1, 80.0f,160.0f, 0.5f,0.0f,
-          PAT_HORIZONTAL, 60.0f,240.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_BEAR, 1, 80.0f, 116.0f, 0.5f,0.0f,
+        PAT_HORIZONTAL, 60.0f,240.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
     /* P4: nivel medio, jabali */
     {
-        { ENEMY_BOAR, 1, 100.0f,160.0f, 0.8f,0.0f,
+        { ENEMY_BOAR, 1, 100.0f,116.0f, 0.8f,0.0f,
           PAT_HORIZONTAL, 40.0f,260.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
@@ -273,6 +273,9 @@ int enemies_check_collision(void)
     int px, py, ex, ey;
     Enemy *e;
 
+    /* Temporal solo para Debug */
+    return 0;
+    
     px = (int)g_game.player.x;
     py = (int)g_game.player.y;
 
