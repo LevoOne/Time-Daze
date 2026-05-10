@@ -18,10 +18,6 @@
 #include "player.h"
 #include "puzzles.h"
 
-
-
-
-
 /* Prototipo interno */
 static int try_load_bmp(char *file, BITMAP *b);
 
@@ -167,17 +163,17 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
         { 245, 133,  59, 2 },   /* roca derecha */
         { 0, 0, 0, 0 }
     },
-    /* P3: pie colina, oso - coordenadas pendiente de ajustar con BMP */
+    /* P3: pie colina, oso  */
     {
-        { 0,   148, 320, 1 },   /* suelo principal */
+        { 0,   148, 320, 8 },   /* suelo principal */
         { 5,  105,  73, 1 },   /* roca izquierda */
         { 0, 0, 0, 0 }
     },
-    /* P4: nivel medio - coordenadas pendiente de ajustar con BMP */
+    /* P4: nivel medio */
     {
-        { 0,   148, 320, 8 },   /* suelo principal */
-        { 50,  120,  60, 2 },   /* plataforma izquierda */
-        { 180, 125,  70, 2 },   /* plataforma derecha */
+        { 0, 148, 320, 1 },   /* suelo principal */
+        { 4,  105, 75, 2 },     /* plataforma izquierda */
+        { 0, 0, 0, 0 },        /* plataforma derecha */
         { 0, 0, 0, 0 }
     },
     /* P5: hoguera */
@@ -185,17 +181,17 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
         { 0,   148, 320, 8 },   /* suelo principal */
         { 0, 0, 0, 0 }
     },
-    /* P6: zona baja izquierda - coordenadas pendiente de ajustar con BMP */
+    /* P6: zona baja izquierda */
     {
-        { 0,   148, 320, 8 },   /* suelo principal */
-        { 30,  130,  40, 2 },   /* plataforma izquierda */
+        { 0, 148, 320, 8 },   /* suelo principal */
+        { 0, 112, 33, 2 },   /* plataforma izquierda */
         { 0, 0, 0, 0 }
     },
-    /* P7: zona baja centro - coordenadas pendiente de ajustar con BMP */
+    /* P7: zona baja centro */
     {
-        { 0,   148, 320, 8 },   /* suelo principal */
-        { 40,  125,  50, 2 },   /* plataforma izquierda */
-        { 180, 120,  60, 2 },   /* plataforma derecha */
+        { 0, 148, 320, 8 },   /* suelo principal */
+        { 0, 87, 35, 2 },   /* plataforma izquierda */
+        { 90, 101, 54, 2 },   /* plataforma derecha */
         { 0, 0, 0, 0 }
     },
     /* P8: cruce del rio - coordenadas pendiente de ajustar con BMP */
@@ -609,7 +605,7 @@ int screen_change(int dir)
             player_place(4, py);
             break;
         case DIR_UP:
-            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 24);
+            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 50);
             break;
         case DIR_DOWN:
             player_place((int)g_game.player.x, 8);

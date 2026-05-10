@@ -9,9 +9,6 @@
 #include "player.h"
 
 
-
-
-
 /* Spritesheet global de Eric, cargado en screen.c */
 extern BITMAP g_spritesheet;
 
@@ -99,6 +96,9 @@ int player_update(void)
     }
 
     g_game.player.vel_y += PLAYER_GRAVITY;
+    /* Limitar velocidad maxima de caida */
+    if (g_game.player.vel_y > 8.0f)
+        g_game.player.vel_y = 8.0f;
     g_game.player.x     += g_game.player.vel_x;
     g_game.player.y     += g_game.player.vel_y;
 

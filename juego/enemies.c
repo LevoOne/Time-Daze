@@ -30,36 +30,37 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
 {
     /* P1: cima, sin enemigos */
     { END_ENEMY },
+    
     /* P2: ladera, sin enemigos */
     { END_ENEMY },
+   
     /* P3: pie colina, oso */
     {
-        { ENEMY_BEAR, 1, 80.0f, 116.0f, 0.5f,0.0f,
-        PAT_HORIZONTAL, 60.0f,240.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_BEAR, 1, 200.0f, 116.0f, 0.5f, 0.0f,
+        PAT_HORIZONTAL, 180.0f, 295.0f, 0.0f, 0.0f, 0, 0 },
         END_ENEMY
     },
+    
     /* P4: nivel medio, jabali */
     {
         { ENEMY_BOAR, 1, 100.0f,116.0f, 0.8f,0.0f,
           PAT_HORIZONTAL, 40.0f,260.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
+    
     /* P5: hoguera, sin enemigos */
     { END_ENEMY },
-    /* P6: zona baja, peces */
-    {
-        { ENEMY_FISH, 1, 80.0f,170.0f, 0.0f,2.0f,
-          PAT_VERTICAL, 0.0f,0.0f, 140.0f,175.0f, 0,0 },
-        { ENEMY_FISH, 1, 140.0f,175.0f, 0.0f,2.0f,
-          PAT_VERTICAL, 0.0f,0.0f, 135.0f,175.0f, 0,0 },
-        END_ENEMY
-    },
+    
+    /* P6: zona baja, sin enemigos */
+    { END_ENEMY },
+    
     /* P7: zona baja centro, reptil */
     {
-        { ENEMY_REPTILE, 1, 80.0f,160.0f, 0.6f,0.0f,
+        { ENEMY_REPTILE, 1, 80.0f, 116.0f, 0.6f,0.0f,
           PAT_HORIZONTAL, 20.0f,280.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
+    
     /* P8: cruce del rio, peces */
     {
         { ENEMY_FISH, 1, 100.0f,170.0f, 0.0f,2.5f,

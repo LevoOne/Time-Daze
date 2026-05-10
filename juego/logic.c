@@ -1,5 +1,5 @@
 /*
- * logic.c - Logica de puzzles y eventos de Time Daze
+ * logic.c - Logica de puzzles y eventos de Tempus Fugit
  *
  * Contiene la logica concreta de cada puzzle:
  * que pasa cuando Eric interactua con objetos y personajes.
@@ -96,6 +96,7 @@ static int logic_prehistory(int screen)
     int egg_x,     egg_y;
     int fire_x,    fire_y;
     int liana_x,   liana_y;
+    int ex4,       ex7;
     ItemInstance  *inst;
 
     handled    = 0;
@@ -254,8 +255,10 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 3)
     {
-        if (eric_near(liana_x, liana_y) && eric_action())
-            logic_screen_change(DIR_DOWN);
+        ex4 = (int)g_game.player.x + PLAYER_WIDTH / 2;
+        if (ex4 > liana_x - INTERACT_DIST && ex4 < liana_x + INTERACT_DIST)
+            if (eric_action())
+                logic_screen_change(DIR_DOWN);
     }
 
     /* --------------------------------------------------------
@@ -263,8 +266,10 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 6)
     {
-        if (eric_near(liana_x, liana_y) && eric_action())
-            logic_screen_change(DIR_UP);
+        ex7 = (int)g_game.player.x + PLAYER_WIDTH / 2;
+        if (ex7 > liana_x - INTERACT_DIST && ex7 < liana_x + INTERACT_DIST)
+            if (eric_action())
+                logic_screen_change(DIR_UP);
     }
 
     /* --------------------------------------------------------
@@ -299,6 +304,7 @@ static int logic_medieval(int screen)
     int alch_x,     alch_y;
     int torch_x,    torch_y;
     int liana_x,    liana_y;
+    int ex4,        ex7;
 
     handled    = 0;
     cup_x      = 180; cup_y      = 159;
@@ -444,8 +450,10 @@ static int logic_medieval(int screen)
      * -------------------------------------------------------- */
     if (screen == 3)
     {
-        if (eric_near(liana_x, liana_y) && eric_action())
-            logic_screen_change(DIR_DOWN);
+        ex4 = (int)g_game.player.x + PLAYER_WIDTH / 2;
+        if (ex4 > liana_x - INTERACT_DIST && ex4 < liana_x + INTERACT_DIST)
+            if (eric_action())
+                logic_screen_change(DIR_DOWN);
     }
 
     /* --------------------------------------------------------
@@ -453,8 +461,10 @@ static int logic_medieval(int screen)
      * -------------------------------------------------------- */
     if (screen == 6)
     {
-        if (eric_near(liana_x, liana_y) && eric_action())
-            logic_screen_change(DIR_UP);
+        ex7 = (int)g_game.player.x + PLAYER_WIDTH / 2;
+        if (ex7 > liana_x - INTERACT_DIST && ex7 < liana_x + INTERACT_DIST)
+            if (eric_action())
+                logic_screen_change(DIR_UP);
     }
 
     /* --------------------------------------------------------
@@ -497,6 +507,7 @@ static int logic_future(int screen)
     int terminal_x,  terminal_y;
     int fragment_x,  fragment_y;
     int liana_x,     liana_y;
+    int ex4,         ex7;
 
     handled     = 0;
     radiation_x = 160; radiation_y = 160;
@@ -596,8 +607,10 @@ static int logic_future(int screen)
      * -------------------------------------------------------- */
     if (screen == 3)
     {
-        if (eric_near(liana_x, liana_y) && eric_action())
-            logic_screen_change(DIR_DOWN);
+        ex4 = (int)g_game.player.x + PLAYER_WIDTH / 2;
+        if (ex4 > liana_x - INTERACT_DIST && ex4 < liana_x + INTERACT_DIST)
+            if (eric_action())
+                logic_screen_change(DIR_DOWN);
     }
 
     /* --------------------------------------------------------
@@ -605,8 +618,10 @@ static int logic_future(int screen)
      * -------------------------------------------------------- */
     if (screen == 6)
     {
-        if (eric_near(liana_x, liana_y) && eric_action())
-            logic_screen_change(DIR_UP);
+        ex7 = (int)g_game.player.x + PLAYER_WIDTH / 2;
+        if (ex7 > liana_x - INTERACT_DIST && ex7 < liana_x + INTERACT_DIST)
+            if (eric_action())
+                logic_screen_change(DIR_UP);
     }
 
     /* --------------------------------------------------------

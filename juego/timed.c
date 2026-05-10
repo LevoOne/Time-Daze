@@ -267,7 +267,8 @@ int main(void)
     music_load_xm("music.xm");
 
     /* Presentación */
-    show_presentation();
+    /* TEMP 
+    show_presentation(); */
 
     /* Comprueba si existe una partida salvada */
     if (save_exists())
