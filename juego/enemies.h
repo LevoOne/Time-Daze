@@ -21,6 +21,45 @@
 #define ENEMY_COUNT     8
 
 /* ----------------------------------------------------------------
+ * DIMENSIONES DE CADA TIPO DE ENEMIGO (w x h en pixels)
+ * Usadas en draw y en check_collision
+ * ---------------------------------------------------------------- */
+#define ENEMY_BEAR_W     28
+#define ENEMY_BEAR_H     28
+#define ENEMY_BOAR_W     24
+#define ENEMY_BOAR_H     20
+#define ENEMY_REPTILE_W  24
+#define ENEMY_REPTILE_H  20
+#define ENEMY_FISH_W     12
+#define ENEMY_FISH_H     10
+#define ENEMY_GUARD_W    16
+#define ENEMY_GUARD_H    32
+#define ENEMY_DRONE_W    20
+#define ENEMY_DRONE_H    12
+#define ENEMY_ROBOT_W    24
+#define ENEMY_ROBOT_H    32
+
+/* Macro para obtener el ancho de un enemigo segun su tipo */
+#define ENEMY_W(type) ( \
+    (type)==ENEMY_BEAR    ? ENEMY_BEAR_W    : \
+    (type)==ENEMY_BOAR    ? ENEMY_BOAR_W    : \
+    (type)==ENEMY_REPTILE ? ENEMY_REPTILE_W : \
+    (type)==ENEMY_FISH    ? ENEMY_FISH_W    : \
+    (type)==ENEMY_GUARD   ? ENEMY_GUARD_W   : \
+    (type)==ENEMY_DRONE   ? ENEMY_DRONE_W   : \
+    (type)==ENEMY_ROBOT   ? ENEMY_ROBOT_W   : PLAYER_WIDTH)
+
+/* Macro para obtener el alto de un enemigo segun su tipo */
+#define ENEMY_H(type) ( \
+    (type)==ENEMY_BEAR    ? ENEMY_BEAR_H    : \
+    (type)==ENEMY_BOAR    ? ENEMY_BOAR_H    : \
+    (type)==ENEMY_REPTILE ? ENEMY_REPTILE_H : \
+    (type)==ENEMY_FISH    ? ENEMY_FISH_H    : \
+    (type)==ENEMY_GUARD   ? ENEMY_GUARD_H   : \
+    (type)==ENEMY_DRONE   ? ENEMY_DRONE_H   : \
+    (type)==ENEMY_ROBOT   ? ENEMY_ROBOT_H   : PLAYER_HEIGHT)
+
+/* ----------------------------------------------------------------
  * PATRONES DE MOVIMIENTO
  * ---------------------------------------------------------------- */
 #define PAT_HORIZONTAL  0   /* patrulla izquierda-derecha    */

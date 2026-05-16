@@ -1,5 +1,5 @@
 /*
- * screen.c - Sistema de pantallas de Time Daze
+ * screen.c - Sistema de pantallas de Tempus Fugit
  *
  * Gestiona:
  *   - Tabla de conexiones entre pantallas
@@ -17,6 +17,10 @@
 #include "screen.h"
 #include "player.h"
 #include "puzzles.h"
+
+
+
+
 
 /* Prototipo interno */
 static int try_load_bmp(char *file, BITMAP *b);
@@ -150,30 +154,30 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
 {
     /* P1: cima, megalitos */
     {
-        { 0,   148, 320, 1 },   /* suelo principal */
+        { 0,   148, 320, 8 },   /* suelo principal */
         { 29,  116,  50, 2 },   /* dolmen izquierdo */
         { 136, 110,  60, 2 },   /* roca plana central, chaman */
         { 0, 0, 0, 0 }
     },
     /* P2: ladera, colmena */
     {
-        { 0,   148, 320, 1 },   /* suelo principal */
+        { 0,   148, 320, 8 },   /* suelo principal */
         { 27,  115,  54, 2 },   /* roca izquierda */
         { 134, 110,  64, 2 },   /* roca central, colmena */
         { 245, 133,  59, 2 },   /* roca derecha */
         { 0, 0, 0, 0 }
     },
-    /* P3: pie colina, oso  */
+    /* P3: pie colina, oso */
     {
         { 0,   148, 320, 8 },   /* suelo principal */
-        { 5,  105,  73, 1 },   /* roca izquierda */
+        { 60,  130,  40, 2 },   /* roca izquierda */
         { 0, 0, 0, 0 }
     },
     /* P4: nivel medio */
     {
-        { 0, 148, 320, 1 },   /* suelo principal */
-        { 4,  105, 75, 2 },     /* plataforma izquierda */
-        { 0, 0, 0, 0 },        /* plataforma derecha */
+        { 0,   148, 320, 8 },   /* suelo principal */
+        { 50,  120,  60, 2 },   /* plataforma izquierda */
+        { 180, 125,  70, 2 },   /* plataforma derecha */
         { 0, 0, 0, 0 }
     },
     /* P5: hoguera */
@@ -183,32 +187,32 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     },
     /* P6: zona baja izquierda */
     {
-        { 0, 148, 320, 8 },   /* suelo principal */
-        { 0, 112, 33, 2 },   /* plataforma izquierda */
+        { 0,   148, 320, 8 },   /* suelo principal */
+        { 30,  130,  40, 2 },   /* plataforma izquierda */
         { 0, 0, 0, 0 }
     },
     /* P7: zona baja centro */
     {
-        { 0, 148, 320, 8 },   /* suelo principal */
-        { 0, 87, 35, 2 },   /* plataforma izquierda */
-        { 90, 101, 54, 2 },   /* plataforma derecha */
+        { 0,   148, 320, 8 },   /* suelo principal */
+        { 40,  125,  50, 2 },   /* plataforma izquierda */
+        { 180, 120,  60, 2 },   /* plataforma derecha */
         { 0, 0, 0, 0 }
     },
-    /* P8: cruce del rio - coordenadas pendiente de ajustar con BMP */
+    /* P8: cruce del rio */
     {
-        { 0,   148,  60, 8 },   /* orilla izquierda */
-        { 260, 148,  60, 8 },   /* orilla derecha */
-        { 80,  133,  30, 2 },   /* roca 1 */
-        { 130, 128,  30, 2 },   /* roca 2 */
-        { 180, 133,  30, 2 },   /* roca 3 */
-        { 230, 131,  25, 2 },   /* roca 4 */
+        { 35, 110, 45, 8 },     /* plataforma izquierda */
+        { 0,   148, 60, 8 },    /* orilla izquierda */
+        { 231, 148, 89, 8 },    /* orilla derecha */
+        { 102,  112, 10, 2 },   /* roca 1 */
+        { 136, 107, 5, 2 },     /* roca 2 */
+        { 176, 100, 5, 2 },     /* roca 3 */
+        { 206, 105, 8, 2 },     /* roca 4 */
         { 0, 0, 0, 0 }
     },
-    /* P9: monolito - coordenadas pendiente de ajustar con BMP */
+    /* P9: monolito */
     {
         { 0,   148, 320, 8 },   /* suelo principal */
-        { 100, 120,  40, 2 },   /* plataforma monolito */
-        { 220, 130,  60, 2 },   /* tronco caido */
+        { 234, 120, 51, 2 },   /* tronco caido */
         { 0, 0, 0, 0 }
     }
 };
@@ -549,12 +553,6 @@ int screen_get_connection(int dir)
 
     /* Bloqueos por puzzles */
 
-    /* Prehistoria: zona baja bloqueada hasta cruzar el rio */
-    if (epoch == EPOCH_PREHISTORY &&
-        screen == 7 && dir == DIR_RIGHT &&
-        !puzzle_is_solved(PUZZLE_RIVER))
-        return NO_SCREEN;
-
     /* Edad Media: p9 bloqueada hasta bajar el puente */
     if (epoch == EPOCH_MEDIEVAL &&
         screen == 7 && dir == DIR_RIGHT &&
@@ -605,7 +603,7 @@ int screen_change(int dir)
             player_place(4, py);
             break;
         case DIR_UP:
-            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 50);
+            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 24);
             break;
         case DIR_DOWN:
             player_place((int)g_game.player.x, 8);
@@ -644,30 +642,13 @@ void screen_travel(int new_epoch)
     vga_clear(0);
     vga_flip();
     screen_load(new_epoch, screen);
+
+    /* Reposicionar a Eric a una Y segura para que caiga al suelo */
+    player_place((int)g_game.player.x, 100);
+
     screen_draw();
     vga_flip();
     palette_inject(238, eric_palette, 18);
     screen_inject_eric_palette();
     vga_fade_in(16, 4);
-}
-
-void screen_draw_platforms_debug(void)
-{
-    int i;
-    int x1, y1, x2, y2;
-    Platform *p;
-
-    for (i = 0; i < g_screen_data.platform_count; i++)
-    {
-        p  = &g_screen_data.platforms[i];
-        x1 = p->x;
-        y1 = p->y;
-        x2 = p->x + p->w - 1;
-        y2 = p->y + p->h - 1;
-
-        draw_line(x1, y1, x2, y1, 10);   /* verde: borde superior */
-        draw_line(x1, y2, x2, y2, 10);   /* verde: borde inferior */
-        draw_line(x1, y1, x1, y2, 10);   /* verde: borde izquierdo */
-        draw_line(x2, y1, x2, y2, 10);   /* verde: borde derecho */
-    }
 }

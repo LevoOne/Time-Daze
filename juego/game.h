@@ -48,7 +48,7 @@ typedef struct {
  * PUZZLES
  * ---------------------------------------------------------------- */
 #define PUZZLE_BEAR        0   /* Prehistoria: el oso y la miel       */
-#define PUZZLE_RIVER       1   /* Prehistoria: el tronco y el rio     */
+#define PUZZLE_LEVER       1   /* Prehistoria: el tronco como palanca */
 #define PUZZLE_SHAMAN      2   /* Prehistoria: la ofrenda al chaman   */
 #define PUZZLE_BRIDGE      3   /* Edad Media: el puente levadizo      */
 #define PUZZLE_GUARD       4   /* Edad Media: el huevo y el guardia   */

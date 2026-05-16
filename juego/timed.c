@@ -60,8 +60,10 @@ static void new_game(void)
     player_init();
     hud_init();
     logic_init();
-    screen_load(EPOCH_PREHISTORY, 0);
-    enemies_load(EPOCH_PREHISTORY, 0);
+    /* TEMP: Cargar pantalla 7 de la prehistoria. Cuando terminen las pruebas, se empezará por la pantalla 0 (P1) */
+    screen_load(EPOCH_PREHISTORY, 7);
+    enemies_load(EPOCH_PREHISTORY, 7);
+
     player_place(20, 100);
     screen_apply_palette();
 }
@@ -257,16 +259,14 @@ static void show_presentation(void)
  * ---------------------------------------------------------------- */
 int main(void)
 {
-    BITMAP bmp;
-
+    /* Inicializar sub-sistemas */
     engine_init();
     font_init();
     sound_init();
-
     sfx_load(SFX_JUMP, "jump.wav");
     music_load_xm("music.xm");
 
-    /* Presentación */
+    /* Secuencia de presentación */
     /* TEMP 
     show_presentation(); */
 

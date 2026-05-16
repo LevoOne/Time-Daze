@@ -3,14 +3,14 @@
     "tasks":
     [
         {
-            "label": "Compilar Tempus-Fugit con Watcom DOS4GW",
+            "label": "Compilar Time Daze con Watcom DOS4GW",
             "type": "shell",
             "command": "wcl386",
             "args": [
                 "-l=dos4g",
                 "-w4",
                 "-dDEBUG",
-                "${fileBasenameNoExtension}.c",
+                "timed.c",
                 "player.c",
                 "enemies.c",
                 "puzzles.c",
@@ -40,7 +40,7 @@
                 "-conf", "dosbox-x.conf",
                 "-c", "mount C .",
                 "-c", "C:",
-                "-c", "${fileBasenameNoExtension}.exe"
+                "-c", "timed.exe"
             ],
             "group": "test"
         }
