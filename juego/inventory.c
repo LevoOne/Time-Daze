@@ -1,5 +1,5 @@
 /*
- * inventory.c - Sistema de inventario de Time Daze
+ * inventory.c - Sistema de inventario de Tempus Fugit
  *
  * Gestiona el objeto que lleva Eric y los objetos
  * depositados en el mapa.
@@ -28,6 +28,65 @@ void inv_init(void)
     {
         g_game.inv.instances[i].item_id = ITEM_NONE;
         g_game.inv.instances[i].active  = 0;
+    }
+}
+
+/* ----------------------------------------------------------------
+ * INV PLACE
+ * Coloca un objeto en el mapa sin que Eric lo lleve.
+ * Usar en logic_init para inicializar los objetos del mundo.
+ * Devuelve 1 si OK, 0 si no hay slots libres.
+ * ---------------------------------------------------------------- */
+int inv_place(int item_id, int epoch, int screen, int x, int y)
+{
+    int i;
+    ItemInstance *inst;
+
+    if (g_game.inv.instance_count >= MAX_ITEM_INSTANCES) return 0;
+
+    inst = NULL;
+    for (i = 0; i < MAX_ITEM_INSTANCES; i++)
+    {
+        if (!g_game.inv.instances[i].active)
+        {
+            inst = &g_game.inv.instances[i];
+            break;
+        }
+    }
+    if (inst == NULL) return 0;
+
+    inst->item_id = item_id;
+    inst->epoch   = epoch;
+    inst->screen  = screen;
+    inst->x       = x;
+    inst->y       = y;
+    inst->active  = 1;
+    g_game.inv.instance_count++;
+    return 1;
+}
+
+/* ----------------------------------------------------------------
+ * INV REMOVE INSTANCE
+ * Desactiva el ItemInstance de un objeto en el mapa.
+ * Llamar justo antes de inv_pick para que el objeto desaparezca.
+ * ---------------------------------------------------------------- */
+void inv_remove_instance(int item_id, int epoch, int screen)
+{
+    int i;
+    ItemInstance *inst;
+
+    for (i = 0; i < MAX_ITEM_INSTANCES; i++)
+    {
+        inst = &g_game.inv.instances[i];
+        if (!inst->active)          continue;
+        if (inst->item_id != item_id) continue;
+        if (inst->epoch   != epoch)   continue;
+        if (inst->screen  != screen)  continue;
+
+        inst->active = 0;
+        if (g_game.inv.instance_count > 0)
+            g_game.inv.instance_count--;
+        return;
     }
 }
 
@@ -130,17 +189,6 @@ ItemInstance *inv_get_at(int epoch, int screen, int x, int y)
         return inst;
     }
     return NULL;
-}
-
-/* ----------------------------------------------------------------
- * INV REMOVE INSTANCE
- * Elimina un objeto del mapa cuando Eric lo recoge
- * ---------------------------------------------------------------- */
-void inv_remove_instance(ItemInstance *inst)
-{
-    inst->active  = 0;
-    inst->item_id = ITEM_NONE;
-    g_game.inv.instance_count--;
 }
 
 /* ----------------------------------------------------------------

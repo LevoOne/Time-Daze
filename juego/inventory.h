@@ -24,6 +24,26 @@ void inv_init(void);
 int inv_pick(int item_id);
 
 /* -----------------------------------------------------------------------------------------
+ * inv_place()
+ *   Coloca un objeto en el mapa sin que Eric lo lleve.
+ *   Usar en logic_init para inicializar los objetos del mundo.
+ * Entrada: item_id (int) = identificador del objeto
+ *          epoch, screen = ubicacion en el mapa
+ *          x, y (int)    = coordenadas en pixels
+ * Salida:  1 si OK, 0 si no hay slots libres
+ * -----------------------------------------------------------------------------------------*/
+int inv_place(int item_id, int epoch, int screen, int x, int y);
+
+/* -----------------------------------------------------------------------------------------
+ * inv_remove_instance()
+ *   Desactiva el ItemInstance de un objeto en el mapa.
+ *   Llamar justo antes de inv_pick para que el objeto desaparezca del suelo.
+ * Entrada: item_id, epoch, screen = identifican el objeto a desactivar
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void inv_remove_instance(int item_id, int epoch, int screen);
+
+/* -----------------------------------------------------------------------------------------
  * inv_drop()
  *   Eric deposita el objeto que lleva en una posicion del mapa.
  * Entrada: epoch, screen (int) = epoca y pantalla destino
@@ -64,14 +84,6 @@ int inv_is_carrying(int item_id);
  * Salida:  puntero al ItemInstance encontrado, NULL si no hay ninguno cerca
  * -----------------------------------------------------------------------------------------*/
 ItemInstance *inv_get_at(int epoch, int screen, int x, int y);
-
-/* -----------------------------------------------------------------------------------------
- * inv_remove_instance()
- *   Elimina un objeto depositado del mapa.
- * Entrada: inst (ItemInstance*) = puntero al objeto a eliminar
- * Salida:  ninguna
- * -----------------------------------------------------------------------------------------*/
-void inv_remove_instance(ItemInstance *inst);
 
 /* -----------------------------------------------------------------------------------------
  * inv_draw()

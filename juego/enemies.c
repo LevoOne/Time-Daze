@@ -34,13 +34,13 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
     { END_ENEMY },
     /* P3: pie colina, oso */
     {
-        { ENEMY_BEAR, 1, 80.0f,160.0f, 0.5f,0.0f,
-          PAT_HORIZONTAL, 60.0f,240.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_BEAR, 1, 200.0f, 120.0f, 0.5f,0.0f,
+          PAT_HORIZONTAL, 180.0f,295.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
     /* P4: nivel medio, jabali */
     {
-        { ENEMY_BOAR, 1, 100.0f,160.0f, 0.8f,0.0f,
+        { ENEMY_BOAR, 1, 100.0f, 128.0f, 0.8f,0.0f,
           PAT_HORIZONTAL, 40.0f,260.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
@@ -50,7 +50,7 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
     { END_ENEMY },
     /* P7: zona baja centro, reptil */
     {
-        { ENEMY_REPTILE, 1, 80.0f, 116.0f, 0.6f,0.0f,
+        { ENEMY_REPTILE, 1, 80.0f, 128.0f, 0.6f,0.0f,
           PAT_HORIZONTAL, 20.0f,280.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },

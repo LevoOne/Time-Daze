@@ -1251,9 +1251,10 @@ Todas las pantallas con conexion vertical necesitan un elemento visual
 que indique al jugador que puede subir o bajar:
 
 **Prehistoria (liana):**
+- P1 eliminar la roca del BMP (ya cambiado en PRE_P1.BMP) para que sea un sprite
 - P3 borde derecho (x=295): liana colgando, baja a P5
 - P5 borde derecho (x=295): liana colgando, sube a P3
-- P4 borde izquierdo (x=40): liana colgando, baja a P7
+- P4 borde izquierdo (x=40): liana colgando, baja a P7, hacer que el gráfico de la liana baje hacia la parte de abajo, y se corte por arriba, como está ahora es confuso
 - P7 borde izquierdo (x=40): liana colgando, sube a P4
 
 **Edad Media (escalera de madera):**
@@ -1267,6 +1268,18 @@ que indique al jugador que puede subir o bajar:
 - P5 borde derecho (x=295): escalera metalica, sube a P3
 - P4 borde izquierdo (x=40): escalera metalica, baja a P7
 - P7 borde izquierdo (x=40): escalera metalica, sube a P4
+
+### Correciones gráficas pendientes
+
+**Prehistoria:**
+- P4 hacer que el gráfico de la liana baje hacia la parte de abajo, y se corte por arriba, como está ahora es confuso
+- P8: modificar el bitmap para que la roca descienda y coincida con la coordenada y de la plataforma
+- P8: modificar el bitmap para que parezca que el río llega hasta la parte de abajo de la pantalla, fluyendo hacia abajo-izquierda
+- P1: la roca redonda no puede estar ahí en el bitmap porque Eric aparece directamente en el lado del chamán, y eso debería ser posible sólo cuando se resuelve el primer puzzle
+
+**Edad Media:**
+
+**Futuro:**
 
 ### Objetos interactivos visibles en el escenario
 
@@ -1283,7 +1296,27 @@ Los siguientes objetos deben ser visibles en el fondo o como sprites separados:
 **Pendiente de revisar:** resto de objetos interactivos por pantalla
 al integrar el arte final de cada epoca.
 
-### Secuencia de intro
+### Sprites animados pendientes
+
+**Prehistoria P1:**
+- **Roca sprite**: la roca redonda que bloquea el acceso al chaman debe ser un
+  sprite independiente del BMP de fondo. Al resolver el puzzle del tronco/palanca,
+  la roca debe animarse rodando hacia la derecha hasta salir de pantalla, dejando
+  libre el paso al chaman.
+- **Chaman sprite**: el chaman de P1 debe ser un sprite animado situado sobre la
+  plataforma central (dolmen). No se desplaza. Realiza una animacion de baile
+  chamanico en bucle (varios frames de movimiento ritual: brazos alzados, giros,
+  invocaciones). Se detiene al interactuar con Eric.
+  **TODO**: mejorar el sprite del chaman. Al reducirlo a 32x32 pixeles el nivel de
+  detalle es insuficiente y el resultado es un amasijo de pixeles poco legible.
+  Opciones: regenerar con Gemini a mayor resolucion (48x48 o 64x64) y ajustar
+  el codigo de dibujado, o retocar manualmente en Aseprite.
+
+**Prehistoria P5:**
+- **Hoguera sprite**: la hoguera del punto de guardado en P5 debe ser un sprite
+  animado en lugar de una imagen estatica en el BMP. La animacion simula las llamas
+  con varios frames (3-4 frames en bucle). La hoguera se dibuja encima del BMP de
+  fondo en su posicion fija.
 
 Implementar una secuencia de intro animada que introduzca al jugador en la historia
 antes de que comience el juego. La secuencia debe narrar brevemente:

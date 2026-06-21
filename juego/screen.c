@@ -18,9 +18,9 @@
 #include "player.h"
 #include "puzzles.h"
 
-
-
-
+/* Animación del chamán */
+#define SHAMAN_FRAMES     4
+#define SHAMAN_ANIM_SPEED 12
 
 /* Prototipo interno */
 static int try_load_bmp(char *file, BITMAP *b);
@@ -67,6 +67,8 @@ static void screen_inject_eric_palette(void)
  * ---------------------------------------------------------------- */
 ScreenData g_screen_data;
 BITMAP     g_spritesheet;
+BITMAP     g_rock_sprite;
+BITMAP     g_shaman_sprite;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -170,14 +172,13 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     /* P3: pie colina, oso */
     {
         { 0,   148, 320, 8 },   /* suelo principal */
-        { 60,  130,  40, 2 },   /* roca izquierda */
+        { 5,  105, 73, 1 },   /* roca izquierda */
         { 0, 0, 0, 0 }
     },
     /* P4: nivel medio */
     {
         { 0,   148, 320, 8 },   /* suelo principal */
-        { 50,  120,  60, 2 },   /* plataforma izquierda */
-        { 180, 125,  70, 2 },   /* plataforma derecha */
+        { 4,  105, 75, 2 },    /* plataforma izquierda */
         { 0, 0, 0, 0 }
     },
     /* P5: hoguera */
@@ -188,19 +189,20 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     /* P6: zona baja izquierda */
     {
         { 0,   148, 320, 8 },   /* suelo principal */
-        { 30,  130,  40, 2 },   /* plataforma izquierda */
+        { 0, 112, 33, 2 },   /* plataforma izquierda */
         { 0, 0, 0, 0 }
     },
     /* P7: zona baja centro */
     {
-        { 0,   148, 320, 8 },   /* suelo principal */
-        { 40,  125,  50, 2 },   /* plataforma izquierda */
-        { 180, 120,  60, 2 },   /* plataforma derecha */
+         { 0, 148, 320, 8 },   /* suelo principal */
+        { 0, 87, 35, 2 },   /* plataforma izquierda */
+        { 90, 101, 54, 2 },   /* plataforma derecha */
         { 0, 0, 0, 0 }
     },
     /* P8: cruce del rio */
     {
-        { 35, 110, 45, 8 },     /* plataforma izquierda */
+        { 0, 87, 36, 8 },     /* plataforma izquierda */
+        { 39, 101, 41, 8 },   /* 2da plataforma  izquierda */
         { 0,   148, 60, 8 },    /* orilla izquierda */
         { 231, 148, 89, 8 },    /* orilla derecha */
         { 102,  112, 10, 2 },   /* roca 1 */
@@ -379,6 +381,14 @@ void screen_init(void)
     /* Cargar el spritesheet de Eric si existe */
     if (!try_load_bmp("PLAYER.BMP", &g_spritesheet))
         g_spritesheet.data = NULL;
+
+    /* Cargar el sprite de la roca de P1 */
+    if (!try_load_bmp("ROCK.BMP", &g_rock_sprite))
+        g_rock_sprite.data = NULL;
+
+    /* Cargar el sprite del chamán de P1 */
+    if (!try_load_bmp("SHAMAN.BMP", &g_shaman_sprite))
+    g_shaman_sprite.data = NULL;
 }
 
 /* ----------------------------------------------------------------
@@ -510,6 +520,21 @@ void screen_apply_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * SCREEN DRAW ROCK
+ * Dibuja el sprite de la roca en P1 de Prehistoria mientras
+ * el puzzle PUZZLE_LEVER no este resuelto.
+ * ---------------------------------------------------------------- */
+void screen_draw_rock(void)
+{
+    if (g_game.screen.current_epoch  != EPOCH_PREHISTORY) return;
+    if (g_game.screen.current_screen != 0)                return;
+    if (puzzle_is_solved(PUZZLE_LEVER))                   return;
+    if (g_rock_sprite.data == NULL)                       return;
+
+    draw_bitmap_buf_t(&g_rock_sprite, 108, 86);
+}
+
+/* ----------------------------------------------------------------
  * SCREEN DRAW
  * Dibuja el fondo de la pantalla actual en el back buffer
  * ---------------------------------------------------------------- */
@@ -603,7 +628,7 @@ int screen_change(int dir)
             player_place(4, py);
             break;
         case DIR_UP:
-            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 24);
+            player_place((int)g_game.player.x, SCREEN_H - PLAYER_HEIGHT - 40);
             break;
         case DIR_DOWN:
             player_place((int)g_game.player.x, 8);
@@ -651,4 +676,27 @@ void screen_travel(int new_epoch)
     palette_inject(238, eric_palette, 18);
     screen_inject_eric_palette();
     vga_fade_in(16, 4);
+}
+
+/* ----------------------------------------------------------------
+ * Draw Chamán
+ * Animación del chamán en P1 de pre
+ * ---------------------------------------------------------------- */
+void screen_draw_shaman(void)
+{
+    static int s_frame = 0;
+    static int s_timer = 0;
+
+    if (g_game.screen.current_epoch  != EPOCH_PREHISTORY) return;
+    if (g_game.screen.current_screen != 0)                return;
+    if (puzzle_is_solved(PUZZLE_SHAMAN))                  return;
+    if (g_shaman_sprite.data == NULL)                     return;
+
+    if (++s_timer >= 30)
+    {
+        s_timer = 0;
+        s_frame = (s_frame + 1) % 4;
+    }
+
+    bmp_draw_tile(&g_shaman_sprite, s_frame, 0, 32, 32, 36, 84);
 }

@@ -29,6 +29,11 @@ static int action_was_pressed = 0;
 void logic_init(void)
 {
     action_was_pressed = 0;
+
+    /* Colocar objetos iniciales en el mundo */
+    inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 80,  148); /* P3: palo   */
+    inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 240, 140); /* P9: tronco */
+    inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 148); /* P8: huevo  */
 }
 
 /* ----------------------------------------------------------------
@@ -97,7 +102,7 @@ static int logic_prehistory(int screen)
     int fire_x,    fire_y;
     int liana_x,   liana_y;
     int ex4,       ex7;
-    ItemInstance  *inst;
+
 
     handled    = 0;
     beehive_x  = 160; beehive_y  = 130;
@@ -159,10 +164,7 @@ static int logic_prehistory(int screen)
         {
             if (eric_near(80, 159) && eric_action())
             {
-                inst = inv_get_at(EPOCH_PREHISTORY, screen,
-                                  80, 159);
-                if (inst != NULL)
-                    inv_remove_instance(inst);
+                inv_remove_instance(ITEM_STICK, EPOCH_PREHISTORY, screen);
                 inv_pick(ITEM_STICK);
                 handled = 1;
             }
@@ -189,6 +191,19 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 0)
     {
+        /* Bloqueo de la roca: Eric no puede pasar a la zona izquierda
+         * (donde esta el chaman) hasta resolver el puzzle del tronco.
+         * La roca ocupa aproximadamente x=160, bloqueamos el paso
+         * cuando Eric intenta ir hacia la izquierda de x=200 */
+        if (!puzzle_is_solved(PUZZLE_LEVER))
+        {
+            if (g_game.player.x < 170.0f)
+            {
+                g_game.player.x     = 170.0f;
+                g_game.player.vel_x = 0.0f;
+            }
+        }
+
         if (!puzzle_is_solved(PUZZLE_SHAMAN))
         {
             if (eric_near(shaman_x, shaman_y) && eric_action())
@@ -229,6 +244,7 @@ static int logic_prehistory(int screen)
         {
             if (inv_is_carrying(ITEM_NONE))
             {
+                inv_remove_instance(ITEM_LOG, EPOCH_PREHISTORY, 8);
                 inv_pick(ITEM_LOG);
                 handled = 1;
             }
@@ -244,6 +260,7 @@ static int logic_prehistory(int screen)
         {
             if (inv_is_carrying(ITEM_NONE))
             {
+                inv_remove_instance(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7);
                 inv_pick(ITEM_DINO_EGG);
                 handled = 1;
             }
@@ -682,8 +699,8 @@ void logic_update(void)
                           (int)g_game.player.y + PLAYER_HEIGHT / 2);
         if (inst != NULL)
         {
+            inv_remove_instance(inst->item_id, inst->epoch, inst->screen);
             inv_pick(inst->item_id);
-            inv_remove_instance(inst);
             handled = 1;
         }
     }

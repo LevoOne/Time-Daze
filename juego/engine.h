@@ -247,6 +247,7 @@ void draw_transparent_bitmap(BITMAP *bmp, int x, int y);
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void draw_bitmap_buf(BITMAP *bmp, int x, int y);
+void draw_bitmap_buf_t(BITMAP *bmp, int x, int y);
 
 /* -----------------------------------------------------------------------------------------
  * draw_transparent_bitmap_buf()

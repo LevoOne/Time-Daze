@@ -12,6 +12,7 @@ extern ScreenData g_screen_data;
 
 /* Spritesheet de Eric, cargado en screen_init */
 extern BITMAP g_spritesheet;
+extern BITMAP g_rock_sprite;
 
 /* ----------------------------------------------------------------
  * FUNCIONES
@@ -53,6 +54,14 @@ void screen_apply_palette(void);
 void screen_draw(void);
 
 /* -----------------------------------------------------------------------------------------
+ * screen_draw_rock()
+ *   Dibuja el sprite de la roca en P1 de Prehistoria si PUZZLE_LEVER no esta resuelto.
+ * Entrada: ninguna
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void screen_draw_rock(void);
+
+/* -----------------------------------------------------------------------------------------
  * screen_change()
  *   Gestiona el cambio de pantalla en una direccion con fade.
  *   Comprueba conexiones y bloqueos por puzzles.
@@ -78,5 +87,7 @@ void screen_travel(int new_epoch);
  * Salida:  indice de pantalla conectada (0..8), o NO_SCREEN si no hay conexion
  * -----------------------------------------------------------------------------------------*/
 int screen_get_connection(int dir);
+
+void screen_draw_shaman(void);
 
 #endif /* SCREEN_SYS_H */

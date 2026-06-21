@@ -60,11 +60,10 @@ static void new_game(void)
     player_init();
     hud_init();
     logic_init();
-    /* TEMP: Cargar pantalla 7 de la prehistoria. Cuando terminen las pruebas, se empezará por la pantalla 0 (P1) */
-    screen_load(EPOCH_PREHISTORY, 7);
-    enemies_load(EPOCH_PREHISTORY, 7);
+    screen_load(EPOCH_PREHISTORY, 0);
+    enemies_load(EPOCH_PREHISTORY, 0);
 
-    player_place(20, 100);
+    player_place(286, 100);
     screen_apply_palette();
 }
 
@@ -74,20 +73,22 @@ static void new_game(void)
 static void draw_frame(void)
 {
     screen_draw();
+    screen_draw_rock();
+    screen_draw_shaman();
     inv_draw();
     enemies_draw();
     player_draw();
     hud_draw();
 
 #ifdef DEBUG
-    draw_string("EP:", 2, 2, 15);
-    draw_int(g_game.screen.current_epoch, 26, 2, 14);
-    draw_string("SC:", 50, 2, 15);
-    draw_int(g_game.screen.current_screen + 1, 74, 2, 14);
-    draw_string("X:", 2, 12, 15);
-    draw_int((int)g_game.player.x, 18, 12, 14);
-    draw_string("Y:", 50, 12, 15);
-    draw_int((int)g_game.player.y, 66, 12, 14);
+    draw_string("EP:", 2, 2, 254);
+    draw_int(g_game.screen.current_epoch, 26, 2, 254);
+    draw_string("SC:", 50, 2, 254);
+    draw_int(g_game.screen.current_screen + 1, 74, 2, 254);
+    draw_string("X:", 2, 12, 254);
+    draw_int((int)g_game.player.x, 18, 12, 254);
+    draw_string("Y:", 50, 12, 254);
+    draw_int((int)g_game.player.y, 66, 12, 254);
 #endif
 
     vga_flip();
@@ -267,8 +268,8 @@ int main(void)
     music_load_xm("music.xm");
 
     /* Secuencia de presentación */
-    /* TEMP 
-    show_presentation(); */
+    /* TEMP: comentar esta función para que arranque más rápido el juego */
+    show_presentation();
 
     /* Comprueba si existe una partida salvada */
     if (save_exists())

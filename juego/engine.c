@@ -528,6 +528,27 @@ void draw_bitmap_buf(BITMAP *bmp, int x, int y)
     }
 }
 
+/* Igual que draw_bitmap_buf pero el indice 0 es transparente */
+void draw_bitmap_buf_t(BITMAP *bmp, int x, int y)
+{
+    int i, j;
+    int dx;
+    byte c;
+
+    for (j = 0; j < bmp->height; j++)
+    {
+        if (y + j < 0 || y + j >= SCREEN_H) continue;
+        for (i = 0; i < bmp->width; i++)
+        {
+            dx = x + i;
+            if (dx < 0 || dx >= SCREEN_W) continue;
+            c = bmp->data[j * bmp->width + i];
+            if (c == 0) continue;
+            back_buffer[(y + j) * SCREEN_W + dx] = c;
+        }
+    }
+}
+
 /* Dibuja en back buffer con transparencia (color 0) */
 void draw_transparent_bitmap_buf(BITMAP *bmp, int x, int y)
 {
