@@ -31,7 +31,7 @@ void logic_init(void)
     action_was_pressed = 0;
 
     /* Colocar objetos iniciales en el mundo */
-    inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 80,  148); /* P3: palo   */
+    inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 104, 134); /* P3: palo   */
     inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 240, 140); /* P9: tronco */
     inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 148); /* P8: huevo  */
 }
@@ -162,7 +162,7 @@ static int logic_prehistory(int screen)
         /* Recoger el palo del suelo */
         if (inv_is_carrying(ITEM_NONE))
         {
-            if (eric_near(80, 159) && eric_action())
+            if (eric_near(104, 134) && eric_action())
             {
                 inv_remove_instance(ITEM_STICK, EPOCH_PREHISTORY, screen);
                 inv_pick(ITEM_STICK);

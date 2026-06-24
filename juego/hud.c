@@ -1,5 +1,5 @@
 /*
- * hud.c - Sistema de HUD de Time Daze
+ * hud.c - Sistema de HUD de Tempus Fugit
  * C89: todas las variables declaradas al inicio del bloque.
  */
 
@@ -8,6 +8,7 @@
 #include "game.h"
 #include "hud.h"
 #include "puzzles.h"
+#include "screen.h"
 
 
 
@@ -102,14 +103,22 @@ static void hud_draw_normal(void)
         draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  15);
     }
 
-    /* Objeto actual: rectangulo amarillo si lleva algo */
+    /* Objeto actual: icono real si es el palo, rectangulo amarillo si no */
     if (g_game.inv.carried != ITEM_NONE)
     {
         x = 60;
-        draw_line(x,     HUD_Y + 3,  x + 8, HUD_Y + 3,  14);
-        draw_line(x + 8, HUD_Y + 3,  x + 8, HUD_Y + 11, 14);
-        draw_line(x + 8, HUD_Y + 11, x,     HUD_Y + 11, 14);
-        draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  14);
+
+        if (g_game.inv.carried == ITEM_STICK && g_stick_icon.data != NULL)
+        {
+            draw_bitmap_buf_t(&g_stick_icon, x, HUD_Y + 3);
+        }
+        else
+        {
+            draw_line(x,     HUD_Y + 3,  x + 8, HUD_Y + 3,  14);
+            draw_line(x + 8, HUD_Y + 3,  x + 8, HUD_Y + 11, 14);
+            draw_line(x + 8, HUD_Y + 11, x,     HUD_Y + 11, 14);
+            draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  14);
+        }
     }
 
     /* Fragmentos: grisaceo si no recogido, color si recogido */
@@ -132,17 +141,6 @@ static void hud_draw_normal(void)
         draw_line(x + 8, HUD_Y + 11, x,     HUD_Y + 11, color);
         draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  color);
     }
-
-    /* Sólo para DEBUG */
-    draw_string("EP:", 2, 2, 15);
-    draw_int(g_game.screen.current_epoch, 26, 2, 14);
-    draw_string("SC:", 50, 2, 15);
-    draw_int(g_game.screen.current_screen + 1, 74, 2, 14);
-    draw_string("X:", 2, 12, 15);
-    draw_int((int)g_game.player.x, 18, 12, 14);
-    draw_string("Y:", 50, 12, 15);
-    draw_int((int)g_game.player.y, 66, 12, 14);
-    /* *********************** */
 }
 
 /* ----------------------------------------------------------------

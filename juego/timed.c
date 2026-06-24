@@ -268,8 +268,8 @@ int main(void)
     music_load_xm("music.xm");
 
     /* Secuencia de presentación */
-    /* TEMP: comentar esta función para que arranque más rápido el juego */
-    show_presentation();
+    /* TEMP: comentar esta función para que arranque más rápido el juego
+    show_presentation();*/
 
     /* Comprueba si existe una partida salvada */
     if (save_exists())

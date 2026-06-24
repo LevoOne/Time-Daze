@@ -69,6 +69,8 @@ ScreenData g_screen_data;
 BITMAP     g_spritesheet;
 BITMAP     g_rock_sprite;
 BITMAP     g_shaman_sprite;
+BITMAP     g_stick_sprite;
+BITMAP     g_stick_icon;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -389,6 +391,14 @@ void screen_init(void)
     /* Cargar el sprite del chamán de P1 */
     if (!try_load_bmp("SHAMAN.BMP", &g_shaman_sprite))
     g_shaman_sprite.data = NULL;
+
+    /* Cargar el sprite del palo (objeto recogible) */
+    if (!try_load_bmp("STICK.BMP", &g_stick_sprite))
+        g_stick_sprite.data = NULL;
+
+    /* Cargar el icono del palo para el HUD */
+    if (!try_load_bmp("STKICON.BMP", &g_stick_icon))
+        g_stick_icon.data = NULL;
 }
 
 /* ----------------------------------------------------------------
@@ -402,6 +412,8 @@ static int try_load_bmp(char *file, BITMAP *b)
     long  index;
     word  num_colors;
     int   x;
+    int   row_size;
+    int   padding;
 
     fp = fopen(file, "rb");
     if (fp == NULL) return 0;
@@ -437,9 +449,19 @@ static int try_load_bmp(char *file, BITMAP *b)
         x = fgetc(fp);
     }
 
+    /* Las filas de un BMP estan alineadas a multiplos de 4 bytes.
+     * Si el ancho no es multiplo de 4, hay bytes de padding al
+     * final de cada fila que hay que saltar. */
+    row_size = ((b->width + 3) / 4) * 4;
+    padding  = row_size - b->width;
+
     for (index = (b->height - 1) * b->width; index >= 0; index -= b->width)
+    {
         for (x = 0; x < b->width; x++)
             b->data[(word)(index + x)] = (byte)fgetc(fp);
+        for (x = 0; x < padding; x++)
+            fgetc(fp);
+    }
 
     fclose(fp);
     return 1;

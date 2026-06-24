@@ -182,6 +182,8 @@ void load_bmp(char *file, BITMAP *b)
     long  index;
     word  num_colors;
     int   x;
+    int   row_size;
+    int   padding;
 
     if ((fp = fopen(file, "rb")) == NULL)
     {
@@ -222,10 +224,20 @@ void load_bmp(char *file, BITMAP *b)
         fgetc(fp);                                            /* padding */
     }
 
+    /* Las filas de un BMP estan alineadas a multiplos de 4 bytes.
+     * Si el ancho no es multiplo de 4, hay bytes de padding al
+     * final de cada fila que hay que saltar. */
+    row_size = ((b->width + 3) / 4) * 4;
+    padding  = row_size - b->width;
+
     /* Pixeles: BMP guarda las filas de abajo a arriba */
     for (index = (b->height - 1) * b->width; index >= 0; index -= b->width)
+    {
         for (x = 0; x < b->width; x++)
             b->data[(word)index + x] = (byte)fgetc(fp);
+        for (x = 0; x < padding; x++)
+            fgetc(fp);
+    }
 
     fclose(fp);
 }

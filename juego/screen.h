@@ -13,6 +13,9 @@ extern ScreenData g_screen_data;
 /* Spritesheet de Eric, cargado en screen_init */
 extern BITMAP g_spritesheet;
 extern BITMAP g_rock_sprite;
+extern BITMAP g_shaman_sprite;
+extern BITMAP g_stick_sprite;
+extern BITMAP g_stick_icon;
 
 /* ----------------------------------------------------------------
  * FUNCIONES
@@ -62,6 +65,14 @@ void screen_draw(void);
 void screen_draw_rock(void);
 
 /* -----------------------------------------------------------------------------------------
+ * screen_draw_shaman()
+ *   Dibuja el chaman animado en P1 de Prehistoria sobre el dolmen izquierdo.
+ * Entrada: ninguna
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void screen_draw_shaman(void);
+
+/* -----------------------------------------------------------------------------------------
  * screen_change()
  *   Gestiona el cambio de pantalla en una direccion con fade.
  *   Comprueba conexiones y bloqueos por puzzles.
@@ -87,7 +98,5 @@ void screen_travel(int new_epoch);
  * Salida:  indice de pantalla conectada (0..8), o NO_SCREEN si no hay conexion
  * -----------------------------------------------------------------------------------------*/
 int screen_get_connection(int dir);
-
-void screen_draw_shaman(void);
 
 #endif /* SCREEN_SYS_H */
