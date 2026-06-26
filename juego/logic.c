@@ -33,7 +33,7 @@ void logic_init(void)
     /* Colocar objetos iniciales en el mundo */
     inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 104, 134); /* P3: palo   */
     inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 240, 140); /* P9: tronco */
-    inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 148); /* P8: huevo  */
+    inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 117); /* P8: huevo  */
 }
 
 /* ----------------------------------------------------------------
@@ -111,7 +111,7 @@ static int logic_prehistory(int screen)
     fragment_x = 160; fragment_y = 130;
     monolith_x = 160; monolith_y = 100;
     log_x      = 240; log_y      = 165;
-    egg_x      = 270; egg_y      = 160;
+    egg_x      = 264; egg_y      = 84;
     fire_x     = 160; fire_y     = 150;
     liana_x    = 40;  liana_y    = 160;
 

@@ -60,8 +60,10 @@ static void new_game(void)
     player_init();
     hud_init();
     logic_init();
-    screen_load(EPOCH_PREHISTORY, 0);
-    enemies_load(EPOCH_PREHISTORY, 0);
+
+    /* TEMP: pantalla inicial modificada para pruebas */
+    screen_load(EPOCH_PREHISTORY, 7);
+    enemies_load(EPOCH_PREHISTORY, 7);
 
     player_place(286, 100);
     screen_apply_palette();

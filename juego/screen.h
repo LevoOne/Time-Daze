@@ -16,6 +16,8 @@ extern BITMAP g_rock_sprite;
 extern BITMAP g_shaman_sprite;
 extern BITMAP g_stick_sprite;
 extern BITMAP g_stick_icon;
+extern BITMAP g_egg_sprite;
+extern BITMAP g_egg_icon;
 
 /* ----------------------------------------------------------------
  * FUNCIONES

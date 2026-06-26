@@ -103,14 +103,17 @@ static void hud_draw_normal(void)
         draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  15);
     }
 
-    /* Objeto actual: icono real si es el palo, rectangulo amarillo si no */
+    /* Objeto actual: icono real si es palo o huevo, rectangulo si no */
     if (g_game.inv.carried != ITEM_NONE)
     {
         x = 60;
-
         if (g_game.inv.carried == ITEM_STICK && g_stick_icon.data != NULL)
         {
             draw_bitmap_buf_t(&g_stick_icon, x, HUD_Y + 3);
+        }
+        else if (g_game.inv.carried == ITEM_DINO_EGG && g_egg_icon.data != NULL)
+        {
+            draw_bitmap_buf_t(&g_egg_icon, x, HUD_Y + 1);
         }
         else
         {

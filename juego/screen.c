@@ -63,6 +63,36 @@ static void screen_inject_eric_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * PALETA DEL HUEVO DE DINOSAURIO
+ * Indices 220-231 reservados para los colores del huevo.
+ * Se inyectan en la paleta activa antes de dibujar el huevo.
+ * ---------------------------------------------------------------- */
+static const byte egg_palette[12 * 3] =
+{
+    16, 14, 15,  /* indice 220 */
+    17, 16, 15,  /* indice 221 */
+    15, 14, 16,  /* indice 222 */
+    17, 15, 17,  /* indice 223 */
+    24, 23, 24,  /* indice 224 */
+    34, 28, 30,  /* indice 225 */
+    31, 32, 31,  /* indice 226 */
+    34, 32, 31,  /* indice 227 */
+    30, 28, 33,  /* indice 228 */
+    35, 30, 35,  /* indice 229 */
+    52, 30, 37,  /* indice 230 */
+    51, 43, 46,  /* indice 231 */
+};
+
+/* Inyecta los colores del huevo en la paleta VGA activa */
+static void screen_inject_egg_palette(void)
+{
+    int i;
+    outp(0x3C8, 220);
+    for (i = 0; i < 12 * 3; i++)
+        outp(0x3C9, egg_palette[i]);
+}
+
+/* ----------------------------------------------------------------
  * VARIABLES GLOBALES
  * ---------------------------------------------------------------- */
 ScreenData g_screen_data;
@@ -71,6 +101,8 @@ BITMAP     g_rock_sprite;
 BITMAP     g_shaman_sprite;
 BITMAP     g_stick_sprite;
 BITMAP     g_stick_icon;
+BITMAP     g_egg_sprite;
+BITMAP     g_egg_icon;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -399,6 +431,14 @@ void screen_init(void)
     /* Cargar el icono del palo para el HUD */
     if (!try_load_bmp("STKICON.BMP", &g_stick_icon))
         g_stick_icon.data = NULL;
+
+    /* Cargar el sprite del huevo de dinosaurio (objeto recogible) */
+    if (!try_load_bmp("HUEVO.BMP", &g_egg_sprite))
+        g_egg_sprite.data = NULL;
+
+    /* Cargar el icono del huevo para el HUD */
+    if (!try_load_bmp("EGGICON.BMP", &g_egg_icon))
+        g_egg_icon.data = NULL;
 }
 
 /* ----------------------------------------------------------------
@@ -539,6 +579,7 @@ void screen_apply_palette(void)
         set_palette(g_backgrounds[epoch][screen].palette);
 
     screen_inject_eric_palette();
+    screen_inject_egg_palette();
 }
 
 /* ----------------------------------------------------------------
@@ -667,6 +708,8 @@ int screen_change(int dir)
     /* Inyectar paleta de Eric en saved_palette y en el hardware */
     palette_inject(238, eric_palette, 18);
     screen_inject_eric_palette();
+    palette_inject(220, egg_palette, 12);
+    screen_inject_egg_palette();
 
     /* Fade in de la nueva pantalla */
     vga_fade_in(16, 4);
@@ -697,6 +740,8 @@ void screen_travel(int new_epoch)
     vga_flip();
     palette_inject(238, eric_palette, 18);
     screen_inject_eric_palette();
+    palette_inject(220, egg_palette, 12);
+    screen_inject_egg_palette();
     vga_fade_in(16, 4);
 }
 

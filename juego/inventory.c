@@ -223,6 +223,12 @@ void inv_draw(void)
             continue;
         }
 
+        if (inst->item_id == ITEM_DINO_EGG && g_egg_sprite.data != NULL)
+        {
+            draw_bitmap_buf_t(&g_egg_sprite, x, y);
+            continue;
+        }
+
         /* Placeholder: rectangulo amarillo para el resto de objetos */
         draw_line(x,     y,     x + 8, y,     14);
         draw_line(x + 8, y,     x + 8, y + 8, 14);
