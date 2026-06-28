@@ -240,9 +240,9 @@ static int logic_prehistory(int screen)
             handled = 1;
         }
 
-        if (eric_near(log_x, log_y) && eric_action())
+        if (inv_is_carrying(ITEM_NONE))
         {
-            if (inv_is_carrying(ITEM_NONE))
+            if (eric_near(log_x, log_y) && eric_action())
             {
                 inv_remove_instance(ITEM_LOG, EPOCH_PREHISTORY, 8);
                 inv_pick(ITEM_LOG);
@@ -256,9 +256,9 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 7)
     {
-        if (eric_near(egg_x, egg_y) && eric_action())
+        if (inv_is_carrying(ITEM_NONE))
         {
-            if (inv_is_carrying(ITEM_NONE))
+            if (eric_near(egg_x, egg_y) && eric_action())
             {
                 inv_remove_instance(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7);
                 inv_pick(ITEM_DINO_EGG);
@@ -696,7 +696,7 @@ void logic_update(void)
     {
         inst = inv_get_at(epoch, screen,
                           (int)g_game.player.x + PLAYER_WIDTH / 2,
-                          (int)g_game.player.y + PLAYER_HEIGHT / 2);
+                          (int)g_game.player.y + PLAYER_HEIGHT - 8);
         if (inst != NULL)
         {
             inv_remove_instance(inst->item_id, inst->epoch, inst->screen);
@@ -709,15 +709,25 @@ void logic_update(void)
      * DEPOSITO GENERAL DE OBJETOS
      * Si Eric lleva un objeto, esta sobre el suelo y pulsa
      * ENTER sin interaccion especifica activa, lo deposita.
-     * -------------------------------------------------------- */
+     *
+     * IMPORTANTE: el punto usado aqui debe coincidir EXACTAMENTE
+     * con el que usa RECOGIDA GENERAL arriba (mismo offset desde
+     * player.x/y). Antes se soltaba en (player.x, player.y) -es
+     * decir, la esquina superior izquierda, a la altura de la
+     * cabeza- mientras que la recogida buscaba en el centro del
+     * sprite, a 16px de distancia en cada eje. Como inv_get_at
+     * solo tolera 8px, el objeto recien soltado quedaba fuera de
+     * su propia zona de recogida: parecia "flotar" (Y de cabeza,
+     * no de pies) y ademas no se podia recuperar de forma fiable
+     * desde la misma posicion en la que se solto. */
     if (!handled &&
         g_game.player.on_ground &&
         g_game.inv.carried != ITEM_NONE &&
         eric_action())
     {
         inv_drop(epoch, screen,
-                 (int)g_game.player.x,
-                 (int)g_game.player.y);
+                 (int)g_game.player.x + PLAYER_WIDTH / 2,
+                 (int)g_game.player.y + PLAYER_HEIGHT - 8);
     }
 
     /* --------------------------------------------------------
