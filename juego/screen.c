@@ -27,38 +27,114 @@ static int try_load_bmp(char *file, BITMAP *b);
 
 /* ----------------------------------------------------------------
  * PALETA DE ERIC
- * Indices 238-255 reservados para los colores de Eric.
+ * Indices 130-219 reservados para los colores de Eric (90 colores).
+ * Los fondos de Prehistoria ahora comparten una paleta comun en los
+ * indices 0-129 (en vez de hasta 219 cada uno por separado), lo que
+ * libero este bloque de 90 indices para dar mucho mas detalle al
+ * sprite de Eric. El hueco 220-231 sigue siendo del huevo, sin tocar.
  * Se inyectan en la paleta activa despues de cada cambio de fondo.
  * Formato: R,G,B en rango 0..63 para VGA.
  * ---------------------------------------------------------------- */
-static const byte eric_palette[18 * 3] =
+static const byte eric_palette[90 * 3] =
 {
-     0,  0,  0,  /* indice 238: negro */
-    11, 13, 48,  /* indice 239: azul oscuro jersey */
-     0,  5, 34,  /* indice 240: azul muy oscuro */
-     0, 36, 63,  /* indice 241: azul claro */
-    21, 11,  8,  /* indice 242: marron muy oscuro piel */
-    26, 14, 11,  /* indice 243: marron oscuro piel */
-    33, 18, 14,  /* indice 244: marron piel */
-    33, 26, 29,  /* indice 245: gris rosado */
-    59, 50, 47,  /* indice 246: piel clara */
-    44, 25, 21,  /* indice 247: marron rojizo */
-    48, 33, 26,  /* indice 248: marron medio */
-    56, 36, 30,  /* indice 249: salmon */
-    58, 41, 36,  /* indice 250: salmon claro */
-    63, 49, 45,  /* indice 251: rosa claro */
-    59, 44, 38,  /* indice 252: salmon medio */
-    50, 50, 50,  /* indice 253: gris claro */
-    58, 57, 50,  /* indice 254: blanco hueso */
-     0,  0,  0,  /* indice 255: negro */
+    61, 45, 37,  /* indice 130 */
+    52, 46, 44,  /* indice 131 */
+    60, 42, 32,  /* indice 132 */
+    47, 41, 38,  /* indice 133 */
+    54, 38, 30,  /* indice 134 */
+    45, 38, 30,  /* indice 135 */
+    41, 37, 33,  /* indice 136 */
+    50, 34, 26,  /* indice 137 */
+    44, 35, 26,  /* indice 138 */
+    41, 35, 25,  /* indice 139 */
+    41, 34, 22,  /* indice 140 */
+    40, 33, 22,  /* indice 141 */
+    31, 32, 32,  /* indice 142 */
+    44, 29, 23,  /* indice 143 */
+    38, 29, 21,  /* indice 144 */
+    40, 25, 18,  /* indice 145 */
+    33, 29, 25,  /* indice 146 */
+    32, 25, 18,  /* indice 147 */
+    26, 30, 32,  /* indice 148 */
+    25, 29, 30,  /* indice 149 */
+    25, 29, 30,  /* indice 150 */
+    24, 28, 29,  /* indice 151 */
+    22, 26, 26,  /* indice 152 */
+    21, 23, 24,  /* indice 153 */
+    34, 21, 16,  /* indice 154 */
+    29, 22, 15,  /* indice 155 */
+    31, 18, 11,  /* indice 156 */
+    24, 21, 20,  /* indice 157 */
+    23, 19, 16,  /* indice 158 */
+    25, 17, 12,  /* indice 159 */
+    19, 21, 33,  /* indice 160 */
+    18, 21, 31,  /* indice 161 */
+    21, 22, 22,  /* indice 162 */
+    19, 21, 26,  /* indice 163 */
+    19, 20, 21,  /* indice 164 */
+    20, 18, 17,  /* indice 165 */
+    18, 21, 33,  /* indice 166 */
+    17, 20, 32,  /* indice 167 */
+    18, 21, 29,  /* indice 168 */
+    16, 21, 23,  /* indice 169 */
+    17, 20, 30,  /* indice 170 */
+    17, 20, 22,  /* indice 171 */
+    16, 19, 28,  /* indice 172 */
+    16, 18, 25,  /* indice 173 */
+    16, 18, 20,  /* indice 174 */
+    14, 17, 24,  /* indice 175 */
+    12, 17, 17,  /* indice 176 */
+    28, 16, 10,  /* indice 177 */
+    25, 15, 11,  /* indice 178 */
+    21, 16, 11,  /* indice 179 */
+    21, 14, 10,  /* indice 180 */
+    22, 12,  8,  /* indice 181 */
+    18, 12,  9,  /* indice 182 */
+    20, 10,  6,  /* indice 183 */
+    14, 16, 24,  /* indice 184 */
+    15, 14, 16,  /* indice 185 */
+    16, 11,  9,  /* indice 186 */
+    15,  9,  6,  /* indice 187 */
+    13, 15, 27,  /* indice 188 */
+    12, 15, 17,  /* indice 189 */
+    11, 13, 23,  /* indice 190 */
+    11, 13, 16,  /* indice 191 */
+    10, 11, 20,  /* indice 192 */
+    10, 11, 14,  /* indice 193 */
+    11,  9, 12,  /* indice 194 */
+     8, 10, 16,  /* indice 195 */
+     7,  8, 16,  /* indice 196 */
+    14,  7,  4,  /* indice 197 */
+    13,  7,  4,  /* indice 198 */
+    11,  7,  5,  /* indice 199 */
+     9,  7,  6,  /* indice 200 */
+    12,  4,  2,  /* indice 201 */
+     9,  3,  2,  /* indice 202 */
+     6,  7, 15,  /* indice 203 */
+     7,  6,  7,  /* indice 204 */
+     7,  4,  2,  /* indice 205 */
+     6,  4,  2,  /* indice 206 */
+     6,  3,  2,  /* indice 207 */
+     5,  6, 14,  /* indice 208 */
+     5,  5,  8,  /* indice 209 */
+     4,  4,  6,  /* indice 210 */
+     2,  2,  6,  /* indice 211 */
+     2,  2,  2,  /* indice 212 */
+     4,  1,  1,  /* indice 213 */
+     2,  1,  1,  /* indice 214 */
+     1,  1,  5,  /* indice 215 */
+     1,  0,  1,  /* indice 216 */
+     2,  0,  0,  /* indice 217 */
+     0,  0,  3,  /* indice 218 */
+     0,  0,  0,  /* indice 219 */
 };
 
 /* Inyecta los colores de Eric en la paleta VGA activa */
 static void screen_inject_eric_palette(void)
 {
     int i;
-    outp(0x3C8, 238);
-    for (i = 0; i < 18 * 3; i++)
+    outp(0x3C8, 130);
+    for (i = 0; i < 90 * 3; i++)
         outp(0x3C9, eric_palette[i]);
 }
 
@@ -90,6 +166,48 @@ static void screen_inject_egg_palette(void)
     outp(0x3C8, 220);
     for (i = 0; i < 12 * 3; i++)
         outp(0x3C9, egg_palette[i]);
+}
+
+/* ----------------------------------------------------------------
+ * PALETA DEL PALO (P3, Prehistoria)
+ * Indices 232-241 reservados para los colores del palo.
+ * ANTES el palo no tenia paleta propia: se dibujaba con sus indices
+ * de pixel crudos apoyandose en lo que tuviera la paleta de fondo
+ * activa en ese momento (igual que Eric/huevo se dibujan, pero SIN
+ * el palette_inject que ellos si tienen). Mientras cada pantalla de
+ * Prehistoria tenia su propia paleta dedicada, coincidia mas o menos
+ * por casualidad. Al pasar P3 a la paleta compartida de 130 colores,
+ * esos mismos indices ya apuntaban a otros colores -> el palo se veia
+ * con la paleta equivocada. Solucionado: STICK.BMP real subido y
+ * cuantizado a sus 10 colores reales en 232-241.
+ *
+ * Valores extraidos directamente de STICK.BMP real (cuantizacion
+ * ponderada por frecuencia de pixel de sus colores reales, ordenados
+ * de mas oscuro a mas claro). STICK.BMP ya viene regenerado para que
+ * sus indices de pixel apunten a 232-241 en vez de a los indices
+ * viejos de fondo.
+ * ---------------------------------------------------------------- */
+static const byte stick_palette[10 * 3] =
+{
+     9,  3,  0,  /* indice 232: contorno (marron muy oscuro) */
+    14,  7,  3,  /* indice 233: sombra oscura rojiza */
+    13,  9,  7,  /* indice 234: sombra oscura neutra */
+    18,  8,  2,  /* indice 235: marron oscuro rojizo */
+    18, 12,  7,  /* indice 236: marron medio-oscuro */
+    25, 14,  6,  /* indice 237: marron medio */
+    28, 19, 13,  /* indice 238: marron */
+    35, 21, 11,  /* indice 239: marron claro calido */
+    35, 23, 15,  /* indice 240: marron claro */
+    39, 27, 19,  /* indice 241: tierra clara (brillo) */
+};
+
+/* Inyecta los colores del palo en la paleta VGA activa */
+static void screen_inject_stick_palette(void)
+{
+    int i;
+    outp(0x3C8, 232);
+    for (i = 0; i < 10 * 3; i++)
+        outp(0x3C9, stick_palette[i]);
 }
 
 /* ----------------------------------------------------------------
@@ -580,6 +698,7 @@ void screen_apply_palette(void)
 
     screen_inject_eric_palette();
     screen_inject_egg_palette();
+    screen_inject_stick_palette();
 }
 
 /* ----------------------------------------------------------------
@@ -706,10 +825,12 @@ int screen_change(int dir)
     vga_flip();
 
     /* Inyectar paleta de Eric en saved_palette y en el hardware */
-    palette_inject(238, eric_palette, 18);
+    palette_inject(130, eric_palette, 90);
     screen_inject_eric_palette();
     palette_inject(220, egg_palette, 12);
     screen_inject_egg_palette();
+    palette_inject(232, stick_palette, 10);
+    screen_inject_stick_palette();
 
     /* Fade in de la nueva pantalla */
     vga_fade_in(16, 4);
@@ -738,10 +859,12 @@ void screen_travel(int new_epoch)
 
     screen_draw();
     vga_flip();
-    palette_inject(238, eric_palette, 18);
+    palette_inject(130, eric_palette, 90);
     screen_inject_eric_palette();
     palette_inject(220, egg_palette, 12);
     screen_inject_egg_palette();
+    palette_inject(232, stick_palette, 10);
+    screen_inject_stick_palette();
     vga_fade_in(16, 4);
 }
 

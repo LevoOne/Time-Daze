@@ -10,7 +10,7 @@
 /* ----------------------------------------------------------------
  * CONSTANTES
  * ---------------------------------------------------------------- */
-#define INTERACT_DIST   50   /* distancia en pixels para interactuar */
+#define INTERACT_DIST   20   /* distancia en pixels para interactuar */
 
 /* ----------------------------------------------------------------
  * FUNCIONES

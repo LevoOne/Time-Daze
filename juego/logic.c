@@ -75,6 +75,32 @@ int eric_near(int x, int y)
 }
 
 /* ----------------------------------------------------------------
+ * ERIC NEAR ITEM
+ * Igual que eric_near(), pero con un radio mucho mas ajustado
+ * (ITEM_PICKUP_DIST, no INTERACT_DIST). Pensado especificamente
+ * para las zonas de recogida de objetos del suelo con codigo
+ * dedicado (palo, huevo, tronco): si usaran el radio generoso de
+ * INTERACT_DIST, sus zonas de recogida se solapan entre si (o con
+ * un objeto soltado cerca) y la que tiene codigo especifico le
+ * roba siempre el turno a RECOGIDA GENERAL, sin mirar si el
+ * jugador esta realmente mas cerca de otra cosa.
+ * ---------------------------------------------------------------- */
+#define ITEM_PICKUP_DIST 16
+
+static int eric_near_item(int x, int y)
+{
+    int ex, ey, dx, dy;
+
+    ex = (int)g_game.player.x + PLAYER_WIDTH / 2;
+    ey = (int)g_game.player.y + PLAYER_HEIGHT / 2;
+    dx = ex - x;
+    dy = ey - y;
+    if (dx < 0) dx = -dx;
+    if (dy < 0) dy = -dy;
+    return (dx < ITEM_PICKUP_DIST && dy < ITEM_PICKUP_DIST);
+}
+
+/* ----------------------------------------------------------------
  * LOGIC SCREEN CHANGE
  * Cambia de pantalla y recarga enemigos.
  * Usar siempre en lugar de screen_change directo desde logic.c
@@ -120,7 +146,13 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 2)
     {
-        if (eric_near(295, 159) && eric_action())
+        /* Y=132 (no 159): el suelo de Prehistoria esta en y=148,
+         * de pie el centro de Eric queda en y=132. El valor 159
+         * esta calibrado para el suelo de Medieval/Futuro (y=175),
+         * que es mas bajo en esta pantalla -con INTERACT_DIST=50
+         * (valor de pruebas anterior) coincidia por pura casualidad
+         * de margen, pero con 20 ya no entra nunca. */
+        if (eric_near(295, 132) && eric_action())
             logic_screen_change(DIR_DOWN);
     }
 
@@ -129,7 +161,7 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 4 && !eric_near(fire_x, fire_y))
     {
-        if (eric_near(295, 159) && eric_action())
+        if (eric_near(295, 132) && eric_action())
             logic_screen_change(DIR_UP);
     }
 
@@ -160,13 +192,16 @@ static int logic_prehistory(int screen)
     if (screen == 2)
     {
         /* Recoger el palo del suelo */
-        if (inv_is_carrying(ITEM_NONE))
+        if (inv_is_carrying(ITEM_NONE) &&
+            inv_instance_exists(ITEM_STICK, EPOCH_PREHISTORY, screen))
         {
-            if (eric_near(104, 134) && eric_action())
+            if (eric_near_item(104, 134) && eric_action())
             {
-                inv_remove_instance(ITEM_STICK, EPOCH_PREHISTORY, screen);
-                inv_pick(ITEM_STICK);
-                handled = 1;
+                if (inv_remove_instance(ITEM_STICK, EPOCH_PREHISTORY, screen))
+                {
+                    inv_pick(ITEM_STICK);
+                    handled = 1;
+                }
             }
         }
 
@@ -234,19 +269,31 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 8)
     {
-        if (eric_near(monolith_x, monolith_y) && eric_action())
-        {
-            /* TODO: mostrar simbolos del codigo en pantalla */
-            handled = 1;
-        }
-
+        /* Gateado por inv_is_carrying(ITEM_NONE): de lo contrario,
+         * este interactuable (que aun es un TODO sin implementar)
+         * se comia el ENTER en cuanto Eric estaba cerca del
+         * monolito, sin mirar el inventario para nada -bloqueando
+         * RECOGIDA/DEPOSITO GENERAL si llevabas algo encima, p.ej.
+         * el huevo, justo en esa zona de la pantalla. */
         if (inv_is_carrying(ITEM_NONE))
         {
-            if (eric_near(log_x, log_y) && eric_action())
+            if (eric_near(monolith_x, monolith_y) && eric_action())
             {
-                inv_remove_instance(ITEM_LOG, EPOCH_PREHISTORY, 8);
-                inv_pick(ITEM_LOG);
+                /* TODO: mostrar simbolos del codigo en pantalla */
                 handled = 1;
+            }
+        }
+
+        if (inv_is_carrying(ITEM_NONE) &&
+            inv_instance_exists(ITEM_LOG, EPOCH_PREHISTORY, 8))
+        {
+            if (eric_near_item(log_x, log_y) && eric_action())
+            {
+                if (inv_remove_instance(ITEM_LOG, EPOCH_PREHISTORY, 8))
+                {
+                    inv_pick(ITEM_LOG);
+                    handled = 1;
+                }
             }
         }
     }
@@ -256,13 +303,16 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 7)
     {
-        if (inv_is_carrying(ITEM_NONE))
+        if (inv_is_carrying(ITEM_NONE) &&
+            inv_instance_exists(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7))
         {
-            if (eric_near(egg_x, egg_y) && eric_action())
+            if (eric_near_item(egg_x, egg_y) && eric_action())
             {
-                inv_remove_instance(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7);
-                inv_pick(ITEM_DINO_EGG);
-                handled = 1;
+                if (inv_remove_instance(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7))
+                {
+                    inv_pick(ITEM_DINO_EGG);
+                    handled = 1;
+                }
             }
         }
     }
@@ -694,9 +744,9 @@ void logic_update(void)
         inv_is_carrying(ITEM_NONE) &&
         eric_action())
     {
-        inst = inv_get_at(epoch, screen,
-                          (int)g_game.player.x + PLAYER_WIDTH / 2,
-                          (int)g_game.player.y + PLAYER_HEIGHT - 8);
+        inst = inv_find_near_player(epoch, screen,
+                                     (int)g_game.player.x,
+                                     (int)g_game.player.y);
         if (inst != NULL)
         {
             inv_remove_instance(inst->item_id, inst->epoch, inst->screen);
@@ -710,16 +760,15 @@ void logic_update(void)
      * Si Eric lleva un objeto, esta sobre el suelo y pulsa
      * ENTER sin interaccion especifica activa, lo deposita.
      *
-     * IMPORTANTE: el punto usado aqui debe coincidir EXACTAMENTE
-     * con el que usa RECOGIDA GENERAL arriba (mismo offset desde
-     * player.x/y). Antes se soltaba en (player.x, player.y) -es
-     * decir, la esquina superior izquierda, a la altura de la
-     * cabeza- mientras que la recogida buscaba en el centro del
-     * sprite, a 16px de distancia en cada eje. Como inv_get_at
-     * solo tolera 8px, el objeto recien soltado quedaba fuera de
-     * su propia zona de recogida: parecia "flotar" (Y de cabeza,
-     * no de pies) y ademas no se podia recuperar de forma fiable
-     * desde la misma posicion en la que se solto. */
+     * El punto de anclaje en Y usa el alto real del sprite del
+     * objeto (inv_item_height) para que quede asentado en el
+     * suelo en vez de flotar o hundirse, sea cual sea su tamano.
+     * Como esto hace que objetos de distinto tamano se guarden
+     * en Y distintas, RECOGIDA GENERAL (arriba) no busca en un
+     * unico punto fijo: usa inv_find_near_player(), que prueba
+     * el punto exacto correspondiente a cada tipo de objeto
+     * conocido. Si se anade un nuevo objeto recogible con
+     * sprite propio, hay que anadirlo tambien ahi. */
     if (!handled &&
         g_game.player.on_ground &&
         g_game.inv.carried != ITEM_NONE &&
@@ -727,7 +776,8 @@ void logic_update(void)
     {
         inv_drop(epoch, screen,
                  (int)g_game.player.x + PLAYER_WIDTH / 2,
-                 (int)g_game.player.y + PLAYER_HEIGHT - 8);
+                 (int)g_game.player.y + PLAYER_HEIGHT
+                     - inv_item_height(g_game.inv.carried));
     }
 
     /* --------------------------------------------------------

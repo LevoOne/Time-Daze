@@ -1055,7 +1055,7 @@ Eventos:
 - Con el sellante: Eric aplica el sellante, zona descontaminada, conexion
   derecha a pantalla 9 desbloqueada.
 
-#### Pantalla 9: Zona baja extremo derecho (Mecha y mina de uranio)
+#### Pantalla 9: Zona baja extremo derecheeeo (Mecha y mina de uranio)
 
 Visual: zona baja extremo derecho con las ruinas de la torre medieval
 dominando la pantalla, reconocible como evolucion de la roca monolitica
@@ -1244,6 +1244,7 @@ Distribucion de izquierda a derecha:
 ---
 
 ## TODO - Arte pendiente
+Estado: ✅ Hecho | ⬜ Pendiente
 
 ### Indicadores visuales de transicion vertical
 
@@ -1251,7 +1252,7 @@ Todas las pantallas con conexion vertical necesitan un elemento visual
 que indique al jugador que puede subir o bajar:
 
 **Prehistoria (liana):**
-- P1 eliminar la roca del BMP (ya cambiado en PRE_P1.BMP) para que sea un sprite
+ ✅ P1 eliminar la roca del BMP (ya cambiado en PRE_P1.BMP) para que sea un sprite
 - P3 borde derecho (x=295): liana colgando, baja a P5
 - P5 borde derecho (x=295): liana colgando, sube a P3
 - P4 borde izquierdo (x=40): liana colgando, baja a P7, hacer que el gráfico de la liana baje hacia la parte de abajo, y se corte por arriba, como está ahora es confuso
@@ -1272,10 +1273,10 @@ que indique al jugador que puede subir o bajar:
 ### Correciones gráficas pendientes
 
 **Prehistoria:**
-- P4 hacer que el gráfico de la liana baje hacia la parte de abajo, y se corte por arriba, como está ahora es confuso
-- P8: modificar el bitmap para que la roca descienda y coincida con la coordenada y de la plataforma
-- P8: modificar el bitmap para que parezca que el río llega hasta la parte de abajo de la pantalla, fluyendo hacia abajo-izquierda
-- P1: la roca redonda no puede estar ahí en el bitmap porque Eric aparece directamente en el lado del chamán, y eso debería ser posible sólo cuando se resuelve el primer puzzle
+✅ P8: modificar el bitmap para que la roca descienda y coincida con la coordenada y de la plataforma
+✅ P8: modificar el bitmap para que parezca que el río llega hasta la parte de abajo de la pantalla, fluyendo hacia abajo-izquierda
+✅ P1: la roca redonda no puede estar ahí en el bitmap porque Eric aparece directamente en el lado del chamán, y eso debería ser posible sólo cuando se resuelve el primer puzzle P1
+ - Modificar el gráfico / frames del chamán en P1, es ilegible
 
 **Edad Media:**
 

@@ -39,9 +39,21 @@ int inv_place(int item_id, int epoch, int screen, int x, int y);
  *   Desactiva el ItemInstance de un objeto en el mapa.
  *   Llamar justo antes de inv_pick para que el objeto desaparezca del suelo.
  * Entrada: item_id, epoch, screen = identifican el objeto a desactivar
- * Salida:  ninguna
+ * Salida:  1 si habia una instancia activa y se ha quitado, 0 si no
+ *          habia ninguna (NO llamar a inv_pick si devuelve 0)
  * -----------------------------------------------------------------------------------------*/
-void inv_remove_instance(int item_id, int epoch, int screen);
+int inv_remove_instance(int item_id, int epoch, int screen);
+
+/* -----------------------------------------------------------------------------------------
+ * inv_instance_exists()
+ *   Comprueba si hay una instancia activa de un objeto en una pantalla,
+ *   sin consumir nada. Usar ANTES de leer eric_action() en interacciones
+ *   especificas de un objeto (palo, huevo, tronco), para no robarle el
+ *   turno a RECOGIDA GENERAL si el objeto ya no esta ahi.
+ * Entrada: item_id, epoch, screen = identifican el objeto a comprobar
+ * Salida:  1 si hay una instancia activa, 0 si no
+ * -----------------------------------------------------------------------------------------*/
+int inv_instance_exists(int item_id, int epoch, int screen);
 
 /* -----------------------------------------------------------------------------------------
  * inv_drop()
@@ -84,6 +96,30 @@ int inv_is_carrying(int item_id);
  * Salida:  puntero al ItemInstance encontrado, NULL si no hay ninguno cerca
  * -----------------------------------------------------------------------------------------*/
 ItemInstance *inv_get_at(int epoch, int screen, int x, int y);
+
+/* -----------------------------------------------------------------------------------------
+ * inv_item_height()
+ *   Devuelve el alto en pixels del sprite real de un objeto (para poder
+ *   anclar su posicion al suelo correctamente al depositarlo). Si el
+ *   objeto no tiene sprite propio cargado, devuelve el alto del
+ *   placeholder generico (8px).
+ * Entrada: item_id (int) = identificador del objeto (ITEM_*)
+ * Salida:  alto en pixels
+ * -----------------------------------------------------------------------------------------*/
+int inv_item_height(int item_id);
+
+/* -----------------------------------------------------------------------------------------
+ * inv_find_near_player()
+ *   Busca un objeto depositado cerca de Eric, probando el punto exacto
+ *   en el que DEPOSITO GENERAL habria guardado cada tipo de objeto
+ *   conocido (cada uno ancla su Y segun su propio alto real). Usar
+ *   esto en vez de inv_get_at directo para la recogida generica.
+ * Entrada: epoch, screen (int) = epoca y pantalla donde buscar
+ *          px, py (int)        = posicion de Eric (esquina superior
+ *                                 izquierda, g_game.player.x/y)
+ * Salida:  puntero al ItemInstance encontrado, NULL si no hay ninguno
+ * -----------------------------------------------------------------------------------------*/
+ItemInstance *inv_find_near_player(int epoch, int screen, int px, int py);
 
 /* -----------------------------------------------------------------------------------------
  * inv_draw()

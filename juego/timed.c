@@ -91,6 +91,31 @@ static void draw_frame(void)
     draw_int((int)g_game.player.x, 18, 12, 254);
     draw_string("Y:", 50, 12, 254);
     draw_int((int)g_game.player.y, 66, 12, 254);
+
+    /* Posicion de TODOS los objetos activos en la pantalla actual,
+     * uno por linea, para comparar a ojo con X/Y del jugador sin
+     * tener que adivinar por una captura de pantalla cual es cual. */
+    {
+        int di, row, ly;
+        row = 0;
+        for (di = 0; di < MAX_ITEM_INSTANCES; di++)
+        {
+            if (!g_game.inv.instances[di].active)                          continue;
+            if (g_game.inv.instances[di].epoch  != g_game.screen.current_epoch)  continue;
+            if (g_game.inv.instances[di].screen != g_game.screen.current_screen) continue;
+
+            ly = 22 + row * 10;
+            draw_string("ID:", 2, ly, 254);
+            draw_int(g_game.inv.instances[di].item_id, 26, ly, 254);
+            draw_string("IX:", 50, ly, 254);
+            draw_int(g_game.inv.instances[di].x, 74, ly, 254);
+            draw_string("IY:", 98, ly, 254);
+            draw_int(g_game.inv.instances[di].y, 122, ly, 254);
+
+            row++;
+            if (row >= 4) break; /* limite de filas visibles en el HUD */
+        }
+    }
 #endif
 
     vga_flip();
