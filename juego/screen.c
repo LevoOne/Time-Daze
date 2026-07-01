@@ -211,6 +211,59 @@ static void screen_inject_stick_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * PALETA DE LA ROCA (P1, Prehistoria)
+ * Indices 242-255 reservados para los colores de la roca.
+ * Mismo problema que tenia el palo: ROCK.BMP nunca tuvo paleta
+ * propia, se dibujaba con sus indices de pixel crudos apoyandose
+ * en la paleta de fondo activa. Al pasar a la paleta compartida de
+ * 130 colores esos indices ya no coinciden -> la roca se ve con
+ * colores equivocados.
+ *
+ * OJO: 242-255 es el mismo rango libre que PRE_P8.BMP usa para sus
+ * propios tonos de agua (ver RESUMEN_PALETA_ERIC.md). No hay
+ * conflicto porque la roca solo se dibuja en P1 y el agua solo
+ * existe en P8 (nunca estan activas a la vez), pero por eso esta
+ * paleta NO se inyecta en screen_change/screen_travel como las
+ * demas (eso pisaria los colores del agua al cambiar de pantalla
+ * hacia cualquier lado). En vez de eso se inyecta solo dentro de
+ * screen_draw_rock(), que ya esta condicionado a P1 con el puzzle
+ * de la palanca sin resolver.
+ * Valores extraidos directamente de ROCK.BMP real (cuantizacion
+ * ponderada por frecuencia de pixel, ordenados de mas oscuro a
+ * mas claro). ROCK.BMP ya viene regenerado para que sus indices de
+ * pixel apunten a 242-255.
+ * ---------------------------------------------------------------- */
+static const byte rock_palette[14 * 3] =
+{
+     6,  1,  0,  /* indice 242 */
+    10,  6,  5,  /* indice 243 */
+    13,  7,  5,  /* indice 244 */
+    11,  9,  7,  /* indice 245 */
+    20,  8,  2,  /* indice 246 */
+    14, 10,  9,  /* indice 247 */
+    16, 13, 12,  /* indice 248 */
+    22, 12,  8,  /* indice 249 */
+    21, 15, 13,  /* indice 250 */
+    29, 13,  6,  /* indice 251 */
+    27, 19, 15,  /* indice 252 */
+    30, 23, 19,  /* indice 253 */
+    42, 22, 11,  /* indice 254 */
+    33, 26, 22,  /* indice 255 */
+};
+
+/* Inyecta los colores de la roca en la paleta VGA activa.
+ * Solo se llama desde screen_draw_rock(), nunca en cambios de
+ * pantalla generales, para no pisar los colores del agua de P8
+ * que tambien viven en el rango 242-255 (ver comentario arriba). */
+static void screen_inject_rock_palette(void)
+{
+    int i;
+    outp(0x3C8, 242);
+    for (i = 0; i < 14 * 3; i++)
+        outp(0x3C9, rock_palette[i]);
+}
+
+/* ----------------------------------------------------------------
  * VARIABLES GLOBALES
  * ---------------------------------------------------------------- */
 ScreenData g_screen_data;
@@ -713,6 +766,7 @@ void screen_draw_rock(void)
     if (puzzle_is_solved(PUZZLE_LEVER))                   return;
     if (g_rock_sprite.data == NULL)                       return;
 
+    screen_inject_rock_palette();
     draw_bitmap_buf_t(&g_rock_sprite, 108, 86);
 }
 

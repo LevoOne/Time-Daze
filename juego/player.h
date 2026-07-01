@@ -14,9 +14,9 @@
 #define PLAYER_HEIGHT   32
 #define PLAYER_GRAVITY  0.35f
 #define PLAYER_JUMP    -5.5f
-#define PLAYER_SPEED    1.2f
-#define PLAYER_LIVES    3
+#define PLAYER_SPEED    0.8f
 #define ANIM_SPEED      8
+#define PLAYER_LIVES    3
 #define FRAMES_PER_ROW  3
 #define FRAME_JUMP      4
 

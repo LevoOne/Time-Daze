@@ -1148,6 +1148,72 @@ Recursos graficos para conseguirlo:
 - Sprites de enemigos
 - Objeto de guardado manual
 
+### 9.3 Paleta VGA compartida por epoca (estado tecnico real y principio general)
+
+Cada epoca tiene su PROPIA paleta VGA de 256 colores, compartida entre
+sus 9 fondos y todos los sprites/objetos de esa epoca. El reparto de
+indices descrito abajo es el ya implementado para Prehistoria, y debe
+servir como plantilla para Edad Media y Futuro cuando llegue su turno
+(18 pantallas restantes + sus respectivos sprites).
+
+**Estado por epoca:**
+- **Prehistoria**: ✅ implementado y verificado (detalle completo abajo).
+- **Edad Media**: ⬜ pendiente. Cuando se generen los 9 fondos, aplicar
+  el mismo proceso: verificar que comparten los mismos colores en su
+  rango de fondo (igual que se hizo aqui comparando byte a byte
+  PRE_P1..P9), y reservar rangos propios para Eric (puede que distinto
+  spritesheet/paleta segun epoca), huevo si reaparece, y cualquier
+  objeto interactivo propio de Edad Media (taza, antorcha, puente
+  levadizo, escalera de madera, etc.).
+- **Futuro**: ⬜ pendiente, mismo proceso. Objetos propios conocidos:
+  escalera metalica, Mecha, elementos de la zona de radiacion.
+
+**Reparto de indices implementado en Prehistoria (referencia):**
+
+- **0-129 (130 colores)**: fondos de Prehistoria. Paleta COMPARTIDA
+  entre las 9 pantallas (PRE_P1.BMP a PRE_P9.BMP) — verificada byte a
+  byte, los 130 colores son identicos en los 9 BMP. Antes cada pantalla
+  tenia su propia paleta de hasta 219 colores; ya no.
+- **130-219 (90 colores)**: sprite de Eric. Basado en el spritesheet
+  detallado de alta resolucion (ver seccion 3/anexos) reducido y
+  cuantizado a 90 colores reales. Antes eran solo 16 colores en el
+  rango 238-255.
+- **220-231 (12 colores)**: huevo de dinosaurio (HUEVO.BMP, EGGICON.BMP).
+  SIN TOCAR, paleta propia desde siempre, no afectada por nada de lo
+  anterior.
+- **232-241 (10 colores)**: palo (STICK.BMP, STKICON.BMP). Colores reales
+  extraidos del BMP, cuantizados por frecuencia de pixel.
+- **242-255 (14 colores)**: doble uso, sin conflicto real:
+  - Roca de P1 (ROCK.BMP): 14 colores reales cuantizados. Se inyectan
+    SOLO dentro de `screen_draw_rock()` (no en cambios de pantalla
+    generales) para no pisar el agua de P8, ya que comparten rango.
+  - Agua del rio de P8 (PRE_P8.BMP): 14 tonos azules propios, viven
+    embebidos en la paleta del propio BMP (el motor carga el fondo con
+    `set_palette(bmp.palette)`, asi que no hace falta inyeccion aparte
+    en codigo).
+  - Roca y agua nunca estan visibles a la vez (la roca solo en P1, el
+    agua solo en P8), por eso compartir el rango no da problema.
+
+**Patron a seguir para nuevos elementos graficos**, dentro de Prehistoria
+(oso, miel, tronco, reptil, jabali, frames del chaman, etc.) y, cuando
+toque, en Edad Media y Futuro desde cero: extraer los colores reales
+del BMP final, cuantizarlos por frecuencia de pixel al numero de
+colores que haga falta, y colocarlos en huecos libres del rango de la
+epoca correspondiente si no chocan en pantalla con otros sprites que
+ya usen ese rango, o reconsiderar el reparto (compartir tonos entre
+sprites de paleta similar, por ejemplo tierra/marron entre tronco y
+roca) si el rango se queda corto. Edad Media y Futuro empiezan con los
+256 indices libres — el reparto exacto (cuantos colores para fondos,
+cuantos para Eric, cuantos de margen para objetos) se decide al
+generar su primer fondo y sprite, siguiendo la misma logica que aqui.
+
+**Archivos de codigo afectados**: `screen.c` contiene las paletas
+(`eric_palette`, `stick_palette`, `rock_palette`, `egg_palette`) y las
+funciones `screen_inject_*_palette()` que las cargan en el hardware VGA.
+`try_load_bmp()` (tambien en screen.c) es la funcion real que parsea
+los BMP de 8 bits e ignora cualquier asuncion sobre el orden de paleta
+que no este verificada contra el codigo.
+
 ---
 
 ## 10. Musica y sonido
@@ -1276,7 +1342,10 @@ que indique al jugador que puede subir o bajar:
 ✅ P8: modificar el bitmap para que la roca descienda y coincida con la coordenada y de la plataforma
 ✅ P8: modificar el bitmap para que parezca que el río llega hasta la parte de abajo de la pantalla, fluyendo hacia abajo-izquierda
 ✅ P1: la roca redonda no puede estar ahí en el bitmap porque Eric aparece directamente en el lado del chamán, y eso debería ser posible sólo cuando se resuelve el primer puzzle P1
+✅ STICK.BMP / STKICON.BMP: tenían paleta sin asignar correctamente (índices de píxel apuntando a huecos de la paleta de fondo en vez de colores propios). Resuelto: paleta propia real en índices 232-241 (ver sección 9.3).
+✅ ROCK.BMP: mismo problema que el palo — sin paleta propia. Resuelto: paleta propia real en índices 242-255, inyectada solo al dibujar la roca (ver sección 9.3).
  - Modificar el gráfico / frames del chamán en P1, es ilegible
+ - SHAMAN.BMP: sin confirmar todavía, pero pinta del mismo bug de paleta que tenían el palo y la roca (sin paleta propia en screen.c). Revisar al mismo tiempo que se rehaga el sprite del chamán.
 
 **Edad Media:**
 
@@ -1304,6 +1373,13 @@ al integrar el arte final de cada epoca.
   sprite independiente del BMP de fondo. Al resolver el puzzle del tronco/palanca,
   la roca debe animarse rodando hacia la derecha hasta salir de pantalla, dejando
   libre el paso al chaman.
+  ✅ Roca ya es sprite independiente con paleta propia (ver seccion 9.3).
+  ✅ Bloqueo de paso verificado: barrera invisible en logic.c (screen==0,
+  PUZZLE_LEVER) ajustada a la posicion real del sprite (g_game.player.x
+  no puede bajar de cierto valor mientras el puzzle no este resuelto).
+  Render y colision confirmados correctos por el usuario.
+  ⬜ Falta la animacion de rodar (3-4 frames deberian bastar) al activar el
+  puzzle de la palanca/tronco.
 - **Chaman sprite**: el chaman de P1 debe ser un sprite animado situado sobre la
   plataforma central (dolmen). No se desplaza. Realiza una animacion de baile
   chamanico en bucle (varios frames de movimiento ritual: brazos alzados, giros,
@@ -1312,12 +1388,18 @@ al integrar el arte final de cada epoca.
   detalle es insuficiente y el resultado es un amasijo de pixeles poco legible.
   Opciones: regenerar con Gemini a mayor resolucion (48x48 o 64x64) y ajustar
   el codigo de dibujado, o retocar manualmente en Aseprite.
+  Cuando se regenere, aplicar tambien el patron de paleta propia descrito en
+  9.3 (probablemente comparte el mismo bug que tenian palo/roca).
 
 **Prehistoria P5:**
 - **Hoguera sprite**: la hoguera del punto de guardado en P5 debe ser un sprite
   animado en lugar de una imagen estatica en el BMP. La animacion simula las llamas
   con varios frames (3-4 frames en bucle). La hoguera se dibuja encima del BMP de
   fondo en su posicion fija.
+
+**Resto de elementos graficos de Prehistoria pendientes de generar e integrar**
+(mismo patron de paleta propia en huecos libres de 242-255, ver seccion 9.3):
+oso, animacion de miel cayendo, tronco, reptil, jabali, peces en P8.
 
 Implementar una secuencia de intro animada que introduzca al jugador en la historia
 antes de que comience el juego. La secuencia debe narrar brevemente:
@@ -1332,4 +1414,54 @@ y fade entre ellas, al estilo de las intros de juegos DOS de la epoca.
 La secuencia debe ser saltable con cualquier tecla.
 
 La intro se insertaria en show_presentation() en tempus.c, despues de los logos
-y antes de que comience el juego.
+y antes de que comience el juego. Ya hay un esqueleto preparado: la propia
+funcion ya carga los logos previos (contest.bmp, h3logo.bmp, timed.bmp) con el
+patron exacto que hace falta repetir (fade in, espera, fade out, liberar
+memoria) y deja un placeholder TODO cargando "intro.bmp" marcando donde
+insertar la secuencia real.
+
+### Animacion y movimiento del jugador
+
+⬜ El ciclo de animacion al caminar se percibe un poco acelerado. Ajustable
+en `ANIM_SPEED` (player.h, actualmente 8) — subir el valor ralentiza el
+ciclo de piernas. El salto en si (trayectoria, no animacion) depende en
+cambio de `PLAYER_GRAVITY` y `PLAYER_JUMP`, tambien en player.h.
+
+### Sonido
+
+Solo existe por ahora el SFX de salto (SFX_JUMP). Pendiente anadir:
+- SFX puntuales: coger objeto, depositar objeto, activar un puzzle/mecanismo,
+  chapoteo de agua al llegar a P8 de Prehistoria, sonido de la roca rodando.
+  Se cargan una vez con `sfx_load()` al arrancar y se disparan con
+  `sfx_play()` en el punto exacto de la logica donde ocurre la accion.
+  El motor soporta 4 canales SFX simultaneos (SFX_CHANNELS).
+- Musica XM ambiental especifica de P1 (tono mistico), distinta de la
+  musica general. El sistema de musica XM es monofonico (solo una pista a
+  la vez, `music_load_xm` libera la anterior automaticamente), asi que se
+  cargaria/pararia desde la logica de cambio de pantalla, igual que ya
+  ocurre con la carga del fondo.
+
+### Cuadro de dialogo
+
+⬜ Dialogo estatico, sin opciones ni ramificacion: secuencia lineal de
+retrato (Eric u otro personaje, p.ej. el chaman) + texto, que avanza
+linea a linea con una tecla. Al terminar la secuencia, vuelve al estado
+de juego normal (STATE_GAME) y a la pantalla donde estaba antes de
+iniciarse. Los retratos podrian salir del spritesheet de alta resolucion
+ya generado para Eric. Requiere un estado de juego nuevo dedicado
+(p.ej. STATE_DIALOG) que pause player/enemigos mientras esta activo.
+
+### HUD
+
+⬜ Dejar el HUD en su forma definitiva una vez cerrado el resto del arte,
+incluyendo ajustar el color de fondo del HUD.
+
+### Paleta VGA de Edad Media y Futuro
+
+⬜ Aplicar a las 18 pantallas restantes (9 Edad Media + 9 Futuro) el
+mismo principio ya implementado en Prehistoria: paleta compartida entre
+los 9 fondos de cada epoca, con rangos de indices reservados aparte
+para Eric, objetos interactivos y sprites animados propios de esa
+epoca. Ver seccion 9.3 para el detalle del reparto de Prehistoria como
+plantilla y el proceso a seguir (verificacion byte a byte de los
+fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).

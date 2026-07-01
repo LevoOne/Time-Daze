@@ -232,9 +232,9 @@ static int logic_prehistory(int screen)
          * cuando Eric intenta ir hacia la izquierda de x=200 */
         if (!puzzle_is_solved(PUZZLE_LEVER))
         {
-            if (g_game.player.x < 170.0f)
+            if (g_game.player.x < 160.0f)
             {
-                g_game.player.x     = 170.0f;
+                g_game.player.x     = 160.0f;
                 g_game.player.vel_x = 0.0f;
             }
         }
