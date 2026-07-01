@@ -239,6 +239,19 @@ static int logic_prehistory(int screen)
             }
         }
 
+        /* TODO TEST: gatillo temporal para probar la animacion de la roca.
+         * Eric pulsa ENTER cerca de la roca sin necesitar el tronco.
+         * Eliminar este bloque cuando la animacion este validada y
+         * sustituirlo por la logica real del puzzle del tronco/palanca. */
+        if (!puzzle_is_solved(PUZZLE_LEVER))
+        {
+            if (eric_near(160, 118) && eric_action())
+            {
+                screen_trigger_rock_roll();
+                handled = 1;
+            }
+        }
+
         if (!puzzle_is_solved(PUZZLE_SHAMAN))
         {
             if (eric_near(shaman_x, shaman_y) && eric_action())

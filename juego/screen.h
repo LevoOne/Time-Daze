@@ -13,6 +13,7 @@ extern ScreenData g_screen_data;
 /* Spritesheet de Eric, cargado en screen_init */
 extern BITMAP g_spritesheet;
 extern BITMAP g_rock_sprite;
+extern BITMAP g_rock_roll_sprite;
 extern BITMAP g_shaman_sprite;
 extern BITMAP g_stick_sprite;
 extern BITMAP g_stick_icon;
@@ -65,6 +66,21 @@ void screen_draw(void);
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void screen_draw_rock(void);
+
+/* -----------------------------------------------------------------------------------------
+ * screen_trigger_rock_roll()
+ *   Activa la animacion de la roca rodando hacia la izquierda.
+ *   Llamar desde logic.c al resolver PUZZLE_LEVER.
+ * -----------------------------------------------------------------------------------------*/
+void screen_trigger_rock_roll(void);
+
+/* -----------------------------------------------------------------------------------------
+ * screen_draw_rock_rolling()
+ *   Dibuja y avanza la animacion de la roca rodando. Cuando la roca
+ *   sale por el borde izquierdo de pantalla marca PUZZLE_LEVER como
+ *   resuelto y desactiva la animacion.
+ * -----------------------------------------------------------------------------------------*/
+void screen_draw_rock_rolling(void);
 
 /* -----------------------------------------------------------------------------------------
  * screen_draw_shaman()

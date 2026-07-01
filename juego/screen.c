@@ -35,98 +35,78 @@ static int try_load_bmp(char *file, BITMAP *b);
  * Se inyectan en la paleta activa despues de cada cambio de fondo.
  * Formato: R,G,B en rango 0..63 para VGA.
  * ---------------------------------------------------------------- */
-static const byte eric_palette[90 * 3] =
+static const byte eric_palette[70 * 3] =
 {
-    61, 45, 37,  /* indice 130 */
-    52, 46, 44,  /* indice 131 */
-    60, 42, 32,  /* indice 132 */
-    47, 41, 38,  /* indice 133 */
-    54, 38, 30,  /* indice 134 */
-    45, 38, 30,  /* indice 135 */
-    41, 37, 33,  /* indice 136 */
-    50, 34, 26,  /* indice 137 */
-    44, 35, 26,  /* indice 138 */
-    41, 35, 25,  /* indice 139 */
-    41, 34, 22,  /* indice 140 */
-    40, 33, 22,  /* indice 141 */
-    31, 32, 32,  /* indice 142 */
-    44, 29, 23,  /* indice 143 */
-    38, 29, 21,  /* indice 144 */
-    40, 25, 18,  /* indice 145 */
-    33, 29, 25,  /* indice 146 */
-    32, 25, 18,  /* indice 147 */
-    26, 30, 32,  /* indice 148 */
-    25, 29, 30,  /* indice 149 */
-    25, 29, 30,  /* indice 150 */
-    24, 28, 29,  /* indice 151 */
-    22, 26, 26,  /* indice 152 */
-    21, 23, 24,  /* indice 153 */
-    34, 21, 16,  /* indice 154 */
-    29, 22, 15,  /* indice 155 */
-    31, 18, 11,  /* indice 156 */
-    24, 21, 20,  /* indice 157 */
-    23, 19, 16,  /* indice 158 */
-    25, 17, 12,  /* indice 159 */
-    19, 21, 33,  /* indice 160 */
-    18, 21, 31,  /* indice 161 */
-    21, 22, 22,  /* indice 162 */
-    19, 21, 26,  /* indice 163 */
-    19, 20, 21,  /* indice 164 */
-    20, 18, 17,  /* indice 165 */
-    18, 21, 33,  /* indice 166 */
-    17, 20, 32,  /* indice 167 */
-    18, 21, 29,  /* indice 168 */
-    16, 21, 23,  /* indice 169 */
-    17, 20, 30,  /* indice 170 */
-    17, 20, 22,  /* indice 171 */
-    16, 19, 28,  /* indice 172 */
-    16, 18, 25,  /* indice 173 */
-    16, 18, 20,  /* indice 174 */
-    14, 17, 24,  /* indice 175 */
-    12, 17, 17,  /* indice 176 */
-    28, 16, 10,  /* indice 177 */
-    25, 15, 11,  /* indice 178 */
-    21, 16, 11,  /* indice 179 */
-    21, 14, 10,  /* indice 180 */
-    22, 12,  8,  /* indice 181 */
-    18, 12,  9,  /* indice 182 */
-    20, 10,  6,  /* indice 183 */
-    14, 16, 24,  /* indice 184 */
-    15, 14, 16,  /* indice 185 */
-    16, 11,  9,  /* indice 186 */
-    15,  9,  6,  /* indice 187 */
-    13, 15, 27,  /* indice 188 */
-    12, 15, 17,  /* indice 189 */
-    11, 13, 23,  /* indice 190 */
-    11, 13, 16,  /* indice 191 */
-    10, 11, 20,  /* indice 192 */
-    10, 11, 14,  /* indice 193 */
-    11,  9, 12,  /* indice 194 */
-     8, 10, 16,  /* indice 195 */
-     7,  8, 16,  /* indice 196 */
-    14,  7,  4,  /* indice 197 */
-    13,  7,  4,  /* indice 198 */
-    11,  7,  5,  /* indice 199 */
-     9,  7,  6,  /* indice 200 */
-    12,  4,  2,  /* indice 201 */
-     9,  3,  2,  /* indice 202 */
-     6,  7, 15,  /* indice 203 */
-     7,  6,  7,  /* indice 204 */
-     7,  4,  2,  /* indice 205 */
-     6,  4,  2,  /* indice 206 */
-     6,  3,  2,  /* indice 207 */
-     5,  6, 14,  /* indice 208 */
-     5,  5,  8,  /* indice 209 */
-     4,  4,  6,  /* indice 210 */
-     2,  2,  6,  /* indice 211 */
-     2,  2,  2,  /* indice 212 */
-     4,  1,  1,  /* indice 213 */
-     2,  1,  1,  /* indice 214 */
-     1,  1,  5,  /* indice 215 */
-     1,  0,  1,  /* indice 216 */
-     2,  0,  0,  /* indice 217 */
-     0,  0,  3,  /* indice 218 */
-     0,  0,  0,  /* indice 219 */
+     4,  1,  1,  /* indice 130 */
+     1,  1,  5,  /* indice 131 */
+     4,  4,  6,  /* indice 132 */
+     6,  4,  2,  /* indice 133 */
+     9,  3,  2,  /* indice 134 */
+     5,  5,  8,  /* indice 135 */
+     5,  6, 14,  /* indice 136 */
+    12,  4,  2,  /* indice 137 */
+     9,  7,  6,  /* indice 138 */
+    11,  7,  5,  /* indice 139 */
+    14,  7,  4,  /* indice 140 */
+     7,  8, 15,  /* indice 141 */
+    11,  9, 12,  /* indice 142 */
+    15,  9,  6,  /* indice 143 */
+    10, 11, 14,  /* indice 144 */
+    10, 11, 20,  /* indice 145 */
+    16, 11,  9,  /* indice 146 */
+    20, 10,  6,  /* indice 147 */
+    11, 13, 16,  /* indice 148 */
+    11, 13, 23,  /* indice 149 */
+    18, 12,  9,  /* indice 150 */
+    15, 14, 16,  /* indice 151 */
+    12, 15, 17,  /* indice 152 */
+    21, 13,  9,  /* indice 153 */
+    13, 15, 27,  /* indice 154 */
+    12, 17, 17,  /* indice 155 */
+    21, 16, 11,  /* indice 156 */
+    15, 17, 25,  /* indice 157 */
+    25, 15, 11,  /* indice 158 */
+    16, 18, 20,  /* indice 159 */
+    20, 18, 17,  /* indice 160 */
+    28, 16, 10,  /* indice 161 */
+    16, 19, 28,  /* indice 162 */
+    25, 17, 12,  /* indice 163 */
+    17, 20, 23,  /* indice 164 */
+    19, 20, 21,  /* indice 165 */
+    23, 19, 16,  /* indice 166 */
+    17, 20, 30,  /* indice 167 */
+    17, 20, 32,  /* indice 168 */
+    18, 21, 29,  /* indice 169 */
+    19, 21, 26,  /* indice 170 */
+    18, 21, 31,  /* indice 171 */
+    31, 18, 11,  /* indice 172 */
+    21, 22, 22,  /* indice 173 */
+    18, 21, 33,  /* indice 174 */
+    24, 21, 20,  /* indice 175 */
+    21, 23, 24,  /* indice 176 */
+    29, 22, 15,  /* indice 177 */
+    34, 21, 16,  /* indice 178 */
+    22, 26, 26,  /* indice 179 */
+    32, 25, 18,  /* indice 180 */
+    24, 28, 29,  /* indice 181 */
+    25, 29, 30,  /* indice 182 */
+    40, 25, 18,  /* indice 183 */
+    26, 30, 32,  /* indice 184 */
+    33, 29, 25,  /* indice 185 */
+    38, 29, 21,  /* indice 186 */
+    31, 32, 32,  /* indice 187 */
+    44, 29, 23,  /* indice 188 */
+    41, 34, 22,  /* indice 189 */
+    41, 35, 25,  /* indice 190 */
+    44, 35, 26,  /* indice 191 */
+    41, 37, 33,  /* indice 192 */
+    50, 34, 26,  /* indice 193 */
+    45, 38, 30,  /* indice 194 */
+    54, 38, 30,  /* indice 195 */
+    47, 41, 38,  /* indice 196 */
+    60, 42, 32,  /* indice 197 */
+    52, 46, 44,  /* indice 198 */
+    61, 45, 37,  /* indice 199 */
 };
 
 /* Inyecta los colores de Eric en la paleta VGA activa */
@@ -134,7 +114,7 @@ static void screen_inject_eric_palette(void)
 {
     int i;
     outp(0x3C8, 130);
-    for (i = 0; i < 90 * 3; i++)
+    for (i = 0; i < 70 * 3; i++)
         outp(0x3C9, eric_palette[i]);
 }
 
@@ -166,6 +146,53 @@ static void screen_inject_egg_palette(void)
     outp(0x3C8, 220);
     for (i = 0; i < 12 * 3; i++)
         outp(0x3C9, egg_palette[i]);
+}
+
+/* ----------------------------------------------------------------
+ * PALETA DEL CHAMAN (P1, Prehistoria)
+ * Indices 200-219 reservados para los colores del chaman.
+ * Estos indices quedaron libres al reducir eric_palette de 90 a 70
+ * colores (130-199). El chaman y la roca son simultaneos en P1
+ * (antes y despues de resolver el puzzle), por lo que NO pueden
+ * compartir el rango 242-255 que usa la roca. 200-219 es el hueco
+ * correcto: no choca ni con Eric (130-199) ni con huevo (220-231)
+ * ni con palo (232-241) ni con roca/agua (242-255).
+ * Sprite: SHAMAN.BMP, 256x64, 4 frames de 64x64.
+ * Colores extraidos del BMP real (cuantizacion ponderada, 20 tonos
+ * tierra/marron/piel, ordenados de mas oscuro a mas claro).
+ * ---------------------------------------------------------------- */
+static const byte shaman_palette[20 * 3] =
+{
+     5,  1,  0,  /* indice 200 */
+     4,  4,  4,  /* indice 201 */
+    10,  4,  2,  /* indice 202 */
+    13,  7,  5,  /* indice 203 */
+    16, 10,  8,  /* indice 204 */
+    22, 10,  6,  /* indice 205 */
+    18, 15, 12,  /* indice 206 */
+    25, 14, 10,  /* indice 207 */
+    23, 17, 14,  /* indice 208 */
+    30, 16,  8,  /* indice 209 */
+    29, 20, 14,  /* indice 210 */
+    36, 21, 15,  /* indice 211 */
+    31, 25, 20,  /* indice 212 */
+    40, 24, 10,  /* indice 213 */
+    40, 28, 20,  /* indice 214 */
+    45, 32, 20,  /* indice 215 */
+    50, 33, 22,  /* indice 216 */
+    42, 37, 30,  /* indice 217 */
+    51, 35, 26,  /* indice 218 */
+    53, 49, 40,  /* indice 219 */
+};
+
+/* Inyecta los colores del chaman en la paleta VGA activa.
+ * Se llama desde screen_draw_shaman() antes de dibujar. */
+static void screen_inject_shaman_palette(void)
+{
+    int i;
+    outp(0x3C8, 200);
+    for (i = 0; i < 20 * 3; i++)
+        outp(0x3C9, shaman_palette[i]);
 }
 
 /* ----------------------------------------------------------------
@@ -269,6 +296,7 @@ static void screen_inject_rock_palette(void)
 ScreenData g_screen_data;
 BITMAP     g_spritesheet;
 BITMAP     g_rock_sprite;
+BITMAP     g_rock_roll_sprite;
 BITMAP     g_shaman_sprite;
 BITMAP     g_stick_sprite;
 BITMAP     g_stick_icon;
@@ -591,6 +619,9 @@ void screen_init(void)
     if (!try_load_bmp("ROCK.BMP", &g_rock_sprite))
         g_rock_sprite.data = NULL;
 
+    if (!try_load_bmp("ROCKROLL.BMP", &g_rock_roll_sprite))
+        g_rock_roll_sprite.data = NULL;
+
     /* Cargar el sprite del chamán de P1 */
     if (!try_load_bmp("SHAMAN.BMP", &g_shaman_sprite))
     g_shaman_sprite.data = NULL;
@@ -759,15 +790,82 @@ void screen_apply_palette(void)
  * Dibuja el sprite de la roca en P1 de Prehistoria mientras
  * el puzzle PUZZLE_LEVER no este resuelto.
  * ---------------------------------------------------------------- */
+ /* Declarado en el bloque de animacion de roca rodando (mas abajo) */
+static int s_rock_rolling = 0;
+
 void screen_draw_rock(void)
 {
-    if (g_game.screen.current_epoch  != EPOCH_PREHISTORY) return;
-    if (g_game.screen.current_screen != 0)                return;
-    if (puzzle_is_solved(PUZZLE_LEVER))                   return;
-    if (g_rock_sprite.data == NULL)                       return;
+    if (g_game.screen.current_epoch  != EPOCH_PREHISTORY)
+        return;
+    if (g_game.screen.current_screen != 0)
+        return;
+    if (puzzle_is_solved(PUZZLE_LEVER))
+        return;
+    if (s_rock_rolling)
+        return;
+    if (g_rock_sprite.data == NULL)
+        return;
 
     screen_inject_rock_palette();
     draw_bitmap_buf_t(&g_rock_sprite, 108, 86);
+}
+
+/* ----------------------------------------------------------------
+ * ANIMACION ROCA RODANDO
+ * Estado interno: la roca rueda hacia la izquierda al activarse.
+ * Velocidad de animacion: ROCK_ROLL_ANIM_SPEED frames de juego
+ *   por frame de sprite.
+ * Velocidad de desplazamiento: ROCK_ROLL_SPEED pixels por frame.
+ * Ajusta estos dos valores para tunear la animacion.
+ * ---------------------------------------------------------------- */
+#define ROCK_ROLL_FRAMES     8
+#define ROCK_ROLL_ANIM_SPEED 6    /* frames de juego por frame de sprite */
+#define ROCK_ROLL_SPEED      1    /* pixels por frame hacia la izquierda */
+
+static int s_roll_frame    = 0;  /* frame actual del spritesheet (0-7) */
+static int s_roll_timer    = 0;  /* contador para cambio de frame      */
+static int s_roll_x        = 0;  /* posicion X actual de la roca       */
+
+void screen_trigger_rock_roll(void)
+{
+    s_rock_rolling = 1;
+    s_roll_frame   = 0;
+    s_roll_timer   = 0;
+    s_roll_x       = 108;  /* misma X inicial que screen_draw_rock */
+}
+
+void screen_draw_rock_rolling(void)
+{
+    if (!s_rock_rolling)
+        return;
+    if (g_game.screen.current_epoch  != EPOCH_PREHISTORY)
+        return;
+    if (g_game.screen.current_screen != 0)
+        return;
+    if (g_rock_roll_sprite.data == NULL)
+        return;
+        
+
+    /* Avanzar posicion */
+    s_roll_x -= ROCK_ROLL_SPEED;
+
+    /* Avanzar frame de animacion */
+    if (++s_roll_timer >= ROCK_ROLL_ANIM_SPEED)
+    {
+        s_roll_timer = 0;
+        s_roll_frame = (s_roll_frame + 1) % ROCK_ROLL_FRAMES;
+    }
+
+    /* Si la roca salio por el borde izquierdo, resolver puzzle y parar */
+    if (s_roll_x < -64)
+    {
+        s_rock_rolling = 0;
+        puzzle_solve(PUZZLE_LEVER);
+        return;
+    }
+
+    screen_inject_rock_palette();
+    bmp_draw_tile(&g_rock_roll_sprite, s_roll_frame, 0, 64, 64, s_roll_x, 86);
 }
 
 /* ----------------------------------------------------------------
@@ -942,5 +1040,10 @@ void screen_draw_shaman(void)
         s_frame = (s_frame + 1) % 4;
     }
 
-    bmp_draw_tile(&g_shaman_sprite, s_frame, 0, 32, 32, 36, 84);
+    screen_inject_shaman_palette();
+    bmp_draw_tile(&g_shaman_sprite, s_frame, 0, 64, 64, 28, 53);
 }
+
+
+    
+

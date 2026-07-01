@@ -75,11 +75,12 @@ static void new_game(void)
 static void draw_frame(void)
 {
     screen_draw();
-    screen_draw_rock();
     screen_draw_shaman();
     inv_draw();
     enemies_draw();
     player_draw();
+    screen_draw_rock();
+    screen_draw_rock_rolling();
     hud_draw();
 
 #ifdef DEBUG
