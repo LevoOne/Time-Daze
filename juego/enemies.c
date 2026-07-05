@@ -8,6 +8,7 @@
 #include "enemies.h"
 #include "player.h"
 #include "puzzles.h"
+#include "screen.h"
 
 
 
@@ -30,30 +31,37 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
 {
     /* P1: cima, sin enemigos */
     { END_ENEMY },
+
     /* P2: ladera, sin enemigos */
     { END_ENEMY },
+    
     /* P3: pie colina, oso */
     {
-        { ENEMY_BEAR, 1, 200.0f, 120.0f, 0.5f,0.0f,
-          PAT_HORIZONTAL, 180.0f,295.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_BEAR, 1, 200.0f, 117.0f, 0.2f,0.0f,
+          PAT_HORIZONTAL, 21.0f,275.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
+    
     /* P4: nivel medio, jabali */
     {
         { ENEMY_BOAR, 1, 100.0f, 128.0f, 0.8f,0.0f,
           PAT_HORIZONTAL, 40.0f,260.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
+    
     /* P5: hoguera, sin enemigos */
     { END_ENEMY },
+    
     /* P6: zona baja izquierda, sin enemigos */
     { END_ENEMY },
+    
     /* P7: zona baja centro, reptil */
     {
         { ENEMY_REPTILE, 1, 80.0f, 128.0f, 0.6f,0.0f,
           PAT_HORIZONTAL, 20.0f,280.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
+    
     /* P8: cruce del rio, peces */
     {
         { ENEMY_FISH, 1, 115.0f, 125.0f, 0.0f, 2.5f,
@@ -249,10 +257,18 @@ void enemies_update(void)
                 break;
         }
 
-        if (++e->anim_timer >= 8)
+        if (++e->anim_timer >= 15)
         {
             e->anim_timer = 0;
-            e->anim_frame = (e->anim_frame + 1) % 3;
+            if (e->type == ENEMY_BEAR)
+            {
+                e->anim_frame = (e->anim_frame + 1) % 3;
+                /* Pisada en frames 0 y 2 (apoyos de pata delantera y trasera) */
+                if (e->anim_frame == 0/* || e->anim_frame == 2*/)
+                    sfx_play(SFX_BEAR_STEP, 38, MIDDLE);
+            }
+            else
+                e->anim_frame = (e->anim_frame + 1) % 3;
         }
     }
 }
@@ -301,6 +317,8 @@ void enemies_draw(void)
 {
     int i;
     int x, y, w, h;
+    int sx, sy, dx, dy;
+    unsigned char c;
     Enemy *e;
 
     for (i = 0; i < g_enemies.count; i++)
@@ -313,6 +331,39 @@ void enemies_draw(void)
         w = ENEMY_W(e->type);
         h = ENEMY_H(e->type);
 
+        /* Oso: dibujar sprite real con espejado segun direccion */
+        if (e->type == ENEMY_BEAR && g_bear_sprite.data != NULL)
+        {
+            screen_inject_bear_palette();
+
+            if (e->vel_x >= 0.0f)
+            {
+                /* Mirando a la derecha */
+                bmp_draw_tile(&g_bear_sprite, e->anim_frame, 0,
+                              48, 32, x, y);
+            }
+            else
+            {
+                /* Mirando a la izquierda: espejado horizontal */
+                for (sy = 0; sy < 32; sy++)
+                {
+                    dy = y + sy;
+                    if (dy < 0 || dy >= SCREEN_H) continue;
+                    for (sx = 0; sx < 48; sx++)
+                    {
+                        dx = x + (47 - sx);
+                        if (dx < 0 || dx >= SCREEN_W) continue;
+                        c = g_bear_sprite.data[sy * g_bear_sprite.width +
+                            e->anim_frame * 48 + sx];
+                        if (c == 0) continue;
+                        back_buffer[dy * SCREEN_W + dx] = c;
+                    }
+                }
+            }
+            continue;
+        }
+
+        /* Placeholder para el resto de enemigos */
         draw_line(x,     y,     x + w, y,     4);
         draw_line(x + w, y,     x + w, y + h, 4);
         draw_line(x + w, y + h, x,     y + h, 4);

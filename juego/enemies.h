@@ -24,8 +24,8 @@
  * DIMENSIONES DE CADA TIPO DE ENEMIGO (w x h en pixels)
  * Usadas en draw y en check_collision
  * ---------------------------------------------------------------- */
-#define ENEMY_BEAR_W     28
-#define ENEMY_BEAR_H     28
+#define ENEMY_BEAR_W     48
+#define ENEMY_BEAR_H     32
 #define ENEMY_BOAR_W     24
 #define ENEMY_BOAR_H     20
 #define ENEMY_REPTILE_W  24

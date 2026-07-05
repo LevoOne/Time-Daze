@@ -1378,8 +1378,15 @@ al integrar el arte final de cada epoca.
   PUZZLE_LEVER) ajustada a la posicion real del sprite (g_game.player.x
   no puede bajar de cierto valor mientras el puzzle no este resuelto).
   Render y colision confirmados correctos por el usuario.
-  ⬜ Falta la animacion de rodar (3-4 frames deberian bastar) al activar el
-  puzzle de la palanca/tronco.
+  ✅ Animacion de rodar implementada: ROCKROLL.BMP (8 frames anti-horario,
+  512x64), screen_trigger_rock_roll() + screen_draw_rock_rolling() en
+  screen.c. Velocidad tunable con ROCK_ROLL_SPEED y ROCK_ROLL_ANIM_SPEED.
+  ⚠️  PENDIENTE ELIMINAR: gatillo temporal en logic.c (bloque TODO TEST,
+  screen==0) que activa la roca con ENTER sin necesitar el tronco.
+  Eliminar cuando se implemente la logica real del puzzle tronco/palanca.
+  ⬜ Sonido: arrancar efecto/musica de roca rodando al llamar a
+  screen_trigger_rock_roll(), y detenerlo en screen_draw_rock_rolling()
+  cuando s_roll_x < -64 (justo antes de resolver PUZZLE_LEVER).
 - **Chaman sprite**: el chaman de P1 debe ser un sprite animado situado sobre la
   plataforma central (dolmen). No se desplaza. Realiza una animacion de baile
   chamanico en bucle (varios frames de movimiento ritual: brazos alzados, giros,
@@ -1455,6 +1462,26 @@ ya generado para Eric. Requiere un estado de juego nuevo dedicado
 
 ⬜ Dejar el HUD en su forma definitiva una vez cerrado el resto del arte,
 incluyendo ajustar el color de fondo del HUD.
+
+⬜ **Pistas contextuales por pantalla**: al entrar en cada pantalla, en la
+primera fila del HUD se muestra una frase corta que da una pista sobre
+algo relevante de esa pantalla. La pista debe ser suficientemente vaga
+para no resolver el puzzle directamente, pero no tan enigmática que
+resulte inútil. Si la pantalla no tiene nada relevante, la frase
+describe brevemente el entorno.
+
+  - La pista cambia cada vez que Eric entra en una pantalla nueva.
+  - Se muestra durante unos segundos y luego desaparece (o se queda
+    fija, a decidir).
+  - Implementación sugerida: array de strings indexado por
+    [epoca][pantalla], dibujado con draw_string() en el HUD.
+  - Las frases para las 27 pantallas (9 x 3 epocas) se definen en
+    hud.c o en un fichero de texto/header separado.
+  - Ejemplos de tono:
+    - P1 Prehistoria (roca/chaman): "El anciano guarda un secreto... y algo pesa demasiado"
+    - P3 Prehistoria (oso): "Los osos no suelen compartir su territorio"
+    - P8 Prehistoria (rio): "El agua siempre encuentra su camino"
+    - Pantalla sin puzzle: "El viento arrastra el olor a tierra mojada"
 
 ### Paleta VGA de Edad Media y Futuro
 

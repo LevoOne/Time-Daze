@@ -15,6 +15,7 @@ extern BITMAP g_spritesheet;
 extern BITMAP g_rock_sprite;
 extern BITMAP g_rock_roll_sprite;
 extern BITMAP g_shaman_sprite;
+extern BITMAP g_bear_sprite;
 extern BITMAP g_stick_sprite;
 extern BITMAP g_stick_icon;
 extern BITMAP g_egg_sprite;
@@ -66,6 +67,8 @@ void screen_draw(void);
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void screen_draw_rock(void);
+
+void screen_inject_bear_palette(void);
 
 /* -----------------------------------------------------------------------------------------
  * screen_trigger_rock_roll()

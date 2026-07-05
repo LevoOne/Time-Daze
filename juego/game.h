@@ -144,6 +144,8 @@ extern GameState g_game;
 /* ----------------------------------------------------------------
  * INDICES DE EFECTOS DE SONIDO
  * ---------------------------------------------------------------- */
-#define SFX_JUMP   0
+#define SFX_JUMP        0
+#define SFX_ROCK_ROLL   1
+#define SFX_BEAR_STEP   2
 
 #endif /* GAME_H */

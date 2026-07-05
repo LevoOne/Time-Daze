@@ -291,6 +291,38 @@ static void screen_inject_rock_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * PALETA DEL OSO (P3, Prehistoria)
+ * Indices 242-255 — mismo rango que la roca (P1) y el agua (P8).
+ * Sin conflicto: oso solo en P3, roca solo en P1, agua solo en P8.
+ * Colores extraidos de BEAR.BMP real (14 tonos marron/tierra).
+ * ---------------------------------------------------------------- */
+static const byte bear_palette[14 * 3] =
+{
+     3,  0,  0,  /* indice 242 */
+     7,  3,  4,  /* indice 243 */
+     8,  4,  4,  /* indice 244 */
+     9,  5,  5,  /* indice 245 */
+    10,  6,  6,  /* indice 246 */
+    12,  8,  6,  /* indice 247 */
+    14,  9,  8,  /* indice 248 */
+    15, 10,  8,  /* indice 249 */
+    16, 10,  8,  /* indice 250 */
+    17, 12, 10,  /* indice 251 */
+    18, 12, 10,  /* indice 252 */
+    20, 14, 12,  /* indice 253 */
+    22, 14, 12,  /* indice 254 */
+    24, 16, 13,  /* indice 255 */
+};
+
+void screen_inject_bear_palette(void)
+{
+    int i;
+    outp(0x3C8, 242);
+    for (i = 0; i < 14 * 3; i++)
+        outp(0x3C9, bear_palette[i]);
+}
+
+/* ----------------------------------------------------------------
  * VARIABLES GLOBALES
  * ---------------------------------------------------------------- */
 ScreenData g_screen_data;
@@ -298,6 +330,7 @@ BITMAP     g_spritesheet;
 BITMAP     g_rock_sprite;
 BITMAP     g_rock_roll_sprite;
 BITMAP     g_shaman_sprite;
+BITMAP     g_bear_sprite;
 BITMAP     g_stick_sprite;
 BITMAP     g_stick_icon;
 BITMAP     g_egg_sprite;
@@ -626,6 +659,9 @@ void screen_init(void)
     if (!try_load_bmp("SHAMAN.BMP", &g_shaman_sprite))
     g_shaman_sprite.data = NULL;
 
+    if (!try_load_bmp("BEAR.BMP", &g_bear_sprite))
+        g_bear_sprite.data = NULL;
+
     /* Cargar el sprite del palo (objeto recogible) */
     if (!try_load_bmp("STICK.BMP", &g_stick_sprite))
         g_stick_sprite.data = NULL;
@@ -790,9 +826,7 @@ void screen_apply_palette(void)
  * Dibuja el sprite de la roca en P1 de Prehistoria mientras
  * el puzzle PUZZLE_LEVER no este resuelto.
  * ---------------------------------------------------------------- */
- /* Declarado en el bloque de animacion de roca rodando (mas abajo) */
-static int s_rock_rolling = 0;
-
+ static int s_rock_rolling;
 void screen_draw_rock(void)
 {
     if (g_game.screen.current_epoch  != EPOCH_PREHISTORY)
@@ -822,16 +856,23 @@ void screen_draw_rock(void)
 #define ROCK_ROLL_ANIM_SPEED 6    /* frames de juego por frame de sprite */
 #define ROCK_ROLL_SPEED      1    /* pixels por frame hacia la izquierda */
 
+static int s_rock_rolling = 0;
 static int s_roll_frame    = 0;  /* frame actual del spritesheet (0-7) */
 static int s_roll_timer    = 0;  /* contador para cambio de frame      */
 static int s_roll_x        = 0;  /* posicion X actual de la roca       */
+static int s_roll_sfx_timer = 0;
+
+#define ROCK_SFX_INTERVAL  46      /* ~0.66s a 70Hz */
+
 
 void screen_trigger_rock_roll(void)
 {
-    s_rock_rolling = 1;
-    s_roll_frame   = 0;
-    s_roll_timer   = 0;
-    s_roll_x       = 108;  /* misma X inicial que screen_draw_rock */
+    s_rock_rolling   = 1;
+    s_roll_frame     = 0;
+    s_roll_timer     = 0;
+    s_roll_x         = 108;
+    s_roll_sfx_timer = 0;
+    sfx_play(SFX_ROCK_ROLL, 64, MIDDLE);  /* primera vez */
 }
 
 void screen_draw_rock_rolling(void)
@@ -844,8 +885,7 @@ void screen_draw_rock_rolling(void)
         return;
     if (g_rock_roll_sprite.data == NULL)
         return;
-        
-
+    
     /* Avanzar posicion */
     s_roll_x -= ROCK_ROLL_SPEED;
 
@@ -854,6 +894,13 @@ void screen_draw_rock_rolling(void)
     {
         s_roll_timer = 0;
         s_roll_frame = (s_roll_frame + 1) % ROCK_ROLL_FRAMES;
+    }
+
+     /* Repetir SFX cuando el anterior ha terminado (~0.66s = 46 ticks) */
+    if (++s_roll_sfx_timer >= ROCK_SFX_INTERVAL)
+    {
+        s_roll_sfx_timer = 0;
+        sfx_play(SFX_ROCK_ROLL, 64, MIDDLE);
     }
 
     /* Si la roca salio por el borde izquierdo, resolver puzzle y parar */
@@ -1001,14 +1048,23 @@ void screen_travel(int new_epoch)
 
     screen = g_game.screen.current_screen;
 
+    /* Parar musica antes del fade para vaciar el buffer */
+    music_free();
+    timer_wait(3);
+
     vga_fade_out(16, 4);
     vga_clear(0);
     vga_flip();
+
+    /* Cargar nueva musica con pantalla en negro */
+    if (new_epoch == EPOCH_MEDIEVAL)
+        music_load_xm("MEDTHEME.XM");
+    else
+        music_load_xm("PRETHEME.XM");
+    music_play(0);
+
     screen_load(new_epoch, screen);
-
-    /* Reposicionar a Eric a una Y segura para que caiga al suelo */
     player_place((int)g_game.player.x, 100);
-
     screen_draw();
     vga_flip();
     palette_inject(130, eric_palette, 90);
@@ -1043,7 +1099,3 @@ void screen_draw_shaman(void)
     screen_inject_shaman_palette();
     bmp_draw_tile(&g_shaman_sprite, s_frame, 0, 64, 64, 28, 53);
 }
-
-
-    
-

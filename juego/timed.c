@@ -62,8 +62,8 @@ static void new_game(void)
     logic_init();
 
     /* TEMP: pantalla inicial modificada para pruebas */
-    screen_load(EPOCH_PREHISTORY, 0);
-    enemies_load(EPOCH_PREHISTORY, 0);
+    screen_load(EPOCH_PREHISTORY, 2);
+    enemies_load(EPOCH_PREHISTORY, 2);
 
     player_place(286, 100);
     screen_apply_palette();
@@ -293,7 +293,9 @@ int main(void)
     font_init();
     sound_init();
     sfx_load(SFX_JUMP, "jump.wav");
-    music_load_xm("music.xm");
+    sfx_load(SFX_ROCK_ROLL, "moverock.wav");
+    sfx_load(SFX_BEAR_STEP, "woso.wav");
+    music_load_xm("PRETHEME.XM");
 
     /* Secuencia de presentación */
     /* TEMP: comentar esta función para que arranque más rápido el juego
@@ -314,6 +316,8 @@ int main(void)
 
     music_free();
     sfx_free(SFX_JUMP);
+    sfx_free(SFX_ROCK_ROLL);
+    sfx_free(SFX_BEAR_STEP);
     sound_shutdown();
     engine_shutdown();
 
