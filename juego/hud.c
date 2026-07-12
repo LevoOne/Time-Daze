@@ -88,10 +88,11 @@ static void hud_draw_normal(void)
 {
     int i, x;
     unsigned char color;
+    const char* item_name;
 
     /* Fondo negro de la franja del HUD */
     for (i = HUD_Y; i < HUD_Y + HUD_HEIGHT; i++)
-        memset(&back_buffer[i * SCREEN_W], 0, SCREEN_W);
+        memset(&back_buffer[i * SCREEN_W], 129, SCREEN_W);
 
     /* Vidas: rectangulos blancos */
     for (i = 0; i < g_game.player.lives; i++)
@@ -122,6 +123,30 @@ static void hud_draw_normal(void)
             draw_line(x + 8, HUD_Y + 11, x,     HUD_Y + 11, 14);
             draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  14);
         }
+
+        /* Imprimimos una cadena con el nombre del objeto del inventario */
+        switch(inv_get_carried())
+        {
+            case ITEM_STICK:        item_name = "palo";        break;
+            case ITEM_CUP:          item_name = "TAZA";        break;
+            case ITEM_CUP_HONEY:    item_name = "TAZA+MIEL";   break;
+            case ITEM_LOG:          item_name = "TRONCO";      break;
+            case ITEM_DINO_EGG:     item_name = "HUEVO";       break;
+            case ITEM_CRANK:        item_name = "MANIVELA";    break;
+            case ITEM_KEY:          item_name = "LLAVE";       break;
+            case ITEM_TORCH:        item_name = "ANTORCHA";    break;
+            case ITEM_TORCH_LIT:    item_name = "ANTORCH.LIT"; break;
+            case ITEM_LEVITATOR:    item_name = "LEVITADOR";   break;
+            case ITEM_CLAY_POT:     item_name = "RECIPIENTE";  break;
+            case ITEM_CLAY_POT_PLANT: item_name = "RECIP+PLANTA"; break;
+            case ITEM_VOLCANIC_MIN: item_name = "MINERAL";     break;
+            case ITEM_SEALANT:      item_name = "SELLANTE";    break;
+            case ITEM_QUARTZ:       item_name = "CUARZO";      break;
+            case ITEM_QUARTZ_CHARGED: item_name = "CUARZO+";   break;
+            default:                item_name = "";            break;
+        }
+
+        draw_string(item_name, x + 12, HUD_Y + 5, 15);
     }
 
     /* Fragmentos: grisaceo si no recogido, color si recogido */

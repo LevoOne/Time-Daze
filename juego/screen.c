@@ -291,10 +291,16 @@ static void screen_inject_rock_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * PALETA DE LA MIEL (P2, Prehistoria)
+ * Indices 242-249 — mismo rango libre que roca/agua/oso.
+ * Sin conflicto: miel solo en P2, roca en P1, agua en P8, oso en P3.
+ * 8 colores amber/dorado extraidos de HONEY.BMP.
+ * ---------------------------------------------------------------- */
+/* ----------------------------------------------------------------
  * PALETA DEL OSO (P3, Prehistoria)
- * Indices 242-255 — mismo rango que la roca (P1) y el agua (P8).
- * Sin conflicto: oso solo en P3, roca solo en P1, agua solo en P8.
- * Colores extraidos de BEAR.BMP real (14 tonos marron/tierra).
+ * Indices 242-255 — mismo rango libre que roca/agua/miel.
+ * Sin conflicto: oso solo en P3, roca en P1, agua en P8, miel en P2.
+ * 14 colores marron/tierra extraidos de BEAR.BMP.
  * ---------------------------------------------------------------- */
 static const byte bear_palette[14 * 3] =
 {
@@ -322,6 +328,125 @@ void screen_inject_bear_palette(void)
         outp(0x3C9, bear_palette[i]);
 }
 
+static const byte honey_palette[8 * 3] =
+{
+    17, 10, 15,  /* indice 242 */
+    25, 14, 12,  /* indice 243 */
+    34, 27, 12,  /* indice 244 */
+    55, 28,  9,  /* indice 245 */
+    55, 28,  9,  /* indice 246 */
+    54, 40, 25,  /* indice 247 */
+    59, 48, 38,  /* indice 248 */
+    62, 60, 13,  /* indice 249 */
+};
+
+static void screen_inject_honey_palette(void)
+{
+    int i;
+    outp(0x3C8, 242);
+    for (i = 0; i < 8 * 3; i++)
+        outp(0x3C9, honey_palette[i]);
+}
+
+/* ----------------------------------------------------------------
+ * ANIMACION MIEL GOTEANDO (P2, Prehistoria)
+ * Activada cuando Eric golpea la colmena con el palo.
+ * Desactivada cuando Eric recoge la miel con la taza.
+ *
+ * Ciclo:
+ *   Frames 0-1: gota formandose en x=175, y=97 (alternando)
+ *   Frame 2:    gota cayendo, y va de 97 a 128
+ *   Frame 3:    salpicadura en y=128, luego reinicia ciclo
+ *
+ * HONEY_DRIP_X    = 175  (181 centro - 6 semiancho)
+ * HONEY_DRIP_TOP  = 97   (y donde empieza la gota)
+ * HONEY_DRIP_BOT  = 128  (148 - 20 alto sprite = y donde cae)
+ * HONEY_FRAME_SPD = ticks por fase de animacion
+ * ---------------------------------------------------------------- */
+#define HONEY_DRIP_X    180
+#define HONEY_DRIP_TOP   97
+#define HONEY_DRIP_BOT  133
+#define HONEY_FRAME_SPD   20
+
+static int s_honey_active = 0;
+static int s_honey_phase  = 0;  /* 0=form0, 1=form1, 2=caida, 3=splash */
+static int s_honey_timer  = 0;
+static int s_honey_y      = 0;
+
+void screen_trigger_honey_drip(void)
+{
+    sfx_free(SFX_BEAR_STEP);
+    sfx_load(SFX_BEAR_STEP, "drops.wav");
+    s_honey_active = 1;
+    s_honey_phase  = 0;
+    s_honey_timer  = 0;
+    s_honey_y      = HONEY_DRIP_TOP;
+}
+
+void screen_stop_honey_drip(void)
+{
+    sfx_free(SFX_BEAR_STEP);
+    sfx_load(SFX_BEAR_STEP, "woso.wav");
+    s_honey_active = 0;
+}
+
+void screen_draw_honey_drip(void)
+{
+    if (!s_honey_active)                                    return;
+    if (g_game.screen.current_epoch  != EPOCH_PREHISTORY)  return;
+    if (g_game.screen.current_screen != 1)                 return;
+    if (g_honey_sprite.data == NULL)                        return;
+
+    screen_inject_honey_palette();
+
+    switch (s_honey_phase)
+    {
+        case 0:  /* gota formandose frame 0 */
+            bmp_draw_tile(&g_honey_sprite, 0, 0, 12, 20, HONEY_DRIP_X, HONEY_DRIP_TOP);
+            if (++s_honey_timer >= HONEY_FRAME_SPD)
+            {
+                s_honey_timer = 0;
+                s_honey_phase = 1;
+            }
+            break;
+
+        case 1:  /* gota formandose frame 1 */
+            bmp_draw_tile(&g_honey_sprite, 1, 0, 12, 20, HONEY_DRIP_X, HONEY_DRIP_TOP);
+            if (++s_honey_timer >= HONEY_FRAME_SPD)
+            {
+                s_honey_timer = 0;
+                s_honey_phase = 2;
+                s_honey_y     = HONEY_DRIP_TOP;
+            }
+            break;
+
+        case 2:  /* gota cayendo */
+            bmp_draw_tile(&g_honey_sprite, 2, 0, 12, 20, HONEY_DRIP_X+3, s_honey_y);
+            if (++s_honey_timer >= 4)
+            {
+                s_honey_timer = 0;
+                s_honey_y++;
+                if (s_honey_y >= HONEY_DRIP_BOT)
+                {
+                    s_honey_phase = 3;
+                    s_honey_timer = 0;
+                }
+            }
+            break;
+
+        case 3:  /* salpicadura */
+            if (s_honey_timer == 0)
+                sfx_play(SFX_BEAR_STEP, 56, MIDDLE);
+            bmp_draw_tile(&g_honey_sprite, 3, 0, 12, 20, HONEY_DRIP_X+1, HONEY_DRIP_BOT+3);
+            if (++s_honey_timer >= HONEY_FRAME_SPD * 2)
+            {
+                s_honey_timer = 0;
+                s_honey_phase = 0;  /* reinicia ciclo */
+            }
+            break;
+    }
+}
+
 /* ----------------------------------------------------------------
  * VARIABLES GLOBALES
  * ---------------------------------------------------------------- */
@@ -330,11 +455,12 @@ BITMAP     g_spritesheet;
 BITMAP     g_rock_sprite;
 BITMAP     g_rock_roll_sprite;
 BITMAP     g_shaman_sprite;
-BITMAP     g_bear_sprite;
 BITMAP     g_stick_sprite;
 BITMAP     g_stick_icon;
 BITMAP     g_egg_sprite;
 BITMAP     g_egg_icon;
+BITMAP     g_honey_sprite;
+BITMAP     g_bear_sprite;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -423,15 +549,15 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     /* P1: cima, megalitos */
     {
         { 0,   148, 320, 8 },   /* suelo principal */
-        { 29,  116,  50, 2 },   /* dolmen izquierdo */
+        { 40,  116,  20, 2 },   /* dolmen izquierdo */
         { 136, 110,  60, 2 },   /* roca plana central, chaman */
         { 0, 0, 0, 0 }
     },
     /* P2: ladera, colmena */
     {
         { 0,   148, 320, 8 },   /* suelo principal */
-        { 27,  115,  54, 2 },   /* roca izquierda */
-        { 134, 110,  64, 2 },   /* roca central, colmena */
+        { 40,  116,  28, 2 },   /* roca izquierda */
+        /*{ 134, 110,  64, 2 },    roca central, colmena */
         { 245, 133,  59, 2 },   /* roca derecha */
         { 0, 0, 0, 0 }
     },
@@ -659,9 +785,6 @@ void screen_init(void)
     if (!try_load_bmp("SHAMAN.BMP", &g_shaman_sprite))
     g_shaman_sprite.data = NULL;
 
-    if (!try_load_bmp("BEAR.BMP", &g_bear_sprite))
-        g_bear_sprite.data = NULL;
-
     /* Cargar el sprite del palo (objeto recogible) */
     if (!try_load_bmp("STICK.BMP", &g_stick_sprite))
         g_stick_sprite.data = NULL;
@@ -677,6 +800,12 @@ void screen_init(void)
     /* Cargar el icono del huevo para el HUD */
     if (!try_load_bmp("EGGICON.BMP", &g_egg_icon))
         g_egg_icon.data = NULL;
+
+    if (!try_load_bmp("HONEY.BMP", &g_honey_sprite))
+        g_honey_sprite.data = NULL;
+
+    if (!try_load_bmp("BEAR.BMP", &g_bear_sprite))
+        g_bear_sprite.data = NULL;
 }
 
 /* ----------------------------------------------------------------
@@ -995,6 +1124,16 @@ int screen_change(int dir)
     /* para evitar parpadeo durante el cambio de paleta         */
     vga_clear(0);
     vga_flip();
+
+    
+   /* Cargar SFX especifico de la pantalla */
+   sfx_free(1);
+    if(next == 0)
+        sfx_load(SFX_ROCK_ROLL,  "moverock.wav");
+    else if(next == 1 && s_honey_active)
+        sfx_load(SFX_HONEY_DROP, "drops.wav");
+    else if(next == 2)
+        sfx_load(SFX_BEAR_STEP,  "woso.wav");        
 
     /* Cargar la nueva pantalla y su paleta */
     screen_load(g_game.screen.current_epoch, next);

@@ -146,6 +146,8 @@ extern GameState g_game;
  * ---------------------------------------------------------------- */
 #define SFX_JUMP        0
 #define SFX_ROCK_ROLL   1
-#define SFX_BEAR_STEP   2
+#define SFX_BEAR_STEP   1
+#define SFX_HONEY_DROP  1
+
 
 #endif /* GAME_H */

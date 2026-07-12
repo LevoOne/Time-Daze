@@ -77,6 +77,12 @@ int load_game(void)
     screen_apply_palette();
     player_place(sd.player_x, sd.player_y);
 
+    /* Cargar SFX de la pantalla inicial */
+    if (g_game.screen.current_screen == 0)
+        sfx_load(SFX_ROCK_ROLL, "moverock.wav");
+    else if (g_game.screen.current_screen == 2)
+        sfx_load(SFX_BEAR_STEP, "woso.wav");
+
     return 1;
 }
 

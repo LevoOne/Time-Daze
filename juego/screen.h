@@ -20,6 +20,7 @@ extern BITMAP g_stick_sprite;
 extern BITMAP g_stick_icon;
 extern BITMAP g_egg_sprite;
 extern BITMAP g_egg_icon;
+extern BITMAP g_honey_sprite;
 
 /* ----------------------------------------------------------------
  * FUNCIONES
@@ -71,27 +72,16 @@ void screen_draw_rock(void);
 void screen_inject_bear_palette(void);
 
 /* -----------------------------------------------------------------------------------------
- * screen_trigger_rock_roll()
- *   Activa la animacion de la roca rodando hacia la izquierda.
- *   Llamar desde logic.c al resolver PUZZLE_LEVER.
- * -----------------------------------------------------------------------------------------*/
-void screen_trigger_rock_roll(void);
-
-/* -----------------------------------------------------------------------------------------
- * screen_draw_rock_rolling()
- *   Dibuja y avanza la animacion de la roca rodando. Cuando la roca
- *   sale por el borde izquierdo de pantalla marca PUZZLE_LEVER como
- *   resuelto y desactiva la animacion.
- * -----------------------------------------------------------------------------------------*/
-void screen_draw_rock_rolling(void);
-
-/* -----------------------------------------------------------------------------------------
  * screen_draw_shaman()
  *   Dibuja el chaman animado en P1 de Prehistoria sobre el dolmen izquierdo.
  * Entrada: ninguna
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void screen_draw_shaman(void);
+
+void screen_trigger_honey_drip(void);
+void screen_stop_honey_drip(void);
+void screen_draw_honey_drip(void);
 
 /* -----------------------------------------------------------------------------------------
  * screen_change()

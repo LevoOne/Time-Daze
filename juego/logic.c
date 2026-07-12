@@ -175,12 +175,13 @@ static int logic_prehistory(int screen)
             if (inv_is_carrying(ITEM_STICK))
             {
                 inv_transform(ITEM_NONE);
+                screen_trigger_honey_drip();
                 handled = 1;
-                /* TODO: activar animacion de goteo */
             }
             else if (inv_is_carrying(ITEM_CUP))
             {
                 inv_transform(ITEM_CUP_HONEY);
+                screen_stop_honey_drip();
                 handled = 1;
             }
         }
@@ -232,23 +233,10 @@ static int logic_prehistory(int screen)
          * cuando Eric intenta ir hacia la izquierda de x=200 */
         if (!puzzle_is_solved(PUZZLE_LEVER))
         {
-            if (g_game.player.x < 160.0f)
+            if (g_game.player.x < 170.0f)
             {
-                g_game.player.x     = 160.0f;
+                g_game.player.x     = 170.0f;
                 g_game.player.vel_x = 0.0f;
-            }
-        }
-
-        /* TODO TEST: gatillo temporal para probar la animacion de la roca.
-         * Eric pulsa ENTER cerca de la roca sin necesitar el tronco.
-         * Eliminar este bloque cuando la animacion este validada y
-         * sustituirlo por la logica real del puzzle del tronco/palanca. */
-        if (!puzzle_is_solved(PUZZLE_LEVER))
-        {
-            if (eric_near(160, 118) && eric_action())
-            {
-                screen_trigger_rock_roll();
-                handled = 1;
             }
         }
 

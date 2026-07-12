@@ -65,6 +65,12 @@ static void new_game(void)
     screen_load(EPOCH_PREHISTORY, 2);
     enemies_load(EPOCH_PREHISTORY, 2);
 
+    /* Cargar SFX de la pantalla inicial */
+    if (g_game.screen.current_screen == 0)
+        sfx_load(SFX_ROCK_ROLL, "moverock.wav");
+    else if (g_game.screen.current_screen == 2)
+        sfx_load(SFX_BEAR_STEP, "woso.wav");
+
     player_place(286, 100);
     screen_apply_palette();
 }
@@ -76,6 +82,7 @@ static void draw_frame(void)
 {
     screen_draw();
     screen_draw_shaman();
+    screen_draw_honey_drip();
     inv_draw();
     enemies_draw();
     player_draw();
@@ -293,9 +300,12 @@ int main(void)
     font_init();
     sound_init();
     sfx_load(SFX_JUMP, "jump.wav");
+    music_load_xm("PRETHEME.XM");
+
+    /* Estos SFX los cargamos dinámicamente en screen_change()
     sfx_load(SFX_ROCK_ROLL, "moverock.wav");
     sfx_load(SFX_BEAR_STEP, "woso.wav");
-    music_load_xm("PRETHEME.XM");
+    */
 
     /* Secuencia de presentación */
     /* TEMP: comentar esta función para que arranque más rápido el juego
@@ -316,8 +326,11 @@ int main(void)
 
     music_free();
     sfx_free(SFX_JUMP);
+    sfx_free(1);
+
+    /* Por lo explicado arriba en la carga
     sfx_free(SFX_ROCK_ROLL);
-    sfx_free(SFX_BEAR_STEP);
+    sfx_free(SFX_BEAR_STEP); */
     sound_shutdown();
     engine_shutdown();
 
