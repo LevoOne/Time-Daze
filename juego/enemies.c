@@ -38,7 +38,7 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
     /* P3: pie colina, oso */
     {
         { ENEMY_BEAR, 1, 200.0f, 117.0f, 0.2f,0.0f,
-          PAT_HORIZONTAL, 21.0f,275.0f, 0.0f,0.0f, 0,0 },
+          PAT_HORIZONTAL, 127.0f,270.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
     
