@@ -35,7 +35,7 @@ static int try_load_bmp(char *file, BITMAP *b);
  * Se inyectan en la paleta activa despues de cada cambio de fondo.
  * Formato: R,G,B en rango 0..63 para VGA.
  * ---------------------------------------------------------------- */
-static const byte eric_palette[70 * 3] =
+static const byte eric_palette[56 * 3] =
 {
      4,  1,  1,  /* indice 130 */
      1,  1,  5,  /* indice 131 */
@@ -45,68 +45,79 @@ static const byte eric_palette[70 * 3] =
      5,  5,  8,  /* indice 135 */
      5,  6, 14,  /* indice 136 */
     12,  4,  2,  /* indice 137 */
-     9,  7,  6,  /* indice 138 */
-    11,  7,  5,  /* indice 139 */
-    14,  7,  4,  /* indice 140 */
-     7,  8, 15,  /* indice 141 */
-    11,  9, 12,  /* indice 142 */
-    15,  9,  6,  /* indice 143 */
-    10, 11, 14,  /* indice 144 */
-    10, 11, 20,  /* indice 145 */
-    16, 11,  9,  /* indice 146 */
-    20, 10,  6,  /* indice 147 */
-    11, 13, 16,  /* indice 148 */
-    11, 13, 23,  /* indice 149 */
-    18, 12,  9,  /* indice 150 */
-    15, 14, 16,  /* indice 151 */
-    12, 15, 17,  /* indice 152 */
-    21, 13,  9,  /* indice 153 */
-    13, 15, 27,  /* indice 154 */
-    12, 17, 17,  /* indice 155 */
-    21, 16, 11,  /* indice 156 */
-    15, 17, 25,  /* indice 157 */
-    25, 15, 11,  /* indice 158 */
-    16, 18, 20,  /* indice 159 */
-    20, 18, 17,  /* indice 160 */
-    28, 16, 10,  /* indice 161 */
-    16, 19, 28,  /* indice 162 */
-    25, 17, 12,  /* indice 163 */
-    17, 20, 23,  /* indice 164 */
-    19, 20, 21,  /* indice 165 */
-    23, 19, 16,  /* indice 166 */
-    17, 20, 30,  /* indice 167 */
-    17, 20, 32,  /* indice 168 */
-    18, 21, 29,  /* indice 169 */
-    19, 21, 26,  /* indice 170 */
-    18, 21, 31,  /* indice 171 */
-    31, 18, 11,  /* indice 172 */
-    21, 22, 22,  /* indice 173 */
-    18, 21, 33,  /* indice 174 */
-    24, 21, 20,  /* indice 175 */
-    21, 23, 24,  /* indice 176 */
-    29, 22, 15,  /* indice 177 */
-    34, 21, 16,  /* indice 178 */
-    22, 26, 26,  /* indice 179 */
-    32, 25, 18,  /* indice 180 */
-    24, 28, 29,  /* indice 181 */
-    25, 29, 30,  /* indice 182 */
-    40, 25, 18,  /* indice 183 */
-    26, 30, 32,  /* indice 184 */
-    33, 29, 25,  /* indice 185 */
-    38, 29, 21,  /* indice 186 */
-    31, 32, 32,  /* indice 187 */
-    44, 29, 23,  /* indice 188 */
-    41, 34, 22,  /* indice 189 */
-    41, 35, 25,  /* indice 190 */
-    44, 35, 26,  /* indice 191 */
-    41, 37, 33,  /* indice 192 */
-    50, 34, 26,  /* indice 193 */
-    45, 38, 30,  /* indice 194 */
-    54, 38, 30,  /* indice 195 */
-    47, 41, 38,  /* indice 196 */
-    60, 42, 32,  /* indice 197 */
-    52, 46, 44,  /* indice 198 */
-    61, 45, 37,  /* indice 199 */
+    11,  7,  5,  /* indice 138 */
+    14,  7,  4,  /* indice 139 */
+     7,  8, 15,  /* indice 140 */
+    11,  9, 12,  /* indice 141 */
+    15,  9,  6,  /* indice 142 */
+    10, 11, 20,  /* indice 143 */
+    11, 12, 16,  /* indice 144 */
+    20, 10,  6,  /* indice 145 */
+    17, 12,  9,  /* indice 146 */
+    11, 13, 23,  /* indice 147 */
+    15, 14, 16,  /* indice 148 */
+    21, 13,  9,  /* indice 149 */
+    12, 16, 17,  /* indice 150 */
+    13, 15, 26,  /* indice 151 */
+    25, 15, 11,  /* indice 152 */
+    16, 18, 20,  /* indice 153 */
+    20, 18, 17,  /* indice 154 */
+    16, 18, 27,  /* indice 155 */
+    25, 17, 12,  /* indice 156 */
+    17, 20, 22,  /* indice 157 */
+    23, 19, 16,  /* indice 158 */
+    18, 20, 29,  /* indice 159 */
+    31, 18, 11,  /* indice 160 */
+    18, 21, 32,  /* indice 161 */
+    21, 22, 22,  /* indice 162 */
+    24, 21, 20,  /* indice 163 */
+    21, 23, 24,  /* indice 164 */
+    29, 22, 15,  /* indice 165 */
+    34, 21, 16,  /* indice 166 */
+    22, 26, 26,  /* indice 167 */
+    32, 25, 18,  /* indice 168 */
+    24, 28, 29,  /* indice 169 */
+    40, 25, 18,  /* indice 170 */
+    26, 30, 31,  /* indice 171 */
+    33, 29, 25,  /* indice 172 */
+    38, 29, 21,  /* indice 173 */
+    31, 32, 32,  /* indice 174 */
+    44, 29, 23,  /* indice 175 */
+    41, 34, 22,  /* indice 176 */
+    42, 35, 26,  /* indice 177 */
+    41, 37, 33,  /* indice 178 */
+    50, 34, 26,  /* indice 179 */
+    45, 38, 30,  /* indice 180 */
+    54, 38, 30,  /* indice 181 */
+    47, 41, 38,  /* indice 182 */
+    60, 42, 32,  /* indice 183 */
+    52, 46, 44,  /* indice 184 */
+    61, 45, 37,  /* indice 185 */
+};
+
+/* ----------------------------------------------------------------
+ * PALETA DE LA TAZA (todas las pantallas de Prehistoria)
+ * Indices 186-199: rango DEDICADO que no se solapa con roca/agua/
+ * oso/miel (todos en 242-255). La taza aparece en el HUD en todas
+ * las pantallas, por eso necesita su propio rango permanente.
+ * Colores madera/marron extraidos de CUP.BMP y CUPHONEY.BMP.
+ * ---------------------------------------------------------------- */
+static const byte cup_palette[14 * 3] =
+{
+    13,  8,  3,  /* indice 186 */
+     8,  9, 11,  /* indice 187 */
+    22, 13,  5,  /* indice 188 */
+    15, 15, 18,  /* indice 189 */
+    26, 16,  6,  /* indice 190 */
+    28, 20, 10,  /* indice 191 */
+    22, 22, 21,  /* indice 192 */
+    33, 24, 14,  /* indice 193 */
+    28, 29, 29,  /* indice 194 */
+    41, 30, 17,  /* indice 195 */
+    47, 36, 18,  /* indice 196 */
+    37, 38, 38,  /* indice 197 */
+    50, 47, 35,  /* indice 198 */
+    54, 52, 49,  /* indice 199 */
 };
 
 /* Inyecta los colores de Eric en la paleta VGA activa */
@@ -114,8 +125,17 @@ static void screen_inject_eric_palette(void)
 {
     int i;
     outp(0x3C8, 130);
-    for (i = 0; i < 70 * 3; i++)
+    for (i = 0; i < 56 * 3; i++)
         outp(0x3C9, eric_palette[i]);
+}
+
+/* Inyecta los colores de la taza en la paleta VGA activa */
+void screen_inject_cup_palette(void)
+{
+    int i;
+    outp(0x3C8, 186);
+    for (i = 0; i < 14 * 3; i++)
+        outp(0x3C9, cup_palette[i]);
 }
 
 /* ----------------------------------------------------------------
@@ -291,6 +311,7 @@ static void screen_inject_rock_palette(void)
 }
 
 /* ----------------------------------------------------------------
+/* ----------------------------------------------------------------
  * PALETA DE LA MIEL (P2, Prehistoria)
  * Indices 242-249 — mismo rango libre que roca/agua/oso.
  * Sin conflicto: miel solo en P2, roca en P1, agua en P8, oso en P3.
@@ -456,11 +477,14 @@ BITMAP     g_rock_sprite;
 BITMAP     g_rock_roll_sprite;
 BITMAP     g_shaman_sprite;
 BITMAP     g_stick_sprite;
-BITMAP     g_stick_icon;
 BITMAP     g_egg_sprite;
+BITMAP     g_cup_sprite;
+BITMAP     g_cuphoney_sprite;
 BITMAP     g_egg_icon;
 BITMAP     g_honey_sprite;
 BITMAP     g_bear_sprite;
+BITMAP      g_cup_icon;
+BITMAP      g_cuphoney_icon;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -789,15 +813,17 @@ void screen_init(void)
     if (!try_load_bmp("STICK.BMP", &g_stick_sprite))
         g_stick_sprite.data = NULL;
 
-    /* Cargar el icono del palo para el HUD */
-    if (!try_load_bmp("STKICON.BMP", &g_stick_icon))
-        g_stick_icon.data = NULL;
-
     /* Cargar el sprite del huevo de dinosaurio (objeto recogible) */
     if (!try_load_bmp("HUEVO.BMP", &g_egg_sprite))
         g_egg_sprite.data = NULL;
 
-    /* Cargar el icono del huevo para el HUD */
+    /* Cargar sprites de la taza */
+    if (!try_load_bmp("CUP16.BMP", &g_cup_sprite))
+        g_cup_sprite.data = NULL;
+
+    if (!try_load_bmp("CUPH16.BMP", &g_cuphoney_sprite))
+        g_cuphoney_sprite.data = NULL;
+
     if (!try_load_bmp("EGGICON.BMP", &g_egg_icon))
         g_egg_icon.data = NULL;
 
@@ -806,6 +832,12 @@ void screen_init(void)
 
     if (!try_load_bmp("BEAR.BMP", &g_bear_sprite))
         g_bear_sprite.data = NULL;
+
+    /* Cargar bitmaps de taza de miel */
+    if (!try_load_bmp("CUPICON.BMP", &g_cup_icon))
+        g_cup_icon.data = NULL;
+    if (!try_load_bmp("CUPHICON.BMP", &g_cuphoney_icon))
+        g_cuphoney_icon.data = NULL;
 }
 
 /* ----------------------------------------------------------------
@@ -948,6 +980,7 @@ void screen_apply_palette(void)
     screen_inject_eric_palette();
     screen_inject_egg_palette();
     screen_inject_stick_palette();
+    screen_inject_cup_palette();
 }
 
 /* ----------------------------------------------------------------
@@ -1163,14 +1196,14 @@ int screen_change(int dir)
     vga_flip();
 
     /* Inyectar paleta de Eric en saved_palette y en el hardware */
-    palette_inject(130, eric_palette, 90);
+    palette_inject(130, eric_palette, 56);
     screen_inject_eric_palette();
+    palette_inject(186, cup_palette, 14);
+    screen_inject_cup_palette();
     palette_inject(220, egg_palette, 12);
     screen_inject_egg_palette();
     palette_inject(232, stick_palette, 10);
     screen_inject_stick_palette();
-
-    /* Fade in de la nueva pantalla */
     vga_fade_in(16, 4);
 
     return 1;
@@ -1206,8 +1239,10 @@ void screen_travel(int new_epoch)
     player_place((int)g_game.player.x, 100);
     screen_draw();
     vga_flip();
-    palette_inject(130, eric_palette, 90);
+    palette_inject(130, eric_palette, 56);
     screen_inject_eric_palette();
+    palette_inject(186, cup_palette, 14);
+    screen_inject_cup_palette();
     palette_inject(220, egg_palette, 12);
     screen_inject_egg_palette();
     palette_inject(232, stick_palette, 10);
@@ -1237,4 +1272,13 @@ void screen_draw_shaman(void)
 
     screen_inject_shaman_palette();
     bmp_draw_tile(&g_shaman_sprite, s_frame, 0, 64, 64, 28, 53);
+}
+
+/* -----------------------------------------------------------------------------------------
+ * SELECTOR screen_is_honey_dripping()
+ *   Devuelve 1 si la animacion de goteo de miel esta activa, 0 si no.
+ * -----------------------------------------------------------------------------------------*/
+int screen_is_honey_dripping(void)
+{
+    return s_honey_active;
 }

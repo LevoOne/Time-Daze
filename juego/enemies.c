@@ -9,6 +9,7 @@
 #include "player.h"
 #include "puzzles.h"
 #include "screen.h"
+#include "inventory.h"
 
 
 
@@ -204,8 +205,15 @@ void enemies_load(int epoch, int screen)
     {
         if (src[i].type == ENEMY_NONE) break;
         g_enemies.enemies[i] = src[i];
+        /* Si el puzzle del oso ya esta resuelto, desactivarlo al cargar */
+        if (src[i].type == ENEMY_BEAR && puzzle_is_solved(PUZZLE_BEAR))
+            g_enemies.enemies[i].active = 0;
         g_enemies.count++;
     }
+
+    /* Si el puzzle del oso esta resuelto, eliminar la taza con miel del suelo */
+    if (puzzle_is_solved(PUZZLE_BEAR))
+        inv_remove_instance(ITEM_CUP_HONEY, epoch, screen);
 }
 
 /* ----------------------------------------------------------------
@@ -221,6 +229,32 @@ void enemies_update(void)
     {
         e = &g_enemies.enemies[i];
         if (!e->active) continue;
+
+        /* Oso con puzzle resuelto: camina hacia la taza y se detiene */
+        if (e->type == ENEMY_BEAR && puzzle_is_solved(PUZZLE_BEAR))
+        {
+            if (e->vel_x != 0.0f)
+            {
+                e->x += e->vel_x;
+                if ((e->vel_x < 0.0f && e->x <= e->min_x) ||
+                    (e->vel_x > 0.0f && e->x >= e->min_x))
+                {
+                    e->x          = e->min_x;
+                    e->vel_x      = 0.0f;
+                    e->anim_frame = 0;
+                    e->anim_timer = 0;
+                    sfx_free(1);
+                }
+                else if (++e->anim_timer >= 15)
+                {
+                    e->anim_timer = 0;
+                    e->anim_frame = (e->anim_frame + 1) % 3;
+                    if (e->anim_frame == 0)
+                        sfx_play(SFX_BEAR_STEP, 38, MIDDLE);
+                }
+            }
+            continue;
+        }
 
         switch (e->pattern)
         {

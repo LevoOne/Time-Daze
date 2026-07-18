@@ -62,8 +62,8 @@ static void new_game(void)
     logic_init();
 
     /* TEMP: pantalla inicial modificada para pruebas */
-    screen_load(EPOCH_PREHISTORY, 2);
-    enemies_load(EPOCH_PREHISTORY, 2);
+    screen_load(EPOCH_PREHISTORY, 0);
+    enemies_load(EPOCH_PREHISTORY, 0);
 
     /* Cargar SFX de la pantalla inicial */
     if (g_game.screen.current_screen == 0)

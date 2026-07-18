@@ -17,10 +17,14 @@ extern BITMAP g_rock_roll_sprite;
 extern BITMAP g_shaman_sprite;
 extern BITMAP g_bear_sprite;
 extern BITMAP g_stick_sprite;
-extern BITMAP g_stick_icon;
 extern BITMAP g_egg_sprite;
 extern BITMAP g_egg_icon;
+extern BITMAP g_cup_sprite;
+extern BITMAP g_cuphoney_sprite;
+extern BITMAP g_cuphoney_sprite;
 extern BITMAP g_honey_sprite;
+extern BITMAP g_cup_icon;
+extern BITMAP g_cuphoney_icon;
 
 /* ----------------------------------------------------------------
  * FUNCIONES
@@ -70,6 +74,7 @@ void screen_draw(void);
 void screen_draw_rock(void);
 
 void screen_inject_bear_palette(void);
+void screen_inject_cup_palette(void);
 
 /* -----------------------------------------------------------------------------------------
  * screen_draw_shaman()
@@ -109,5 +114,12 @@ void screen_travel(int new_epoch);
  * Salida:  indice de pantalla conectada (0..8), o NO_SCREEN si no hay conexion
  * -----------------------------------------------------------------------------------------*/
 int screen_get_connection(int dir);
+
+/* -----------------------------------------------------------------------------------------
+ * screen_is_honey_dripping()
+ *   Devuelve 1 si la animacion de goteo de miel esta activa, 0 si no.
+ *   Usar desde logic.c para condicionar la recogida de miel con la taza.
+ * -----------------------------------------------------------------------------------------*/
+int screen_is_honey_dripping(void);
 
 #endif /* SCREEN_SYS_H */

@@ -10,8 +10,8 @@
 /* ----------------------------------------------------------------
  * CONSTANTES
  * ---------------------------------------------------------------- */
-#define HUD_Y              184   /* posicion Y de la franja del HUD  */
-#define HUD_HEIGHT          16   /* altura de la franja en pixels    */
+#define HUD_Y              170   /* posicion Y de la franja del HUD  */
+#define HUD_HEIGHT          30   /* altura de la franja en pixels    */
 #define HUD_NORMAL           0   /* HUD estandar del juego           */
 #define HUD_MECHA            1   /* HUD especial del Mecha           */
 #define MECHA_LIVES          3   /* impactos maximos del Mecha       */

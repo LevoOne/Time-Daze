@@ -34,6 +34,7 @@ void logic_init(void)
     inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 104, 134); /* P3: palo   */
     inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 240, 140); /* P9: tronco */
     inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 117); /* P8: huevo  */
+    inv_place(ITEM_CUP,      EPOCH_PREHISTORY, 0, 244, 116); /* P1: taza TEMP */
 }
 
 /* ----------------------------------------------------------------
@@ -120,6 +121,7 @@ static int logic_prehistory(int screen)
     int handled;
     int beehive_x, beehive_y;
     int honey_x,   honey_y;
+    int deposit_x;
     int shaman_x,  shaman_y;
     int fragment_x, fragment_y;
     int monolith_x, monolith_y;
@@ -178,7 +180,7 @@ static int logic_prehistory(int screen)
                 screen_trigger_honey_drip();
                 handled = 1;
             }
-            else if (inv_is_carrying(ITEM_CUP))
+           else if (inv_is_carrying(ITEM_CUP) && screen_is_honey_dripping())
             {
                 inv_transform(ITEM_CUP_HONEY);
                 screen_stop_honey_drip();
@@ -206,18 +208,20 @@ static int logic_prehistory(int screen)
             }
         }
 
-        /* Depositar taza con miel para ahuyentar al oso */
+        /* Depositar taza con miel en cualquier lugar de P3 */
         if (!puzzle_is_solved(PUZZLE_BEAR))
         {
-            if (eric_near(honey_x, honey_y) && eric_action())
+            if (inv_is_carrying(ITEM_CUP_HONEY) && eric_action())
             {
-                if (inv_is_carrying(ITEM_CUP_HONEY))
-                {
-                    inv_drop(EPOCH_PREHISTORY, screen, honey_x, honey_y);
-                    puzzle_solve(PUZZLE_BEAR);
-                    g_enemies.enemies[0].active = 0;
-                    handled = 1;
-                }
+                deposit_x = (int)g_game.player.x;
+                inv_drop(EPOCH_PREHISTORY, screen, deposit_x, 116);
+                puzzle_solve(PUZZLE_BEAR);
+                g_enemies.enemies[0].pattern = PAT_HORIZONTAL;
+                g_enemies.enemies[0].vel_x   = (deposit_x < (int)g_enemies.enemies[0].x)
+                                                ? -0.2f : 0.2f;
+                g_enemies.enemies[0].min_x   = (float)deposit_x;
+                g_enemies.enemies[0].max_x   = (float)deposit_x;
+                handled = 1;
             }
         }
     }
@@ -233,10 +237,33 @@ static int logic_prehistory(int screen)
          * cuando Eric intenta ir hacia la izquierda de x=200 */
         if (!puzzle_is_solved(PUZZLE_LEVER))
         {
-            if (g_game.player.x < 170.0f)
+            if (g_game.player.x < 160.0f)
             {
-                g_game.player.x     = 170.0f;
+                g_game.player.x     = 160.0f;
                 g_game.player.vel_x = 0.0f;
+            }
+        }
+
+        /* TODO TEMP: taza en P1 para pruebas del puzzle taza/miel/oso */
+        if (inv_is_carrying(ITEM_NONE) &&
+            inv_instance_exists(ITEM_CUP, EPOCH_PREHISTORY, screen))
+        {
+            if (eric_near(244, 116) && eric_action())
+            {
+                if (inv_remove_instance(ITEM_CUP, EPOCH_PREHISTORY, screen))
+                    inv_pick(ITEM_CUP);
+                handled = 1;
+            }
+        }
+
+        /* TODO TEST: gatillo temporal para probar la animacion de la roca.
+         * Eliminar cuando se implemente la logica real del tronco/palanca. */
+        if (!puzzle_is_solved(PUZZLE_LEVER))
+        {
+            if (eric_near(160, 118) && eric_action())
+            {
+                screen_trigger_rock_roll();
+                handled = 1;
             }
         }
 

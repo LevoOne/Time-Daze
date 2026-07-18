@@ -593,8 +593,6 @@ entre los escombros que cubren el fragmento 3.
 Plataformas: orilla irregular con plataformas naturales de roca y raices.
 El rio en la parte inferior es infranqueable, sin rocas emergentes.
 
-Enemigos: peces prehistoricos saltando desde el rio con patrones fijos.
-
 Objetos: ninguno relevante en Prehistoria.
 
 Conexiones: derecha a pantalla 7.
@@ -1492,3 +1490,63 @@ para Eric, objetos interactivos y sprites animados propios de esa
 epoca. Ver seccion 9.3 para el detalle del reparto de Prehistoria como
 plantilla y el proceso a seguir (verificacion byte a byte de los
 fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
+
+### Checklist para cerrar la fase de Prehistoria
+
+1. ⬜ **Probar puzzle taza/miel/oso** — flujo completo: recoger taza en P1
+   (temporal), depositar en P2, golpear colmena con palo, recoger taza
+   con miel, depositar en P3, oso se va a la izquierda, Eric puede bajar
+   a P5.
+
+2. ⬜ **BMPs y sprites pendientes**:
+   - Hoguera animada P5 (punto de guardado, 3-4 frames de llamas)
+   - Sprite de peces P8
+   - Sprite de reptil
+   - Sprite de jabali gigante P4
+   - Bitmap del fragmento 1
+   - Bitmap del tronco a recoger en P9
+
+3. ⬜ **Codigos del monolito P9** — representar via ventana de dialogo
+   (ver punto 8). Los codigos son simbolos tipo runas dibujados como BMP
+   que se muestran en la ventana emergente al interactuar con el monolito.
+
+4. ⬜ **Frases de pistas por pantalla** — mostrar via ventana emergente.
+   Decidir si se muestran al entrar en la pantalla o solo al pulsar
+   accion cerca de algun elemento.
+
+5. ⬜ **Indicador de objeto en el suelo** — cuando Eric este sobre un
+   objeto recogible, mostrar su icono y nombre en el HUD. Implementar
+   en logic_update() comprobando si hay un inv_instance cerca de Eric.
+
+6. ⬜ **Lianas** — perfilar visualmente en algunas pantallas (usuario en
+   Aseprite). Sin cambios en codigo salvo ajuste de coordenadas de
+   transicion.
+
+7. ⬜ **Vidas con cabeza de Eric** — sustituir rectangulos del HUD por
+   BMP con la cabeza de Eric recortada del spritesheet hi-res.
+   Dejar para el HUD definitivo.
+
+8. ⬜ **Ventana emergente de dialogo** — sistema para mostrar texto largo,
+   retratos de personajes, codigos del monolito y frases de pistas.
+   Cubre los puntos 3, 4 y 8 de esta lista.
+
+9. ⬜ **Prueba puzzle planta** — colocar la planta temporalmente en una
+   pantalla accesible de Prehistoria para probar el flujo completo,
+   igual que se hizo con la taza.
+
+**Adicionales:**
+- ⚠️  Eliminar gatillo temporal de la roca (TODO TEST en logic.c) y
+  sustituir por logica real del tronco/palanca (la animacion de la
+  roca rodando ya esta implementada).
+- ⬜ **SFX coger/depositar objetos** — disparar un SFX al recoger un
+  objeto del suelo y otro al depositarlo. Reutilizar el slot dinamico
+  (indice 1) segun la pantalla activa.
+- ⬜ **SFX viaje entre epocas** — sonido al pulsar ALT para viajar,
+  integrar en screen_travel() antes del fade out.
+- ⬜ **SFX fuego crepitante hoguera P5** — reproducir en loop al entrar
+  en P5, parar al salir. Mismo patron que el SFX del oso (slot 1).
+- ⬜ **Logica punto de guardado P5** — al interactuar con la hoguera,
+  mostrar confirmacion (S/N) y llamar a save_game() si el jugador
+  confirma.
+- ⬜ Sonido de la roca rodando al activar el puzzle del tronco/palanca
+  (ya anotado, pendiente de WAV apropiado).

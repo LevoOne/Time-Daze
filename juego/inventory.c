@@ -250,6 +250,12 @@ int inv_item_height(int item_id)
         case ITEM_DINO_EGG:
             if (g_egg_sprite.data != NULL) return g_egg_sprite.height;
             break;
+        case ITEM_CUP:
+            if (g_cup_sprite.data != NULL) return g_cup_sprite.height;
+            break;
+        case ITEM_CUP_HONEY:
+            if (g_cuphoney_sprite.data != NULL) return g_cuphoney_sprite.height;
+            break;
         default:
             break;
     }
@@ -325,6 +331,18 @@ void inv_draw(void)
         if (inst->item_id == ITEM_DINO_EGG && g_egg_sprite.data != NULL)
         {
             draw_bitmap_buf_t(&g_egg_sprite, x, y);
+            continue;
+        }
+
+        if (inst->item_id == ITEM_CUP && g_cup_sprite.data != NULL)
+        {
+            draw_bitmap_buf_t(&g_cup_sprite, x, y);
+            continue;
+        }
+
+        if (inst->item_id == ITEM_CUP_HONEY && g_cuphoney_sprite.data != NULL)
+        {
+            draw_bitmap_buf_t(&g_cuphoney_sprite, x, y);
             continue;
         }
 

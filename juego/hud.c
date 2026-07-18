@@ -89,6 +89,7 @@ static void hud_draw_normal(void)
     int i, x;
     unsigned char color;
     const char* item_name;
+    int icon_w = 0;
 
     /* Fondo negro de la franja del HUD */
     for (i = HUD_Y; i < HUD_Y + HUD_HEIGHT; i++)
@@ -108,13 +109,25 @@ static void hud_draw_normal(void)
     if (g_game.inv.carried != ITEM_NONE)
     {
         x = 60;
-        if (g_game.inv.carried == ITEM_STICK && g_stick_icon.data != NULL)
+        if (g_game.inv.carried == ITEM_STICK && g_stick_sprite.data != NULL)
         {
-            draw_bitmap_buf_t(&g_stick_icon, x, HUD_Y + 3);
+            icon_w = g_stick_sprite.width;
+            draw_bitmap_buf_t(&g_stick_sprite, x, HUD_Y+6);
         }
         else if (g_game.inv.carried == ITEM_DINO_EGG && g_egg_icon.data != NULL)
         {
-            draw_bitmap_buf_t(&g_egg_icon, x, HUD_Y + 1);
+            icon_w = g_egg_icon.width;
+            draw_bitmap_buf_t(&g_egg_icon, x+20, HUD_Y + 4);
+        }
+        else if (g_game.inv.carried == ITEM_CUP && g_cup_icon.data != NULL)
+        {
+            icon_w = g_cup_icon.width;
+            draw_bitmap_buf_t(&g_cup_icon, x, HUD_Y + 4);
+        }
+        else if (g_game.inv.carried == ITEM_CUP_HONEY && g_cuphoney_icon.data != NULL)
+        {
+            icon_w = g_cuphoney_icon.width;
+            draw_bitmap_buf_t(&g_cuphoney_icon, x, HUD_Y + 4);
         }
         else
         {
@@ -127,26 +140,26 @@ static void hud_draw_normal(void)
         /* Imprimimos una cadena con el nombre del objeto del inventario */
         switch(inv_get_carried())
         {
-            case ITEM_STICK:        item_name = "palo";        break;
-            case ITEM_CUP:          item_name = "TAZA";        break;
-            case ITEM_CUP_HONEY:    item_name = "TAZA+MIEL";   break;
-            case ITEM_LOG:          item_name = "TRONCO";      break;
-            case ITEM_DINO_EGG:     item_name = "HUEVO";       break;
-            case ITEM_CRANK:        item_name = "MANIVELA";    break;
-            case ITEM_KEY:          item_name = "LLAVE";       break;
-            case ITEM_TORCH:        item_name = "ANTORCHA";    break;
-            case ITEM_TORCH_LIT:    item_name = "ANTORCH.LIT"; break;
-            case ITEM_LEVITATOR:    item_name = "LEVITADOR";   break;
-            case ITEM_CLAY_POT:     item_name = "RECIPIENTE";  break;
-            case ITEM_CLAY_POT_PLANT: item_name = "RECIP+PLANTA"; break;
-            case ITEM_VOLCANIC_MIN: item_name = "MINERAL";     break;
-            case ITEM_SEALANT:      item_name = "SELLANTE";    break;
-            case ITEM_QUARTZ:       item_name = "CUARZO";      break;
-            case ITEM_QUARTZ_CHARGED: item_name = "CUARZO+";   break;
-            default:                item_name = "";            break;
+            case ITEM_STICK:        item_name = "palo";                 break;
+            case ITEM_CUP:          item_name = "recipiente";           break;
+            case ITEM_CUP_HONEY:    item_name = "recipiente con miel";  break;
+            case ITEM_LOG:          item_name = "TRONCO";               break;
+            case ITEM_DINO_EGG:     item_name = "huevo";                break;
+            case ITEM_CRANK:        item_name = "MANIVELA";             break;
+            case ITEM_KEY:          item_name = "LLAVE";                break;
+            case ITEM_TORCH:        item_name = "ANTORCHA";             break;
+            case ITEM_TORCH_LIT:    item_name = "ANTORCH.LIT";          break;
+            case ITEM_LEVITATOR:    item_name = "LEVITADOR";            break;
+            case ITEM_CLAY_POT:     item_name = "RECIPIENTE";           break;
+            case ITEM_CLAY_POT_PLANT: item_name = "RECIP+PLANTA";       break;
+            case ITEM_VOLCANIC_MIN: item_name = "MINERAL";              break;
+            case ITEM_SEALANT:      item_name = "SELLANTE";             break;
+            case ITEM_QUARTZ:       item_name = "CUARZO";               break;
+            case ITEM_QUARTZ_CHARGED: item_name = "CUARZO+";            break;
+            default:                item_name = "";                     break;
         }
 
-        draw_string(item_name, x + 12, HUD_Y + 5, 15);
+        draw_string(item_name, x + icon_w + 4, HUD_Y + 10, 15);
     }
 
     /* Fragmentos: grisaceo si no recogido, color si recogido */
