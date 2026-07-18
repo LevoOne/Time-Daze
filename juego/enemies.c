@@ -187,6 +187,10 @@ void enemies_init(void)
  * LOAD
  * Carga los enemigos de la pantalla actual
  * ---------------------------------------------------------------- */
+
+/* Ultima direccion del oso antes de detenerse (para dibujo correcto) */
+static float s_bear_last_dir = -1.0f;  /* -1=izquierda, 1=derecha */
+
 void enemies_load(int epoch, int screen)
 {
     int i;
@@ -233,8 +237,9 @@ void enemies_update(void)
         /* Oso con puzzle resuelto: camina hacia la taza y se detiene */
         if (e->type == ENEMY_BEAR && puzzle_is_solved(PUZZLE_BEAR))
         {
-            if (e->vel_x != 0.0f)
+            if (e->vel_x < -0.01f || e->vel_x > 0.01f)
             {
+                s_bear_last_dir = (e->vel_x < 0.0f) ? -1.0f : 1.0f;
                 e->x += e->vel_x;
                 if ((e->vel_x < 0.0f && e->x <= e->min_x) ||
                     (e->vel_x > 0.0f && e->x >= e->min_x))
@@ -368,9 +373,10 @@ void enemies_draw(void)
         /* Oso: dibujar sprite real con espejado segun direccion */
         if (e->type == ENEMY_BEAR && g_bear_sprite.data != NULL)
         {
+            float draw_dir = (e->vel_x != 0.0f) ? e->vel_x : s_bear_last_dir;
             screen_inject_bear_palette();
 
-            if (e->vel_x >= 0.0f)
+            if (draw_dir >= 0.0f)
             {
                 /* Mirando a la derecha */
                 bmp_draw_tile(&g_bear_sprite, e->anim_frame, 0,

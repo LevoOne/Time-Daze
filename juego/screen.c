@@ -485,6 +485,7 @@ BITMAP     g_honey_sprite;
 BITMAP     g_bear_sprite;
 BITMAP      g_cup_icon;
 BITMAP      g_cuphoney_icon;
+BITMAP     g_eric_head;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -838,6 +839,9 @@ void screen_init(void)
         g_cup_icon.data = NULL;
     if (!try_load_bmp("CUPHICON.BMP", &g_cuphoney_icon))
         g_cuphoney_icon.data = NULL;
+
+    if (!try_load_bmp("HEAD.BMP", &g_eric_head))
+        g_eric_head.data = NULL;
 }
 
 /* ----------------------------------------------------------------

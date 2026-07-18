@@ -21,10 +21,10 @@ extern BITMAP g_egg_sprite;
 extern BITMAP g_egg_icon;
 extern BITMAP g_cup_sprite;
 extern BITMAP g_cuphoney_sprite;
-extern BITMAP g_cuphoney_sprite;
 extern BITMAP g_honey_sprite;
 extern BITMAP g_cup_icon;
 extern BITMAP g_cuphoney_icon;
+extern BITMAP g_eric_head;
 
 /* ----------------------------------------------------------------
  * FUNCIONES

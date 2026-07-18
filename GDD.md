@@ -1548,5 +1548,5 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
 - ⬜ **Logica punto de guardado P5** — al interactuar con la hoguera,
   mostrar confirmacion (S/N) y llamar a save_game() si el jugador
   confirma.
-- ⬜ Sonido de la roca rodando al activar el puzzle del tronco/palanca
-  (ya anotado, pendiente de WAV apropiado).
+- ⬜ SFX a la hora de coger / recoger objetos
+- ⬜ Modificar P3 de prehistoria para que aparezca la liana en la derecha para bajar a P5

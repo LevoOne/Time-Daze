@@ -95,14 +95,19 @@ static void hud_draw_normal(void)
     for (i = HUD_Y; i < HUD_Y + HUD_HEIGHT; i++)
         memset(&back_buffer[i * SCREEN_W], 129, SCREEN_W);
 
-    /* Vidas: rectangulos blancos */
+    /* Vidas: cabeza de Eric */
     for (i = 0; i < g_game.player.lives; i++)
     {
-        x = 4 + i * 12;
-        draw_line(x,     HUD_Y + 3,  x + 8, HUD_Y + 3,  15);
-        draw_line(x + 8, HUD_Y + 3,  x + 8, HUD_Y + 11, 15);
-        draw_line(x + 8, HUD_Y + 11, x,     HUD_Y + 11, 15);
-        draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  15);
+        x = 4 + i * 20;
+        if (g_eric_head.data != NULL)
+            draw_bitmap_buf_t(&g_eric_head, x, HUD_Y + 7);
+        else
+        {
+            draw_line(x,      HUD_Y + 3,  x + 18, HUD_Y + 3,  15);
+            draw_line(x + 18, HUD_Y + 3,  x + 18, HUD_Y + 19, 15);
+            draw_line(x + 18, HUD_Y + 19, x,      HUD_Y + 19, 15);
+            draw_line(x,      HUD_Y + 19, x,      HUD_Y + 3,  15);
+        }
     }
 
     /* Objeto actual: icono real si es palo o huevo, rectangulo si no */
