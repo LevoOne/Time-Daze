@@ -21,6 +21,7 @@
                 "logic.c",
                 "engine.c",
                 "game.c",
+                "dialog.c",
                 "judas.lib"
             ],
             "group":

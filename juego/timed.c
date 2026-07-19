@@ -20,6 +20,7 @@
 #include "save.h"
 #include "hud.h"
 #include "logic.h"
+#include "dialog.h"
 
 
 /* ----------------------------------------------------------------
@@ -89,6 +90,7 @@ static void draw_frame(void)
     screen_draw_rock();
     screen_draw_rock_rolling();
     hud_draw();
+    dialog_draw();
 
 #ifdef DEBUG
     draw_string("EP:", 2, 2, 254);
@@ -143,6 +145,7 @@ static void game_loop(void)
         screen = g_game.screen.current_screen;
 
         /* 1. LOGICA DE PUZZLES Y EVENTOS */
+        dialog_update();
         logic_update();
 
         /* 2. ACTUALIZAR ENEMIGOS */
@@ -150,7 +153,6 @@ static void game_loop(void)
 
         /* 3. ACTUALIZAR ERIC */
         player_event = player_update();
-
         /* 4. COLISION CON ENEMIGOS */
         if (enemies_check_collision())
         {

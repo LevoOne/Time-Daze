@@ -7,6 +7,7 @@
 #include "game.h"
 #include "screen.h"
 #include "player.h"
+#include "dialog.h"
 
 
 /* Spritesheet global de Eric, cargado en screen.c */
@@ -71,28 +72,35 @@ int player_update(void)
 
     moving = 0;
 
-    if (key_pressed(KEY_LEFT))
+    if (!dialog_is_open())
     {
-        g_game.player.vel_x  = -PLAYER_SPEED;
-        g_game.player.facing = -1;
-        moving               = 1;
-    }
-    else if (key_pressed(KEY_RIGHT))
-    {
-        g_game.player.vel_x  = PLAYER_SPEED;
-        g_game.player.facing = 1;
-        moving               = 1;
+        if (key_pressed(KEY_O))
+        {
+            g_game.player.vel_x  = -PLAYER_SPEED;
+            g_game.player.facing = -1;
+            moving               = 1;
+        }
+        else if (key_pressed(KEY_P))
+        {
+            g_game.player.vel_x  = PLAYER_SPEED;
+            g_game.player.facing = 1;
+            moving               = 1;
+        }
+        else
+        {
+            g_game.player.vel_x = 0.0f;
+        }
+
+        if (key_pressed(KEY_Q) && g_game.player.on_ground)
+        {
+            g_game.player.vel_y     = PLAYER_JUMP;
+            g_game.player.on_ground = 0;
+            sfx_play(SFX_JUMP, 64, MIDDLE);
+        }
     }
     else
     {
-        g_game.player.vel_x = 0.0f;
-    }
-
-    if (key_pressed(KEY_SPACE) && g_game.player.on_ground)
-    {
-        g_game.player.vel_y     = PLAYER_JUMP;
-        g_game.player.on_ground = 0;
-        sfx_play(SFX_JUMP, 64, MIDDLE);
+        g_game.player.vel_x = 0.0f;  /* parar a Eric mientras hay dialogo */
     }
 
     g_game.player.vel_y += PLAYER_GRAVITY;

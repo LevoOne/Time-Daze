@@ -420,6 +420,10 @@ void draw_int(int n, int x, int y, unsigned char color);
 #define KEY_ENTER      0x1C
 #define KEY_CTRL       0x1D
 #define KEY_ALT        0x38
+#define KEY_O          0x18
+#define KEY_P          0x19
+#define KEY_Q          0x10
+#define KEY_A          0x1E
 
 extern volatile unsigned char keys[128];
 

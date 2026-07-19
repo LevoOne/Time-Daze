@@ -17,6 +17,7 @@
 #include "save.h"
 #include "hud.h"
 #include "logic.h"
+#include "dialog.h"
 
 /* ----------------------------------------------------------------
  * ESTADO INTERNO
@@ -43,7 +44,7 @@ void logic_init(void)
  * ---------------------------------------------------------------- */
 int eric_action(void)
 {
-    if (key_pressed(KEY_ENTER))
+    if (key_pressed(KEY_SPACE))
     {
         if (!action_was_pressed)
         {
@@ -374,9 +375,12 @@ static int logic_prehistory(int screen)
     {
         if (eric_near(fire_x, fire_y) && eric_action())
         {
-            save_game();
+            static const char *confirm[] = { "Guardar la partida?", NULL };
+            dialog_open(DIALOG_YESNO, NULL, confirm);
             handled = 1;
         }
+        if (!dialog_is_open() && dialog_got_yes())
+            save_game();
     }
 
     return handled;
@@ -740,6 +744,7 @@ static int logic_future(int screen)
 void logic_update(void)
 {
     static int alt_was_pressed = 0;
+    static const char *hint_wrap[2];
     int epoch;
     int screen;
     int next_epoch;
@@ -749,6 +754,26 @@ void logic_update(void)
     epoch   = g_game.screen.current_epoch;
     screen  = g_game.screen.current_screen;
     handled = 0;
+
+    /* --------------------------------------------------------
+     * PISTA DE PANTALLA
+     * Se evalua ANTES de cualquier logica especifica para que
+     * ninguna llamada a eric_action() haya consumido ESPACIO.
+     * -------------------------------------------------------- */
+    if (!dialog_is_open() && g_hud.nearby_item == ITEM_NONE)
+    {
+        if (key_pressed(KEY_SPACE) && !action_was_pressed)
+        {
+            action_was_pressed = 1;
+            hint_wrap[0] = g_hints[epoch][screen];
+            hint_wrap[1] = NULL;
+            dialog_open(DIALOG_HINT, NULL, hint_wrap);
+            handled = 1;
+        }
+    }
+
+    /* Si hay dialogo abierto, no procesar logica de juego */
+    if (dialog_is_open()) return;
 
     switch (epoch)
     {
@@ -764,23 +789,27 @@ void logic_update(void)
     }
 
     /* --------------------------------------------------------
-     * RECOGIDA GENERAL DE OBJETOS DEL SUELO
-     * Si Eric no lleva nada y pulsa ENTER cerca de un objeto
-     * depositado, lo recoge y elimina la instancia del mapa.
+     * INDICADOR HUD + RECOGIDA GENERAL DE OBJETOS DEL SUELO
+     * Una sola llamada a inv_find_near_player sirve para el
+     * indicador del HUD y para la recogida al pulsar accion.
      * -------------------------------------------------------- */
-    if (!handled &&
-        inv_is_carrying(ITEM_NONE) &&
-        eric_action())
+    if (inv_is_carrying(ITEM_NONE))
     {
         inst = inv_find_near_player(epoch, screen,
-                                     (int)g_game.player.x,
-                                     (int)g_game.player.y);
-        if (inst != NULL)
+                                    (int)g_game.player.x,
+                                    (int)g_game.player.y);
+        hud_set_nearby_item(inst != NULL ? inst->item_id : ITEM_NONE);
+
+        if (!handled && inst != NULL && eric_action())
         {
             inv_remove_instance(inst->item_id, inst->epoch, inst->screen);
             inv_pick(inst->item_id);
             handled = 1;
         }
+    }
+    else
+    {
+        hud_set_nearby_item(ITEM_NONE);
     }
 
     /* --------------------------------------------------------
@@ -812,7 +841,7 @@ void logic_update(void)
      * VIAJE TEMPORAL
      * ALT cicla entre epocas con deteccion de flanco
      * -------------------------------------------------------- */
-    if (key_pressed(KEY_ALT))
+    if (key_pressed(KEY_A))
     {
         if (!alt_was_pressed)
         {
@@ -826,4 +855,10 @@ void logic_update(void)
     {
         alt_was_pressed = 0;
     }
+
+    /* Reset action_was_pressed cuando ESPACIO no esta pulsado,
+     * necesario cuando logic_update retorna anticipadamente
+     * (dialogo abierto) y eric_action() nunca se llama */
+    if (!key_pressed(KEY_SPACE))
+        action_was_pressed = 0;
 }

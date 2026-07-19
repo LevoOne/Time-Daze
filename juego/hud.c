@@ -28,6 +28,7 @@ void hud_init(void)
     g_hud.mecha_lives    = MECHA_LIVES;
     g_hud.cristal_ticks  = 0;
     g_hud.cristal_active = 0;
+    g_hud.nearby_item    = ITEM_NONE;
 }
 
 /* ----------------------------------------------------------------
@@ -36,6 +37,11 @@ void hud_init(void)
 void hud_set_mode(int mode)
 {
     g_hud.mode = mode;
+}
+
+void hud_set_nearby_item(int item_id)
+{
+    g_hud.nearby_item = item_id;
 }
 
 /* ----------------------------------------------------------------
@@ -100,7 +106,7 @@ static void hud_draw_normal(void)
     {
         x = 4 + i * 20;
         if (g_eric_head.data != NULL)
-            draw_bitmap_buf_t(&g_eric_head, x, HUD_Y + 7);
+            draw_bitmap_buf_t(&g_eric_head, x, HUD_Y + 4);
         else
         {
             draw_line(x,      HUD_Y + 3,  x + 18, HUD_Y + 3,  15);
@@ -127,7 +133,7 @@ static void hud_draw_normal(void)
         else if (g_game.inv.carried == ITEM_CUP && g_cup_icon.data != NULL)
         {
             icon_w = g_cup_icon.width;
-            draw_bitmap_buf_t(&g_cup_icon, x, HUD_Y + 4);
+            draw_bitmap_buf_t(&g_cup_icon, x+10, HUD_Y + 4);
         }
         else if (g_game.inv.carried == ITEM_CUP_HONEY && g_cuphoney_icon.data != NULL)
         {
@@ -164,7 +170,56 @@ static void hud_draw_normal(void)
             default:                item_name = "";                     break;
         }
 
-        draw_string(item_name, x + icon_w + 4, HUD_Y + 10, 15);
+        draw_string(item_name, x + icon_w + 14, HUD_Y + 10, 15);
+    }
+    else if (g_hud.nearby_item != ITEM_NONE)
+    {
+        /* Objeto cercano en el suelo: mostrar icono + nombre en color tenue */
+        x = 60;
+        icon_w = 0;
+
+        if (g_hud.nearby_item == ITEM_STICK && g_stick_sprite.data != NULL)
+        {
+            icon_w = g_stick_sprite.width;
+            draw_bitmap_buf_t(&g_stick_sprite, x, HUD_Y + 6);
+        }
+        else if (g_hud.nearby_item == ITEM_DINO_EGG && g_egg_icon.data != NULL)
+        {
+            icon_w = g_egg_icon.width;
+            draw_bitmap_buf_t(&g_egg_icon, x + 20, HUD_Y + 4);
+        }
+        else if (g_hud.nearby_item == ITEM_CUP && g_cup_icon.data != NULL)
+        {
+            icon_w = g_cup_icon.width;
+            draw_bitmap_buf_t(&g_cup_icon, x+10, HUD_Y + 4);
+        }
+        else if (g_hud.nearby_item == ITEM_CUP_HONEY && g_cuphoney_icon.data != NULL)
+        {
+            icon_w = g_cuphoney_icon.width;
+            draw_bitmap_buf_t(&g_cuphoney_icon, x, HUD_Y + 4);
+        }
+
+        switch (g_hud.nearby_item)
+        {
+            case ITEM_STICK:        item_name = "palo";                 break;
+            case ITEM_CUP:          item_name = "recipiente";           break;
+            case ITEM_CUP_HONEY:    item_name = "recipiente con miel";  break;
+            case ITEM_LOG:          item_name = "TRONCO";               break;
+            case ITEM_DINO_EGG:     item_name = "huevo";                break;
+            case ITEM_CRANK:        item_name = "MANIVELA";             break;
+            case ITEM_KEY:          item_name = "LLAVE";                break;
+            case ITEM_TORCH:        item_name = "ANTORCHA";             break;
+            case ITEM_TORCH_LIT:    item_name = "ANTORCH.LIT";          break;
+            case ITEM_LEVITATOR:    item_name = "LEVITADOR";            break;
+            case ITEM_CLAY_POT:     item_name = "RECIPIENTE";           break;
+            case ITEM_CLAY_POT_PLANT: item_name = "RECIP+PLANTA";       break;
+            case ITEM_VOLCANIC_MIN: item_name = "MINERAL";              break;
+            case ITEM_SEALANT:      item_name = "SELLANTE";             break;
+            case ITEM_QUARTZ:       item_name = "CUARZO";               break;
+            case ITEM_QUARTZ_CHARGED: item_name = "CUARZO+";            break;
+            default:                item_name = "";                     break;
+        }
+        draw_string(item_name, x + icon_w + 14, HUD_Y + 10, 8);
     }
 
     /* Fragmentos: grisaceo si no recogido, color si recogido */

@@ -25,6 +25,7 @@ typedef struct {
     int mecha_lives;
     int cristal_ticks;
     int cristal_active;
+    int nearby_item;    /* objeto recogible cercano (ITEM_NONE si ninguno) */
 } HudState;
 
 extern HudState g_hud;
@@ -57,6 +58,8 @@ void hud_draw(void);
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void hud_set_mode(int mode);
+
+void hud_set_nearby_item(int item_id);
 
 /* -----------------------------------------------------------------------------------------
  * hud_mecha_hit()
