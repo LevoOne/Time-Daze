@@ -25,6 +25,7 @@ extern BITMAP g_honey_sprite;
 extern BITMAP g_cup_icon;
 extern BITMAP g_cuphoney_icon;
 extern BITMAP g_eric_head;
+extern BITMAP g_fire_sprite;
 
 /* ----------------------------------------------------------------
  * FUNCIONES
@@ -84,9 +85,12 @@ void screen_inject_cup_palette(void);
  * -----------------------------------------------------------------------------------------*/
 void screen_draw_shaman(void);
 
+void screen_draw_fire(void);
+
 void screen_trigger_honey_drip(void);
 void screen_stop_honey_drip(void);
 void screen_draw_honey_drip(void);
+void screen_draw_fire(void);
 
 /* -----------------------------------------------------------------------------------------
  * screen_change()

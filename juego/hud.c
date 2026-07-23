@@ -123,12 +123,12 @@ static void hud_draw_normal(void)
         if (g_game.inv.carried == ITEM_STICK && g_stick_sprite.data != NULL)
         {
             icon_w = g_stick_sprite.width;
-            draw_bitmap_buf_t(&g_stick_sprite, x, HUD_Y+6);
+            draw_bitmap_buf_t(&g_stick_sprite, x+10, HUD_Y+6);
         }
         else if (g_game.inv.carried == ITEM_DINO_EGG && g_egg_icon.data != NULL)
         {
             icon_w = g_egg_icon.width;
-            draw_bitmap_buf_t(&g_egg_icon, x+20, HUD_Y + 4);
+            draw_bitmap_buf_t(&g_egg_icon, x+10, HUD_Y + 4);
         }
         else if (g_game.inv.carried == ITEM_CUP && g_cup_icon.data != NULL)
         {
@@ -138,7 +138,7 @@ static void hud_draw_normal(void)
         else if (g_game.inv.carried == ITEM_CUP_HONEY && g_cuphoney_icon.data != NULL)
         {
             icon_w = g_cuphoney_icon.width;
-            draw_bitmap_buf_t(&g_cuphoney_icon, x, HUD_Y + 4);
+            draw_bitmap_buf_t(&g_cuphoney_icon, x+10, HUD_Y + 4);
         }
         else
         {
@@ -181,12 +181,12 @@ static void hud_draw_normal(void)
         if (g_hud.nearby_item == ITEM_STICK && g_stick_sprite.data != NULL)
         {
             icon_w = g_stick_sprite.width;
-            draw_bitmap_buf_t(&g_stick_sprite, x, HUD_Y + 6);
+            draw_bitmap_buf_t(&g_stick_sprite, x+10, HUD_Y + 6);
         }
         else if (g_hud.nearby_item == ITEM_DINO_EGG && g_egg_icon.data != NULL)
         {
             icon_w = g_egg_icon.width;
-            draw_bitmap_buf_t(&g_egg_icon, x + 20, HUD_Y + 4);
+            draw_bitmap_buf_t(&g_egg_icon, x + 10, HUD_Y + 4);
         }
         else if (g_hud.nearby_item == ITEM_CUP && g_cup_icon.data != NULL)
         {

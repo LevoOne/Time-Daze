@@ -35,7 +35,7 @@ void logic_init(void)
     inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 104, 134); /* P3: palo   */
     inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 240, 140); /* P9: tronco */
     inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 117); /* P8: huevo  */
-    inv_place(ITEM_CUP,      EPOCH_PREHISTORY, 0, 244, 116); /* P1: taza TEMP */
+    inv_place(ITEM_CUP,      EPOCH_PREHISTORY, 0, 244, 132); /* P1: taza TEMP */
 }
 
 /* ----------------------------------------------------------------
@@ -215,7 +215,7 @@ static int logic_prehistory(int screen)
             if (inv_is_carrying(ITEM_CUP_HONEY) && eric_action())
             {
                 deposit_x = (int)g_game.player.x;
-                inv_drop(EPOCH_PREHISTORY, screen, deposit_x, 116);
+                inv_drop(EPOCH_PREHISTORY, screen, deposit_x, 132);
                 puzzle_solve(PUZZLE_BEAR);
                 g_enemies.enemies[0].pattern = PAT_HORIZONTAL;
                 g_enemies.enemies[0].vel_x   = (deposit_x < (int)g_enemies.enemies[0].x)
@@ -755,23 +755,6 @@ void logic_update(void)
     screen  = g_game.screen.current_screen;
     handled = 0;
 
-    /* --------------------------------------------------------
-     * PISTA DE PANTALLA
-     * Se evalua ANTES de cualquier logica especifica para que
-     * ninguna llamada a eric_action() haya consumido ESPACIO.
-     * -------------------------------------------------------- */
-    if (!dialog_is_open() && g_hud.nearby_item == ITEM_NONE)
-    {
-        if (key_pressed(KEY_SPACE) && !action_was_pressed)
-        {
-            action_was_pressed = 1;
-            hint_wrap[0] = g_hints[epoch][screen];
-            hint_wrap[1] = NULL;
-            dialog_open(DIALOG_HINT, NULL, hint_wrap);
-            handled = 1;
-        }
-    }
-
     /* Si hay dialogo abierto, no procesar logica de juego */
     if (dialog_is_open()) return;
 
@@ -856,9 +839,23 @@ void logic_update(void)
         alt_was_pressed = 0;
     }
 
-    /* Reset action_was_pressed cuando ESPACIO no esta pulsado,
-     * necesario cuando logic_update retorna anticipadamente
-     * (dialogo abierto) y eric_action() nunca se llama */
+    /* --------------------------------------------------------
+     * PISTA DE PANTALLA
+     * Solo si ninguna interaccion especifica ocurrio este frame.
+     * Sin condicion sobre nearby_item: igual en todas las pantallas.
+     * -------------------------------------------------------- */
+    if (!handled && !dialog_is_open())
+    {
+        if (key_pressed(KEY_SPACE) && !action_was_pressed)
+        {
+            action_was_pressed = 1;
+            hint_wrap[0] = g_hints[epoch][screen];
+            hint_wrap[1] = NULL;
+            dialog_open(DIALOG_HINT, NULL, hint_wrap);
+        }
+    }
+
+    /* Reset action_was_pressed cuando ESPACIO no esta pulsado */
     if (!key_pressed(KEY_SPACE))
         action_was_pressed = 0;
 }

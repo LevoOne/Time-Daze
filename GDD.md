@@ -1543,10 +1543,18 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
   (indice 1) segun la pantalla activa.
 - ⬜ **SFX viaje entre epocas** — sonido al pulsar ALT para viajar,
   integrar en screen_travel() antes del fade out.
-- ⬜ **SFX fuego crepitante hoguera P5** — reproducir en loop al entrar
-  en P5, parar al salir. Mismo patron que el SFX del oso (slot 1).
+- ✅ **Ambiente sonoro hoguera P5** — implementado como musica XM en vez
+  de SFX (loop nativo del sample, mas limpio que relanzar un WAV a mano).
+  `FIREAMB.WAV` grabado normalizado (8-bit mono 22050Hz) y convertido a
+  `FIRE.XM` en OpenMPT con loop activado sobre el sample completo.
+  `screen_change()`, `screen_travel()`, `new_game()` y `load_game()`
+  actualizados para cargar `fire.xm` al entrar en P5 (Prehistoria) y
+  `PRETHEME.XM`/`MEDTHEME.XM`/tema de Futuro segun corresponda al salir.
+  Bug resuelto: `fire.xm` se creo con los 32 canales por defecto de
+  OpenMPT, pisando los 4 canales reservados para SFX (28-31) y silenciando
+  `jump.wav` mientras sonaba; corregido reduciendo el modulo a los canales
+  minimos necesarios. Probado y funcionando.
 - ⬜ **Logica punto de guardado P5** — al interactuar con la hoguera,
   mostrar confirmacion (S/N) y llamar a save_game() si el jugador
   confirma.
-- ⬜ SFX a la hora de coger / recoger objetos
 - ⬜ Modificar P3 de prehistoria para que aparezca la liana en la derecha para bajar a P5

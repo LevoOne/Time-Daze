@@ -311,13 +311,6 @@ static void screen_inject_rock_palette(void)
 }
 
 /* ----------------------------------------------------------------
-/* ----------------------------------------------------------------
- * PALETA DE LA MIEL (P2, Prehistoria)
- * Indices 242-249 — mismo rango libre que roca/agua/oso.
- * Sin conflicto: miel solo en P2, roca en P1, agua en P8, oso en P3.
- * 8 colores amber/dorado extraidos de HONEY.BMP.
- * ---------------------------------------------------------------- */
-/* ----------------------------------------------------------------
  * PALETA DEL OSO (P3, Prehistoria)
  * Indices 242-255 — mismo rango libre que roca/agua/miel.
  * Sin conflicto: oso solo en P3, roca en P1, agua en P8, miel en P2.
@@ -349,6 +342,43 @@ void screen_inject_bear_palette(void)
         outp(0x3C9, bear_palette[i]);
 }
 
+/* ----------------------------------------------------------------
+ * PALETA DE LA HOGUERA (P5, Prehistoria)
+ * Indices 242-255. Sin conflicto: P5 no tiene roca/oso/miel/agua.
+ * 14 colores naranja/rojo/blanco extraidos de FIRE.BMP.
+ * ---------------------------------------------------------------- */
+static const byte fire_palette[14 * 3] =
+{
+     5,  0,  0,  /* indice 242 */
+     2,  3,  4,  /* indice 243 */
+    10,  1,  0,  /* indice 244 */
+    17,  3,  1,  /* indice 245 */
+    22, 17, 10,  /* indice 246 */
+    30, 24, 19,  /* indice 247 */
+    40, 22, 14,  /* indice 248 */
+    37, 30, 26,  /* indice 249 */
+    49, 26, 23,  /* indice 250 */
+    50, 29, 14,  /* indice 251 */
+    49, 39, 30,  /* indice 252 */
+    58, 39, 25,  /* indice 253 */
+    61, 48, 38,  /* indice 254 */
+    63, 63, 63,  /* indice 255 */
+};
+
+static void screen_inject_fire_palette(void)
+{
+    int i;
+    outp(0x3C8, 242);
+    for (i = 0; i < 14 * 3; i++)
+        outp(0x3C9, fire_palette[i]);
+}
+
+/* ----------------------------------------------------------------
+ * PALETA DE LA MIEL (P2, Prehistoria)
+ * Indices 242-249 — mismo rango libre que roca/agua/oso.
+ * Sin conflicto: miel solo en P2, roca en P1, agua en P8, oso en P3.
+ * 8 colores amber/dorado extraidos de HONEY.BMP.
+ * ---------------------------------------------------------------- */
 static const byte honey_palette[8 * 3] =
 {
     17, 10, 15,  /* indice 242 */
@@ -468,6 +498,25 @@ void screen_draw_honey_drip(void)
     }
 }
 
+void screen_draw_fire(void)
+{
+    static int s_frame = 0;
+    static int s_timer = 0;
+
+    if (g_game.screen.current_epoch  != EPOCH_PREHISTORY) return;
+    if (g_game.screen.current_screen != 4)                return;
+    if (g_fire_sprite.data == NULL)                     return;
+
+    if (++s_timer >= 8)
+    {
+        s_timer = 0;
+        s_frame = (s_frame + 1) % 4;
+    }
+
+    screen_inject_fire_palette();
+    bmp_draw_tile(&g_fire_sprite, s_frame, 0, 67, 63, 128, 75);
+}
+
 /* ----------------------------------------------------------------
  * VARIABLES GLOBALES
  * ---------------------------------------------------------------- */
@@ -486,6 +535,7 @@ BITMAP     g_bear_sprite;
 BITMAP      g_cup_icon;
 BITMAP      g_cuphoney_icon;
 BITMAP     g_eric_head;
+BITMAP     g_fire_sprite;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -842,6 +892,9 @@ void screen_init(void)
 
     if (!try_load_bmp("HEAD.BMP", &g_eric_head))
         g_eric_head.data = NULL;
+
+    if (!try_load_bmp("FIRE.BMP", &g_fire_sprite))
+        g_fire_sprite.data = NULL;
 }
 
 /* ----------------------------------------------------------------
@@ -1161,16 +1214,33 @@ int screen_change(int dir)
     /* para evitar parpadeo durante el cambio de paleta         */
     vga_clear(0);
     vga_flip();
+  
+    /* Cargar SFX / XM especifico de la pantalla-época */
+    sfx_free(1);
+    if (g_game.screen.current_epoch == EPOCH_PREHISTORY)
+    {
+        /* SFX segun la pantalla de destino */
+        if (next == 0)
+            sfx_load(SFX_ROCK_ROLL,  "moverock.wav");
+        else if (next == 1 && s_honey_active)
+            sfx_load(SFX_HONEY_DROP, "drops.wav");
+        else if (next == 2)
+            sfx_load(SFX_BEAR_STEP,  "woso.wav");
 
-    
-   /* Cargar SFX especifico de la pantalla */
-   sfx_free(1);
-    if(next == 0)
-        sfx_load(SFX_ROCK_ROLL,  "moverock.wav");
-    else if(next == 1 && s_honey_active)
-        sfx_load(SFX_HONEY_DROP, "drops.wav");
-    else if(next == 2)
-        sfx_load(SFX_BEAR_STEP,  "woso.wav");        
+        /* Musica: independiente del SFX, se evalua siempre */
+        if (next == 4)
+        {
+            music_free();
+            music_load_xm("fire.xm");
+            music_play(0);
+        }
+        else if (g_game.screen.current_screen == 4) /* saliendo de P5 */
+        {
+            music_free();
+            music_load_xm("PRETHEME.XM");
+            music_play(0);
+        }
+    }
 
     /* Cargar la nueva pantalla y su paleta */
     screen_load(g_game.screen.current_epoch, next);
@@ -1233,10 +1303,22 @@ void screen_travel(int new_epoch)
     vga_flip();
 
     /* Cargar nueva musica con pantalla en negro */
-    if (new_epoch == EPOCH_MEDIEVAL)
+    if (new_epoch == EPOCH_PREHISTORY && screen == 4)
+    {
+        music_load_xm("fire.xm");
+    }
+    else if (new_epoch == EPOCH_MEDIEVAL)
+    {
         music_load_xm("MEDTHEME.XM");
+    }
+    else if (new_epoch == EPOCH_FUTURE)
+    {
+        music_load_xm("MEDTHEME.XM");  /* pendiente */
+    }
     else
+    {
         music_load_xm("PRETHEME.XM");
+    }
     music_play(0);
 
     screen_load(new_epoch, screen);
@@ -1277,6 +1359,12 @@ void screen_draw_shaman(void)
     screen_inject_shaman_palette();
     bmp_draw_tile(&g_shaman_sprite, s_frame, 0, 64, 64, 28, 53);
 }
+
+/* ----------------------------------------------------------------
+ * Draw Hoguera
+ * Animación de la hoguera en P5 de prehistoria
+ * ---------------------------------------------------------------- */
+
 
 /* -----------------------------------------------------------------------------------------
  * SELECTOR screen_is_honey_dripping()
