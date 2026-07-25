@@ -57,9 +57,7 @@ const char *g_hints[3][9] =
 const char *g_dialog_shaman[] =
 {
     "Forastero... has llegado lejos.",
-    "La planta sagrada crece donde",
-    "el fuego y el agua se tocan.",
-    "Traemela y te abriré el paso.",
+    "Te abro paso.",
     NULL
 };
 

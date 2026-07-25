@@ -55,7 +55,6 @@ static void show_presentation(void);
  * ---------------------------------------------------------------- */
 static void new_game(void)
 {
-    screen_init();
     puzzle_init();
     inv_init();
     player_init();
@@ -63,8 +62,8 @@ static void new_game(void)
     logic_init();
 
     /* TEMP: pantalla inicial modificada para pruebas */
-    screen_load(EPOCH_PREHISTORY,0);
-    enemies_load(EPOCH_PREHISTORY, 0);
+    screen_load(EPOCH_PREHISTORY,3);
+    enemies_load(EPOCH_PREHISTORY, 3);
 
    /* Cargar SFX de la pantalla inicial */
     sfx_free(1);
@@ -316,6 +315,9 @@ int main(void)
     /* Secuencia de presentación */
     /* TEMP: comentar esta función para que arranque más rápido el juego
     show_presentation();*/
+
+    /* Cargamos los assets gráficos */
+    screen_init();
 
     /* Comprueba si existe una partida salvada */
     if (save_exists())

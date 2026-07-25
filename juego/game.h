@@ -80,13 +80,11 @@ typedef struct {
 #define ITEM_TORCH           8   /* antorcha apagada (Edad Media)     */
 #define ITEM_TORCH_LIT       9   /* antorcha encendida                */
 #define ITEM_LEVITATOR      10   /* artilugio de levitacion (Futuro)  */
-#define ITEM_CLAY_POT       11   /* recipiente de barro (Edad Media)  */
-#define ITEM_CLAY_POT_PLANT 12   /* recipiente con planta             */
-#define ITEM_VOLCANIC_MIN   13   /* mineral volcanico (Prehistoria)   */
-#define ITEM_SEALANT        14   /* sellante (Edad Media)             */
-#define ITEM_QUARTZ         15   /* cristal de cuarzo (Prehistoria)   */
-#define ITEM_QUARTZ_CHARGED 16   /* cristal de cuarzo cargado         */
-#define ITEM_COUNT          17
+#define ITEM_VOLCANIC_MIN   11   /* mineral volcanico (Prehistoria)   */
+#define ITEM_SEALANT        12   /* sellante (Edad Media)             */
+#define ITEM_QUARTZ         13   /* cristal de cuarzo (Prehistoria)   */
+#define ITEM_QUARTZ_CHARGED 14   /* cristal de cuarzo cargado         */
+#define ITEM_COUNT          15
 
 #define MAX_ITEM_INSTANCES  32
 

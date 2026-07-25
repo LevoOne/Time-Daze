@@ -120,6 +120,26 @@ static const byte cup_palette[14 * 3] =
     54, 52, 49,  /* indice 199 */
 };
 
+/* ---------------------------------------
+ * PALETA DEL TRoNCO
+ * --------------------------------------- */
+static const byte log_palette[13 * 3] =
+{
+     6,  3,  2,  /* indice 242 */
+    12,  8,  5,  /* indice 243 */
+    14,  8,  3,  /* indice 244 */
+    13, 14,  7,  /* indice 245 */
+    17, 11,  6,  /* indice 246 */
+    19, 12,  9,  /* indice 247 */
+    15, 18,  8,  /* indice 248 */
+    26, 19, 15,  /* indice 249 */
+    30, 22, 17,  /* indice 250 */
+    34, 22, 16,  /* indice 251 */
+    39, 30, 23,  /* indice 252 */
+    49, 40, 30,  /* indice 253 */
+    50, 41, 32,  /* indice 254 */
+};
+
 /* Inyecta los colores de Eric en la paleta VGA activa */
 static void screen_inject_eric_palette(void)
 {
@@ -136,6 +156,15 @@ void screen_inject_cup_palette(void)
     outp(0x3C8, 186);
     for (i = 0; i < 14 * 3; i++)
         outp(0x3C9, cup_palette[i]);
+}
+
+/* Inyecta los colores del tronco  en la paleta VGA activa */
+void screen_inject_log_palette(void)
+{
+    int i;
+    outp(0x3C8, 242);
+    for (i = 0; i < 13 * 3; i++)
+        outp(0x3C9, log_palette[i]);
 }
 
 /* ----------------------------------------------------------------
@@ -343,6 +372,40 @@ void screen_inject_bear_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * PALETA DEL JABALI (P4, Prehistoria)
+ * Indices 242-255 — mismo rango libre que roca/miel/oso/hoguera/agua.
+ * Sin conflicto: el jabali solo se dibuja en P4, nunca se lleva en
+ * el inventario ni aparece en el HUD, asi que no compite con nada
+ * mas del rango dinamico (a diferencia del tronco).
+ * 14 colores tierra/marron extraidos de BOAR.BMP.
+ * ---------------------------------------------------------------- */
+static const byte boar_palette[14 * 3] =
+{
+     3,  1,  1,  /* indice 242 */
+     6,  4,  3,  /* indice 243 */
+     8,  7,  6,  /* indice 244 */
+    12, 10,  9,  /* indice 245 */
+    15, 12, 10,  /* indice 246 */
+    18, 14, 11,  /* indice 247 */
+    21, 17, 12,  /* indice 248 */
+    24, 19, 13,  /* indice 249 */
+    26, 21, 14,  /* indice 250 */
+    29, 24, 16,  /* indice 251 */
+    33, 27, 19,  /* indice 252 */
+    35, 29, 20,  /* indice 253 */
+    41, 35, 27,  /* indice 254 */
+    50, 44, 33,  /* indice 255 */
+};
+
+void screen_inject_boar_palette(void)
+{
+    int i;
+    outp(0x3C8, 242);
+    for (i = 0; i < 14 * 3; i++)
+        outp(0x3C9, boar_palette[i]);
+}
+
+/* ----------------------------------------------------------------
  * PALETA DE LA HOGUERA (P5, Prehistoria)
  * Indices 242-255. Sin conflicto: P5 no tiene roca/oso/miel/agua.
  * 14 colores naranja/rojo/blanco extraidos de FIRE.BMP.
@@ -532,10 +595,13 @@ BITMAP     g_cuphoney_sprite;
 BITMAP     g_egg_icon;
 BITMAP     g_honey_sprite;
 BITMAP     g_bear_sprite;
+BITMAP     g_boar_sprite;
 BITMAP      g_cup_icon;
 BITMAP      g_cuphoney_icon;
 BITMAP     g_eric_head;
 BITMAP     g_fire_sprite;
+BITMAP     g_log_sprite;
+BITMAP     g_log_icon;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -884,9 +950,13 @@ void screen_init(void)
     if (!try_load_bmp("BEAR.BMP", &g_bear_sprite))
         g_bear_sprite.data = NULL;
 
+    if (!try_load_bmp("BOAR.BMP", &g_boar_sprite))
+        g_boar_sprite.data = NULL;
+
     /* Cargar bitmaps de taza de miel */
     if (!try_load_bmp("CUPICON.BMP", &g_cup_icon))
         g_cup_icon.data = NULL;
+
     if (!try_load_bmp("CUPHICON.BMP", &g_cuphoney_icon))
         g_cuphoney_icon.data = NULL;
 
@@ -895,6 +965,12 @@ void screen_init(void)
 
     if (!try_load_bmp("FIRE.BMP", &g_fire_sprite))
         g_fire_sprite.data = NULL;
+
+    if (!try_load_bmp("LOG.BMP", &g_log_sprite))
+        g_log_sprite.data = NULL;
+
+    if (!try_load_bmp("LOG_ICON.BMP", &g_log_icon))   
+        g_log_icon.data = NULL;
 }
 
 /* ----------------------------------------------------------------

@@ -33,7 +33,7 @@ void logic_init(void)
 
     /* Colocar objetos iniciales en el mundo */
     inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 104, 134); /* P3: palo   */
-    inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 240, 140); /* P9: tronco */
+    inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 180, 132); /* P9: tronco */
     inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 117); /* P8: huevo  */
     inv_place(ITEM_CUP,      EPOCH_PREHISTORY, 0, 244, 132); /* P1: taza TEMP */
 }
@@ -243,6 +243,12 @@ static int logic_prehistory(int screen)
                 g_game.player.x     = 160.0f;
                 g_game.player.vel_x = 0.0f;
             }
+            if (inv_is_carrying(ITEM_LOG) && eric_near(160, 118) && eric_action())
+            {
+                inv_transform(ITEM_NONE);
+                screen_trigger_rock_roll();
+                handled = 1;
+            }
         }
 
         /* TODO TEMP: taza en P1 para pruebas del puzzle taza/miel/oso */
@@ -254,30 +260,6 @@ static int logic_prehistory(int screen)
                 if (inv_remove_instance(ITEM_CUP, EPOCH_PREHISTORY, screen))
                     inv_pick(ITEM_CUP);
                 handled = 1;
-            }
-        }
-
-        /* TODO TEST: gatillo temporal para probar la animacion de la roca.
-         * Eliminar cuando se implemente la logica real del tronco/palanca. */
-        if (!puzzle_is_solved(PUZZLE_LEVER))
-        {
-            if (eric_near(160, 118) && eric_action())
-            {
-                screen_trigger_rock_roll();
-                handled = 1;
-            }
-        }
-
-        if (!puzzle_is_solved(PUZZLE_SHAMAN))
-        {
-            if (eric_near(shaman_x, shaman_y) && eric_action())
-            {
-                if (inv_is_carrying(ITEM_CLAY_POT_PLANT))
-                {
-                    inv_transform(ITEM_NONE);
-                    puzzle_solve(PUZZLE_SHAMAN);
-                    handled = 1;
-                }
             }
         }
 

@@ -244,14 +244,14 @@ Dificultad: baja, introductoria
 2. Eric recoge el tronco en zona baja
 3. Eric transporta el tronco hasta la roca (pantalla 2)
 4. Eric usa el tronco como palanca, mueve la roca
-5. Acceso a pantalla 1 desbloqueado
+5. El chaman se aparta, Eric recoge el fragmento 1
 ```
 
 Objetos: tronco (Prehistoria)
 Viajes temporales: ninguno, puzzle interno a la epoca
 Dificultad: media, introduce elemento arcade
 
-#### Puzzle Principal: La ofrenda al chaman
+#### Puzzle Principal: La ofrenda al chaman (no implementado en esta versión inicial para el concurso)
 
 **Objetivo**: conseguir la planta sagrada para entregarla al chaman que custodia el fragmento 1.
 
@@ -1493,36 +1493,36 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
 
 ### Checklist para cerrar la fase de Prehistoria
 
-1. ⬜ **Probar puzzle taza/miel/oso** — flujo completo: recoger taza en P1
+1. ✅ **Probar puzzle taza/miel/oso** — flujo completo: recoger taza en P1
    (temporal), depositar en P2, golpear colmena con palo, recoger taza
    con miel, depositar en P3, oso se va a la izquierda, Eric puede bajar
    a P5.
 
 2. ⬜ **BMPs y sprites pendientes**:
-   - Hoguera animada P5 (punto de guardado, 3-4 frames de llamas)
+   -✅ Hoguera animada P5 (punto de guardado, 3-4 frames de llamas)
    - Sprite de peces P8
    - Sprite de reptil
    - Sprite de jabali gigante P4
    - Bitmap del fragmento 1
-   - Bitmap del tronco a recoger en P9
+   -✅ Bitmap del tronco a recoger en P9
 
 3. ⬜ **Codigos del monolito P9** — representar via ventana de dialogo
    (ver punto 8). Los codigos son simbolos tipo runas dibujados como BMP
    que se muestran en la ventana emergente al interactuar con el monolito.
 
-4. ⬜ **Frases de pistas por pantalla** — mostrar via ventana emergente.
+4. ✅ **Frases de pistas por pantalla** — mostrar via ventana emergente.
    Decidir si se muestran al entrar en la pantalla o solo al pulsar
    accion cerca de algun elemento.
 
-5. ⬜ **Indicador de objeto en el suelo** — cuando Eric este sobre un
+5. ✅ **Indicador de objeto en el suelo** — cuando Eric este sobre un
    objeto recogible, mostrar su icono y nombre en el HUD. Implementar
    en logic_update() comprobando si hay un inv_instance cerca de Eric.
 
-6. ⬜ **Lianas** — perfilar visualmente en algunas pantallas (usuario en
+6. ✅ **Lianas** — perfilar visualmente en algunas pantallas (usuario en
    Aseprite). Sin cambios en codigo salvo ajuste de coordenadas de
    transicion.
 
-7. ⬜ **Vidas con cabeza de Eric** — sustituir rectangulos del HUD por
+7. ✅ **Vidas con cabeza de Eric** — sustituir rectangulos del HUD por
    BMP con la cabeza de Eric recortada del spritesheet hi-res.
    Dejar para el HUD definitivo.
 
@@ -1530,7 +1530,7 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
    retratos de personajes, codigos del monolito y frases de pistas.
    Cubre los puntos 3, 4 y 8 de esta lista.
 
-9. ⬜ **Prueba puzzle planta** — colocar la planta temporalmente en una
+9. ✅ **Prueba puzzle planta** — colocar la planta temporalmente en una
    pantalla accesible de Prehistoria para probar el flujo completo,
    igual que se hizo con la taza.
 
@@ -1557,4 +1557,4 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
 - ⬜ **Logica punto de guardado P5** — al interactuar con la hoguera,
   mostrar confirmacion (S/N) y llamar a save_game() si el jugador
   confirma.
-- ⬜ Modificar P3 de prehistoria para que aparezca la liana en la derecha para bajar a P5
+- ✅ Modificar P3 de prehistoria para que aparezca la liana en la derecha para bajar a P5

@@ -107,13 +107,6 @@ static void hud_draw_normal(void)
         x = 4 + i * 20;
         if (g_eric_head.data != NULL)
             draw_bitmap_buf_t(&g_eric_head, x, HUD_Y + 4);
-        else
-        {
-            draw_line(x,      HUD_Y + 3,  x + 18, HUD_Y + 3,  15);
-            draw_line(x + 18, HUD_Y + 3,  x + 18, HUD_Y + 19, 15);
-            draw_line(x + 18, HUD_Y + 19, x,      HUD_Y + 19, 15);
-            draw_line(x,      HUD_Y + 19, x,      HUD_Y + 3,  15);
-        }
     }
 
     /* Objeto actual: icono real si es palo o huevo, rectangulo si no */
@@ -140,6 +133,11 @@ static void hud_draw_normal(void)
             icon_w = g_cuphoney_icon.width;
             draw_bitmap_buf_t(&g_cuphoney_icon, x+10, HUD_Y + 4);
         }
+        else if (g_game.inv.carried == ITEM_LOG  && g_log_sprite.data != NULL)
+        {
+            icon_w = g_log_icon.width;
+            draw_bitmap_buf_t(&g_log_icon, x+10, HUD_Y + 4);
+        }
         else
         {
             draw_line(x,     HUD_Y + 3,  x + 8, HUD_Y + 3,  14);
@@ -154,15 +152,13 @@ static void hud_draw_normal(void)
             case ITEM_STICK:        item_name = "palo";                 break;
             case ITEM_CUP:          item_name = "recipiente";           break;
             case ITEM_CUP_HONEY:    item_name = "recipiente con miel";  break;
-            case ITEM_LOG:          item_name = "TRONCO";               break;
+            case ITEM_LOG:          item_name = "palanca";              break;
             case ITEM_DINO_EGG:     item_name = "huevo";                break;
             case ITEM_CRANK:        item_name = "MANIVELA";             break;
             case ITEM_KEY:          item_name = "LLAVE";                break;
             case ITEM_TORCH:        item_name = "ANTORCHA";             break;
             case ITEM_TORCH_LIT:    item_name = "ANTORCH.LIT";          break;
             case ITEM_LEVITATOR:    item_name = "LEVITADOR";            break;
-            case ITEM_CLAY_POT:     item_name = "RECIPIENTE";           break;
-            case ITEM_CLAY_POT_PLANT: item_name = "RECIP+PLANTA";       break;
             case ITEM_VOLCANIC_MIN: item_name = "MINERAL";              break;
             case ITEM_SEALANT:      item_name = "SELLANTE";             break;
             case ITEM_QUARTZ:       item_name = "CUARZO";               break;
@@ -198,21 +194,24 @@ static void hud_draw_normal(void)
             icon_w = g_cuphoney_icon.width;
             draw_bitmap_buf_t(&g_cuphoney_icon, x, HUD_Y + 4);
         }
+        else if (g_hud.nearby_item == ITEM_LOG  && g_log_icon.data != NULL)
+        {
+            icon_w = g_log_icon.width;
+            draw_bitmap_buf_t(&g_log_icon, x+10, HUD_Y + 4);
+        }
 
         switch (g_hud.nearby_item)
         {
             case ITEM_STICK:        item_name = "palo";                 break;
             case ITEM_CUP:          item_name = "recipiente";           break;
             case ITEM_CUP_HONEY:    item_name = "recipiente con miel";  break;
-            case ITEM_LOG:          item_name = "TRONCO";               break;
+            case ITEM_LOG:          item_name = "palanca";              break;
             case ITEM_DINO_EGG:     item_name = "huevo";                break;
             case ITEM_CRANK:        item_name = "MANIVELA";             break;
             case ITEM_KEY:          item_name = "LLAVE";                break;
             case ITEM_TORCH:        item_name = "ANTORCHA";             break;
             case ITEM_TORCH_LIT:    item_name = "ANTORCH.LIT";          break;
             case ITEM_LEVITATOR:    item_name = "LEVITADOR";            break;
-            case ITEM_CLAY_POT:     item_name = "RECIPIENTE";           break;
-            case ITEM_CLAY_POT_PLANT: item_name = "RECIP+PLANTA";       break;
             case ITEM_VOLCANIC_MIN: item_name = "MINERAL";              break;
             case ITEM_SEALANT:      item_name = "SELLANTE";             break;
             case ITEM_QUARTZ:       item_name = "CUARZO";               break;

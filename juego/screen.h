@@ -16,6 +16,7 @@ extern BITMAP g_rock_sprite;
 extern BITMAP g_rock_roll_sprite;
 extern BITMAP g_shaman_sprite;
 extern BITMAP g_bear_sprite;
+extern BITMAP g_boar_sprite;
 extern BITMAP g_stick_sprite;
 extern BITMAP g_egg_sprite;
 extern BITMAP g_egg_icon;
@@ -26,6 +27,8 @@ extern BITMAP g_cup_icon;
 extern BITMAP g_cuphoney_icon;
 extern BITMAP g_eric_head;
 extern BITMAP g_fire_sprite;
+extern BITMAP g_log_sprite;
+extern BITMAP g_log_icon;
 
 /* ----------------------------------------------------------------
  * FUNCIONES
@@ -75,7 +78,9 @@ void screen_draw(void);
 void screen_draw_rock(void);
 
 void screen_inject_bear_palette(void);
+void screen_inject_boar_palette(void);
 void screen_inject_cup_palette(void);
+void screen_inject_log_palette(void);
 
 /* -----------------------------------------------------------------------------------------
  * screen_draw_shaman()

@@ -12,10 +12,6 @@
 #include "player.h"
 #include "inventory.h"
 
-
-
-
-
 /* ----------------------------------------------------------------
  * INIT
  * ---------------------------------------------------------------- */
@@ -256,6 +252,9 @@ int inv_item_height(int item_id)
         case ITEM_CUP_HONEY:
             if (g_cuphoney_sprite.data != NULL) return g_cuphoney_sprite.height;
             break;
+        case ITEM_LOG:
+            if (g_log_sprite.data != NULL) return g_log_sprite.height;
+            break;
         default:
             break;
     }
@@ -343,6 +342,13 @@ void inv_draw(void)
         if (inst->item_id == ITEM_CUP_HONEY && g_cuphoney_sprite.data != NULL)
         {
             draw_bitmap_buf_t(&g_cuphoney_sprite, x, y);
+            continue;
+        }
+
+         if (inst->item_id == ITEM_LOG && g_log_sprite.data != NULL)
+        {
+            screen_inject_log_palette();
+            draw_bitmap_buf_t(&g_log_sprite, x, y);
             continue;
         }
 
