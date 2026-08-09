@@ -463,6 +463,39 @@ static void screen_inject_honey_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * PALETA DEL REPTIL (P7, Prehistoria)
+ * Indices 242-255 — mismo rango libre que roca/miel/oso/hoguera/
+ * agua/jabali. Sin conflicto: el reptil solo se dibuja en P7,
+ * nunca se lleva en el inventario ni aparece en el HUD.
+ * 14 colores tierra/verde oliva extraidos de REPTILE.BMP.
+ * ---------------------------------------------------------------- */
+static const byte reptile_palette[14 * 3] =
+{
+     6,  5,  3,  /* indice 242 */
+     8,  7,  6,  /* indice 243 */
+    10,  9,  7,  /* indice 244 */
+    12, 11,  7,  /* indice 245 */
+    14, 13,  8,  /* indice 246 */
+    16, 15,  9,  /* indice 247 */
+    18, 17,  9,  /* indice 248 */
+    19, 18, 11,  /* indice 249 */
+    22, 21, 12,  /* indice 250 */
+    24, 23, 14,  /* indice 251 */
+    27, 26, 15,  /* indice 252 */
+    29, 28, 18,  /* indice 253 */
+    37, 35, 28,  /* indice 254 */
+    50, 46, 39,  /* indice 255 */
+};
+
+void screen_inject_reptile_palette(void)
+{
+    int i;
+    outp(0x3C8, 242);
+    for (i = 0; i < 14 * 3; i++)
+        outp(0x3C9, reptile_palette[i]);
+}
+
+/* ----------------------------------------------------------------
  * ANIMACION MIEL GOTEANDO (P2, Prehistoria)
  * Activada cuando Eric golpea la colmena con el palo.
  * Desactivada cuando Eric recoge la miel con la taza.
@@ -602,6 +635,7 @@ BITMAP     g_eric_head;
 BITMAP     g_fire_sprite;
 BITMAP     g_log_sprite;
 BITMAP     g_log_icon;
+BITMAP      g_reptile_sprite;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -971,6 +1005,10 @@ void screen_init(void)
 
     if (!try_load_bmp("LOG_ICON.BMP", &g_log_icon))   
         g_log_icon.data = NULL;
+
+    if(!try_load_bmp("REPTILE.BMP", &g_reptile_sprite))
+        g_reptile_sprite.data = NULL;
+
 }
 
 /* ----------------------------------------------------------------
@@ -1300,7 +1338,7 @@ int screen_change(int dir)
             sfx_load(SFX_ROCK_ROLL,  "moverock.wav");
         else if (next == 1 && s_honey_active)
             sfx_load(SFX_HONEY_DROP, "drops.wav");
-        else if (next == 2)
+        else if (next == 2 || next == 3 || next == 6)
             sfx_load(SFX_BEAR_STEP,  "woso.wav");
 
         /* Musica: independiente del SFX, se evalua siempre */

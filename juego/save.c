@@ -80,7 +80,7 @@ int load_game(void)
     {
         if (g_game.screen.current_screen == 0)
             sfx_load(SFX_ROCK_ROLL, "moverock.wav");
-        else if (g_game.screen.current_screen == 2)
+        else if (g_game.screen.current_screen == 2 || g_game.screen.current_screen == 3 || g_game.screen.current_screen == 6)
             sfx_load(SFX_BEAR_STEP, "woso.wav");
     }
 

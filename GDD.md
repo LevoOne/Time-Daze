@@ -1501,8 +1501,8 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
 2. ⬜ **BMPs y sprites pendientes**:
    -✅ Hoguera animada P5 (punto de guardado, 3-4 frames de llamas)
    - Sprite de peces P8
-   - Sprite de reptil
-   - Sprite de jabali gigante P4
+   -✅ Sprite de reptil
+   -✅ Sprite de jabali gigante P4
    - Bitmap del fragmento 1
    -✅ Bitmap del tronco a recoger en P9
 
@@ -1535,7 +1535,7 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
    igual que se hizo con la taza.
 
 **Adicionales:**
-- ⚠️  Eliminar gatillo temporal de la roca (TODO TEST en logic.c) y
+- ✅ Eliminar gatillo temporal de la roca (TODO TEST en logic.c) y
   sustituir por logica real del tronco/palanca (la animacion de la
   roca rodando ya esta implementada).
 - ⬜ **SFX coger/depositar objetos** — disparar un SFX al recoger un
@@ -1554,7 +1554,7 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
   OpenMPT, pisando los 4 canales reservados para SFX (28-31) y silenciando
   `jump.wav` mientras sonaba; corregido reduciendo el modulo a los canales
   minimos necesarios. Probado y funcionando.
-- ⬜ **Logica punto de guardado P5** — al interactuar con la hoguera,
+- ✅ **Logica punto de guardado P5** — al interactuar con la hoguera,
   mostrar confirmacion (S/N) y llamar a save_game() si el jugador
   confirma.
 - ✅ Modificar P3 de prehistoria para que aparezca la liana en la derecha para bajar a P5

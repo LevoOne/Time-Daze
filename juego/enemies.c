@@ -55,8 +55,8 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
     
     /* P7: zona baja centro, reptil */
     {
-        { ENEMY_REPTILE, 1, 80.0f, 128.0f, 0.6f,0.0f,
-          PAT_HORIZONTAL, 20.0f,280.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_REPTILE, 1, 80.0f, 124.0f, 0.15f,0.0f,
+          PAT_HORIZONTAL, 20.0f,260.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
     
@@ -191,6 +191,9 @@ static float s_bear_last_dir = -1.0f;  /* -1=izquierda, 1=derecha */
 /* Ultima direccion del jabali (para dibujo correcto, mismo criterio que el oso) */
 static float s_boar_last_dir = -1.0f;  /* -1=izquierda, 1=derecha */
 
+/* Última dirección del reptil (para dibujo correct, mismo criterio que el oso) */
+static float s_reptile_last_dir = -1.0f; /* -1=izquierda, 1=derecha */
+
 void enemies_load(int epoch, int screen)
 {
     int i;
@@ -311,6 +314,15 @@ void enemies_update(void)
             {
                 /* BOAR.BMP tiene 4 frames reales de ciclo de carrera */
                 e->anim_frame = (e->anim_frame + 1) % 4;
+                if (e->anim_frame == 0 || e->anim_frame == 3)
+                    sfx_play(SFX_BEAR_STEP, 39, MIDDLE);
+            }
+            else if (e->type == ENEMY_REPTILE)
+            {
+                /* REPTILE.BMP también tiene 4 frames reales de ciclo de carrera */
+                e->anim_frame = (e->anim_frame + 1) % 3;
+                if(e->anim_frame == 1)
+                    sfx_play(SFX_BEAR_STEP, 38, MIDDLE);
             }
             else
                 e->anim_frame = (e->anim_frame + 1) % 3;
@@ -435,6 +447,41 @@ void enemies_draw(void)
                         dx = x + (63 - sx);
                         if (dx < 0 || dx >= SCREEN_W) continue;
                         c = g_boar_sprite.data[sy * g_boar_sprite.width +
+                            e->anim_frame * 64 + sx];
+                        if (c == 0) continue;
+                        back_buffer[dy * SCREEN_W + dx] = c;
+                    }
+                }
+            }
+            continue;
+        }
+
+        /* Reptil: dibujar sprite real con espejado segun direccion */
+        if (e->type == ENEMY_REPTILE && g_reptile_sprite.data != NULL)
+        {
+            float draw_dir = (e->vel_x != 0.0f) ? e->vel_x : s_reptile_last_dir;
+            screen_inject_reptile_palette();
+
+            if (draw_dir >= 0.0f)
+            {
+                s_reptile_last_dir = 1.0f;
+                /* Mirando a la derecha */
+                bmp_draw_tile(&g_reptile_sprite, e->anim_frame, 0,
+                              64, 24, x, y);
+            }
+            else
+            {
+                s_reptile_last_dir = -1.0f;
+                /* Mirando a la izquierda: espejado horizontal */
+                for (sy = 0; sy < 24; sy++)
+                {
+                    dy = y + sy;
+                    if (dy < 0 || dy >= SCREEN_H) continue;
+                    for (sx = 0; sx < 64; sx++)
+                    {
+                        dx = x + (63 - sx);
+                        if (dx < 0 || dx >= SCREEN_W) continue;
+                        c = g_reptile_sprite.data[sy * g_reptile_sprite.width +
                             e->anim_frame * 64 + sx];
                         if (c == 0) continue;
                         back_buffer[dy * SCREEN_W + dx] = c;
