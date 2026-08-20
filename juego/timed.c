@@ -62,8 +62,8 @@ static void new_game(void)
     logic_init();
 
     /* TEMP: pantalla inicial modificada para pruebas */
-    screen_load(EPOCH_PREHISTORY,5);
-    enemies_load(EPOCH_PREHISTORY, 5);
+    screen_load(EPOCH_PREHISTORY,7);
+    enemies_load(EPOCH_PREHISTORY, 7);
 
    /* Cargar SFX de la pantalla inicial */
     sfx_free(1);
@@ -71,6 +71,8 @@ static void new_game(void)
         sfx_load(SFX_ROCK_ROLL, "moverock.wav");
     else if (g_game.screen.current_screen == 2 || g_game.screen.current_screen == 3 || g_game.screen.current_screen == 6)
         sfx_load(SFX_BEAR_STEP, "woso.wav");
+    else if (g_game.screen.current_screen == 7)
+        sfx_load(SFX_BEAR_STEP, "splash.wav");
 
     /* Cargar musica de la pantalla inicial */
     if (g_game.screen.current_screen == 4)

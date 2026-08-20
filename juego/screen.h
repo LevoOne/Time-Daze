@@ -30,6 +30,8 @@ extern BITMAP g_fire_sprite;
 extern BITMAP g_log_sprite;
 extern BITMAP g_log_icon;
 extern BITMAP g_reptile_sprite;
+extern BITMAP g_fish_sprite;
+extern BITMAP g_splash_sprite;
 
 /* ----------------------------------------------------------------
  * FUNCIONES
@@ -82,7 +84,8 @@ void screen_inject_bear_palette(void);
 void screen_inject_boar_palette(void);
 void screen_inject_cup_palette(void);
 void screen_inject_log_palette(void);
-void screeb_inject_reptile_palette(void);
+void screen_inject_reptile_palette(void);
+void screen_inject_fish_palette(void);
 
 /* -----------------------------------------------------------------------------------------
  * screen_draw_shaman()

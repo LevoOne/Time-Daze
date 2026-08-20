@@ -496,6 +496,43 @@ void screen_inject_reptile_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * PALETA DE LOS PECES (P8, Prehistoria)
+ * Indices 200-213 — rango prestado del chaman (200-219), que solo
+ * se inyecta de forma dinamica dentro de screen_draw_shaman() y por
+ * tanto nunca esta activo fuera de P1. Como los peces solo existen
+ * en P8, nunca coinciden en pantalla con el chaman.
+ * IMPORTANTE: NO se puede usar el rango 242-255 aqui, porque en P8
+ * esos indices ya estan ocupados de forma permanente por los tonos
+ * del agua, horneados directamente en el propio fondo PRE_P8.BMP.
+ * 14 colores verde oliva/marron extraidos de FISH.BMP.
+ * ---------------------------------------------------------------- */
+static const byte fish_palette[14 * 3] =
+{
+     6,  6,  3,  /* indice 200 */
+     9,  9,  6,  /* indice 201 */
+    11, 12,  9,  /* indice 202 */
+    14, 14,  8,  /* indice 203 */
+    13, 14, 11,  /* indice 204 */
+    16, 16, 11,  /* indice 205 */
+    21, 19, 11,  /* indice 206 */
+    19, 19, 14,  /* indice 207 */
+    22, 22, 16,  /* indice 208 */
+    28, 22, 13,  /* indice 209 */
+    25, 25, 19,  /* indice 210 */
+    32, 27, 18,  /* indice 211 */
+    38, 32, 21,  /* indice 212 */
+    41, 37, 32,  /* indice 213 */
+};
+
+void screen_inject_fish_palette(void)
+{
+    int i;
+    outp(0x3C8, 200);
+    for (i = 0; i < 14 * 3; i++)
+        outp(0x3C9, fish_palette[i]);
+}
+
+/* ----------------------------------------------------------------
  * ANIMACION MIEL GOTEANDO (P2, Prehistoria)
  * Activada cuando Eric golpea la colmena con el palo.
  * Desactivada cuando Eric recoge la miel con la taza.
@@ -617,25 +654,27 @@ void screen_draw_fire(void)
  * VARIABLES GLOBALES
  * ---------------------------------------------------------------- */
 ScreenData g_screen_data;
-BITMAP     g_spritesheet;
-BITMAP     g_rock_sprite;
-BITMAP     g_rock_roll_sprite;
-BITMAP     g_shaman_sprite;
-BITMAP     g_stick_sprite;
-BITMAP     g_egg_sprite;
-BITMAP     g_cup_sprite;
-BITMAP     g_cuphoney_sprite;
-BITMAP     g_egg_icon;
-BITMAP     g_honey_sprite;
-BITMAP     g_bear_sprite;
-BITMAP     g_boar_sprite;
+BITMAP      g_spritesheet;
+BITMAP      g_rock_sprite;
+BITMAP      g_rock_roll_sprite;
+BITMAP      g_shaman_sprite;
+BITMAP      g_stick_sprite;
+BITMAP      g_egg_sprite;
+BITMAP      g_cup_sprite;
+BITMAP      g_cuphoney_sprite;
+BITMAP      g_egg_icon;
+BITMAP      g_honey_sprite;
+BITMAP      g_bear_sprite;
+BITMAP      g_boar_sprite;
 BITMAP      g_cup_icon;
 BITMAP      g_cuphoney_icon;
-BITMAP     g_eric_head;
-BITMAP     g_fire_sprite;
-BITMAP     g_log_sprite;
-BITMAP     g_log_icon;
+BITMAP      g_eric_head;
+BITMAP      g_fire_sprite;
+BITMAP      g_log_sprite;
+BITMAP      g_log_icon;
 BITMAP      g_reptile_sprite;
+BITMAP      g_fish_sprite;
+BITMAP      g_splash_sprite;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -1009,6 +1048,11 @@ void screen_init(void)
     if(!try_load_bmp("REPTILE.BMP", &g_reptile_sprite))
         g_reptile_sprite.data = NULL;
 
+    if(!try_load_bmp("FISH.BMP", &g_fish_sprite))
+        g_fish_sprite.data = NULL;
+
+    if(!try_load_bmp("SPLASH.BMP", &g_splash_sprite))
+        g_splash_sprite.data = NULL;
 }
 
 /* ----------------------------------------------------------------
@@ -1340,6 +1384,8 @@ int screen_change(int dir)
             sfx_load(SFX_HONEY_DROP, "drops.wav");
         else if (next == 2 || next == 3 || next == 6)
             sfx_load(SFX_BEAR_STEP,  "woso.wav");
+        else if (next == 7)
+            sfx_load(SFX_BEAR_STEP,  "splash.wav");
 
         /* Musica: independiente del SFX, se evalua siempre */
         if (next == 4)

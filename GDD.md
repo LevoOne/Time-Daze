@@ -1500,7 +1500,7 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
 
 2. ⬜ **BMPs y sprites pendientes**:
    -✅ Hoguera animada P5 (punto de guardado, 3-4 frames de llamas)
-   - Sprite de peces P8
+   -✅ Sprite de peces P8
    -✅ Sprite de reptil
    -✅ Sprite de jabali gigante P4
    - Bitmap del fragmento 1

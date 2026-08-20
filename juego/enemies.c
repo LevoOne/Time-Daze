@@ -55,21 +55,39 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
     
     /* P7: zona baja centro, reptil */
     {
-        { ENEMY_REPTILE, 1, 80.0f, 124.0f, 0.15f,0.0f,
-          PAT_HORIZONTAL, 20.0f,260.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_REPTILE, 1, 80.0f, 124.0f, 0.15f,0.0f, PAT_HORIZONTAL, 20.0f,200.0f, 0.0f,0.0f, 0,0 },
+
         END_ENEMY
     },
     
     /* P8: cruce del rio, peces */
+
+    /* Mi propuesta de patrón de movimiento
     {
-        { ENEMY_FISH, 1, 115.0f, 125.0f, 0.0f, 2.5f,
-          PAT_VERTICAL, 0.0f,0.0f, 95.0f, 125.0f, 0,0 },
-        { ENEMY_FISH, 1, 152.0f, 125.0f, 0.0f, 2.0f,
-          PAT_VERTICAL, 0.0f,0.0f, 90.0f, 125.0f, 0,0 },
-        { ENEMY_FISH, 1, 190.0f, 125.0f, 0.0f, 2.8f,
-          PAT_VERTICAL, 0.0f,0.0f, 85.0f, 125.0f, 0,0 },
+        { ENEMY_FISH, 1, 110.0f, 125.0f, 0.0f, -6.0f, PAT_VERTICAL, -6.0f, 0.15f, 14.0f, 125.0f, 0,0 },
+
+        { ENEMY_FISH, 1, 145.0f, 125.0f, 0.0f, -3.5f, PAT_VERTICAL, -3.5f, 0.06f, 84.0f, 125.0f, 0,0 },
+
+        { ENEMY_FISH, 1, 186.0f, 125.0f, 0.0f, -5.3f, PAT_VERTICAL, -5.3f, 0.10f, 24.0f, 125.0f, 0,0 },
+
         END_ENEMY
     },
+    */
+
+    /* He pedido a Claude que busque una combinación más asequible para el jugador. De momento dejo esta.*/
+    {
+        { ENEMY_FISH, 1, 110.0f, 125.0f, 0.0f, -4.0f, PAT_VERTICAL, -4.0f, 0.15f, 55.0f, 125.0f, 0,0 },
+        { ENEMY_FISH, 1, 145.0f, 125.0f, 0.0f, -3.5f, PAT_VERTICAL, -3.5f, 0.06f, 84.0f, 125.0f, 0,0 },
+        { ENEMY_FISH, 1, 186.0f, 125.0f, 0.0f, -3.8f, PAT_VERTICAL, -3.8f, 0.10f, 65.0f, 125.0f, 0,0 },
+    },
+
+
+
+
+
+
+
+
     /* P9: monolito, sin enemigos */
     { END_ENEMY },
 };
@@ -194,6 +212,16 @@ static float s_boar_last_dir = -1.0f;  /* -1=izquierda, 1=derecha */
 /* Última dirección del reptil (para dibujo correct, mismo criterio que el oso) */
 static float s_reptile_last_dir = -1.0f; /* -1=izquierda, 1=derecha */
 
+/* Temporizador de salpicadura por pez (uno por slot de enemigo).
+ * Se activa al tocar el agua (ver PAT_VERTICAL en enemies_update)
+ * y cuenta hacia atras en cada frame hasta llegar a 0. */
+#define FISH_SPLASH_DURATION 8
+
+#define FISH_WAIT_MIN  10   /* frames minimos de espera en el agua */
+#define FISH_WAIT_MAX  40   /* frames maximos de espera en el agua */
+
+static int s_fish_splash_timer[MAX_ENEMIES];
+
 void enemies_load(int epoch, int screen)
 {
     int i;
@@ -236,6 +264,10 @@ void enemies_update(void)
     {
         e = &g_enemies.enemies[i];
         if (!e->active) continue;
+
+        /* Actualizo el timer de las salpicaduras */
+         if (s_fish_splash_timer[i] > 0)
+            s_fish_splash_timer[i]--;
 
         /* Oso con puzzle resuelto: camina hacia la taza y se detiene */
         if (e->type == ENEMY_BEAR && puzzle_is_solved(PUZZLE_BEAR))
@@ -280,23 +312,32 @@ void enemies_update(void)
                 }
                 break;
 
-            case PAT_VERTICAL:
-                e->y += e->vel_y;
-                if (e->y <= e->min_y)
-                {
-                    e->y     = e->min_y;
-                    e->vel_y = -e->vel_y;
-                }
+                
+             case PAT_VERTICAL:
+                /* Fisica de salto con gravedad real:
+                 *   min_x = velocidad de lanzamiento inicial (negativa,
+                 *           hacia arriba)
+                 *   max_x = gravedad (aceleracion que se suma cada frame)
+                 * min_y = altura maxima del salto (tope de seguridad)
+                 * max_y = nivel del agua (punto de relanzamiento)       */
+                e->vel_y += e->max_x;
+                e->y     += e->vel_y;
+
                 if (e->y >= e->max_y)
                 {
                     e->y     = e->max_y;
-                    e->vel_y = -e->vel_y;
+                    e->vel_y = e->min_x;
+                    if (e->type == ENEMY_FISH) {
+                        s_fish_splash_timer[i] = FISH_SPLASH_DURATION;
+                        sfx_play(SFX_BEAR_STEP, 38, MIDDLE);
+                    }
+                }
+                if (e->y <= e->min_y)
+                {
+                    e->y = e->min_y;
                 }
                 break;
 
-            case PAT_FIXED:
-            default:
-                break;
         }
 
         if (++e->anim_timer >= 15)
@@ -483,6 +524,46 @@ void enemies_draw(void)
                         if (dx < 0 || dx >= SCREEN_W) continue;
                         c = g_reptile_sprite.data[sy * g_reptile_sprite.width +
                             e->anim_frame * 64 + sx];
+                        if (c == 0) continue;
+                        back_buffer[dy * SCREEN_W + dx] = c;
+                    }
+                }
+            }
+            continue;
+        }
+
+        /* Peces: dibujar sprite real, espejado en vertical segun suba o baje */
+        if (e->type == ENEMY_FISH && g_fish_sprite.data != NULL)
+        {
+            if (s_fish_splash_timer[i] > 0 && g_splash_sprite.data != NULL)
+            {
+                /* Salpicadura: usa los mismos indices de color que el agua
+                 * de fondo (242-255), no requiere inyectar ninguna paleta */
+                bmp_draw_tile(&g_splash_sprite, 0, 0, 24, 12,
+                              (int)e->x, (int)e->max_y + 13);
+                continue;
+            }
+            
+            screen_inject_fish_palette();
+
+            if (e->vel_y <= 0.0f)
+            {
+                /* Subiendo: dibujo normal */
+                bmp_draw_tile(&g_fish_sprite, e->anim_frame, 0, 30, 25, x, y);
+            }
+            else
+            {
+                /* Bajando: espejado vertical (voltea filas, no columnas) */
+                for (sy = 0; sy < 25; sy++)
+                {
+                    dy = y + (24 - sy);
+                    if (dy < 0 || dy >= SCREEN_H) continue;
+                    for (sx = 0; sx < 30; sx++)
+                    {
+                        dx = x + sx;
+                        if (dx < 0 || dx >= SCREEN_W) continue;
+                        c = g_fish_sprite.data[sy * g_fish_sprite.width +
+                            e->anim_frame * 30 + sx];
                         if (c == 0) continue;
                         back_buffer[dy * SCREEN_W + dx] = c;
                     }
