@@ -93,7 +93,6 @@ int hud_cristal_update(void)
 static void hud_draw_normal(void)
 {
     int i, x;
-    unsigned char color;
     const char* item_name;
     int icon_w = 0;
 
@@ -221,25 +220,24 @@ static void hud_draw_normal(void)
         draw_string(item_name, x + icon_w + 14, HUD_Y + 10, 8);
     }
 
-    /* Fragmentos: grisaceo si no recogido, color si recogido */
-    for (i = 0; i < FRAGMENT_COUNT; i++)
+    /* Fragmentos: sprite apagado (gris, paleta de Eric) si no recogido,
+     * sprite a color (dorado, paleta de la taza) si recogido. Cada
+     * fragmento tiene su propia silueta; ninguno necesita inyeccion
+     * de paleta porque ambos estados reutilizan rangos permanentes
+     * ya activos (Eric 130-185 / taza 186-199), igual que el tronco. */
     {
-        x = 290 - (FRAGMENT_COUNT - 1 - i) * 14;
+        BITMAP *dim_sprites[3]       = { &g_frag1_dim, &g_frag2_dim, &g_frag3_dim };
+        BITMAP *collected_sprites[3] = { &g_frag1_collected, &g_frag2_collected, &g_frag3_collected };
 
-        if (fragment_is_collected(i))
+        for (i = 0; i < FRAGMENT_COUNT; i++)
         {
-            /* Color distintivo por fragmento: 2=verde, 3=cyan, 4=rojo */
-            color = (i == 0) ? 2 : (i == 1) ? 3 : 4;
-        }
-        else
-        {
-            color = 8;   /* grisaceo */
-        }
+            x = 296 - (FRAGMENT_COUNT - 1 - i) * 22;
 
-        draw_line(x,     HUD_Y + 3,  x + 8, HUD_Y + 3,  color);
-        draw_line(x + 8, HUD_Y + 3,  x + 8, HUD_Y + 11, color);
-        draw_line(x + 8, HUD_Y + 11, x,     HUD_Y + 11, color);
-        draw_line(x,     HUD_Y + 11, x,     HUD_Y + 3,  color);
+            if (fragment_is_collected(i))
+                draw_bitmap_buf_t(collected_sprites[i], x, HUD_Y + 5);
+            else
+                draw_bitmap_buf_t(dim_sprites[i], x, HUD_Y + 5);
+        }
     }
 }
 

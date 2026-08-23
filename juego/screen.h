@@ -32,6 +32,12 @@ extern BITMAP g_log_icon;
 extern BITMAP g_reptile_sprite;
 extern BITMAP g_fish_sprite;
 extern BITMAP g_splash_sprite;
+extern BITMAP g_frag1_dim;
+extern BITMAP g_frag1_collected;
+extern BITMAP g_frag2_dim;
+extern BITMAP g_frag2_collected;
+extern BITMAP g_frag3_dim;
+extern BITMAP g_frag3_collected;
 
 /* ----------------------------------------------------------------
  * FUNCIONES

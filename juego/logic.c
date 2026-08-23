@@ -124,21 +124,20 @@ static int logic_prehistory(int screen)
     int honey_x,   honey_y;
     int deposit_x;
     int shaman_x,  shaman_y;
-    int fragment_x, fragment_y;
     int monolith_x, monolith_y;
     int log_x,     log_y;
     int egg_x,     egg_y;
     int fire_x,    fire_y;
     int liana_x,   liana_y;
     int ex4,       ex7;
+    static const char *monolith_hint[2];
 
 
     handled    = 0;
     beehive_x  = 160; beehive_y  = 130;
     honey_x    = 200; honey_y    = 160;
-    shaman_x   = 160; shaman_y   = 140;
-    fragment_x = 160; fragment_y = 130;
-    monolith_x = 160; monolith_y = 100;
+    shaman_x   = 37; shaman_y   = 140;
+    monolith_x = 110; monolith_y = 120;
     log_x      = 240; log_y      = 165;
     egg_x      = 264; egg_y      = 84;
     fire_x     = 160; fire_y     = 150;
@@ -263,11 +262,11 @@ static int logic_prehistory(int screen)
             }
         }
 
-        if (puzzle_is_solved(PUZZLE_SHAMAN) &&
-            !fragment_is_collected(FRAGMENT_1))
+        if (!puzzle_is_solved(PUZZLE_SHAMAN))
         {
-            if (eric_near(fragment_x, fragment_y) && eric_action())
+            if (eric_near(shaman_x, shaman_y) && eric_action())
             {
+                puzzle_solve(PUZZLE_SHAMAN);
                 fragment_collect(FRAGMENT_1);
                 save_game();
                 handled = 1;
@@ -290,7 +289,9 @@ static int logic_prehistory(int screen)
         {
             if (eric_near(monolith_x, monolith_y) && eric_action())
             {
-                /* TODO: mostrar simbolos del codigo en pantalla */
+                monolith_hint[0] = "SIMBOLOS: ^ O < # ~ (anotalos)";
+                monolith_hint[1] = NULL;
+                dialog_open(DIALOG_HINT, NULL, monolith_hint);
                 handled = 1;
             }
         }

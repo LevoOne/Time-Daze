@@ -675,6 +675,12 @@ BITMAP      g_log_icon;
 BITMAP      g_reptile_sprite;
 BITMAP      g_fish_sprite;
 BITMAP      g_splash_sprite;
+BITMAP      g_frag1_dim;
+BITMAP      g_frag1_collected;
+BITMAP      g_frag2_dim;
+BITMAP      g_frag2_collected;
+BITMAP      g_frag3_dim;
+BITMAP      g_frag3_collected;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -1053,6 +1059,24 @@ void screen_init(void)
 
     if(!try_load_bmp("SPLASH.BMP", &g_splash_sprite))
         g_splash_sprite.data = NULL;
+
+    if (!try_load_bmp("F1DIM.BMP", &g_frag1_dim))
+        g_frag1_dim.data = NULL;
+
+    if (!try_load_bmp("F1COL.BMP", &g_frag1_collected))
+        g_frag1_collected.data = NULL;
+    
+    if (!try_load_bmp("F2DIM.BMP", &g_frag2_dim))
+        g_frag2_dim.data = NULL;
+    
+    if (!try_load_bmp("F2COL.BMP", &g_frag2_collected))
+        g_frag2_collected.data = NULL;
+    
+    if (!try_load_bmp("F3DIM.BMP", &g_frag3_dim))
+        g_frag3_dim.data = NULL;
+    
+    if (!try_load_bmp("F3COL.BMP", &g_frag3_collected))
+        g_frag3_collected.data = NULL;    
 }
 
 /* ----------------------------------------------------------------
@@ -1507,7 +1531,6 @@ void screen_draw_shaman(void)
 
     if (g_game.screen.current_epoch  != EPOCH_PREHISTORY) return;
     if (g_game.screen.current_screen != 0)                return;
-    if (puzzle_is_solved(PUZZLE_SHAMAN))                  return;
     if (g_shaman_sprite.data == NULL)                     return;
 
     if (++s_timer >= 30)
