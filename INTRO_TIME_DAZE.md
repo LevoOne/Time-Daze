@@ -1,6 +1,6 @@
 # Secuencia de introducción — Time Daze
 ### Guión estructurado para `show_presentation()` — sustituye al placeholder `intro.bmp`
-### v2 — corregido para alinearse con la sección 2 (Historia) del GDD
+### v3 — tiempos recalibrados para sincronizar con JINGLE.WAV/XM (54.7s)
 
 ---
 
@@ -22,8 +22,9 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 
 - **8 paneles**, una sola línea narrativa (ya no dos actos separados).
 - Mismo patrón técnico que ya tenéis: `load_bmp → fade_in → wait → fade_out → free`.
-- Música: un único tema de fondo, con el mismo arco que comentamos (más ligero al principio, más tenso en la activación, se asienta en `PRETHEME.XM` en cuanto Eric cae en Prehistoria).
+- **Música**: `JINGLE.XM` (convertido de `JINGLE.WAV`, 54.7s), sonando de principio a fin de toda la secuencia — desde el logo del concurso hasta el fundido final. Sin loop: es una pieza con principio y fin, se deja sonar una sola vez.
 - Tecla de salto global para todo el bloque.
+- **Los tiempos de esta versión están recalibrados para que la duración total de la secuencia visual (3 logos + 8 paneles + fundido final) sume ~54.7s**, la duración real del jingle.
 
 ---
 
@@ -35,7 +36,7 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 **Texto:**
 > *"Tres generaciones de su familia pasaron por este colegio. Eric no venía por nostalgia."*
 
-**Duración:** ~180 ticks (2.5s)
+**Duración:** ~230 ticks (3.3s)
 
 ---
 
@@ -45,7 +46,7 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 **Texto:**
 > *"— Recupera lo que escondí en la caja fuerte del colegio. No preguntes por qué — le había dicho su abuelo."*
 
-**Duración:** ~220 ticks (3.1s) — hay una cita textual, dale tiempo de lectura.
+**Duración:** ~280 ticks (4.0s) — hay una cita textual, dale tiempo de lectura.
 
 ---
 
@@ -55,7 +56,7 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 **Texto:**
 > *"Mientras el director se perdía en su décimo agradecimiento, Eric encontró su salida."*
 
-**Duración:** ~180 ticks (2.5s)
+**Duración:** ~230 ticks (3.3s)
 
 ---
 
@@ -65,7 +66,7 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 **Texto:**
 > *"Los pasillos no habían cambiado tanto como él."*
 
-**Duración:** ~150 ticks (2.1s)
+**Duración:** ~190 ticks (2.7s)
 
 ---
 
@@ -75,7 +76,7 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 **Texto:**
 > *"La combinación seguía siendo la misma de siempre. Algunas cosas, en este colegio, nunca cambian."*
 
-**Duración:** ~180 ticks (2.5s)
+**Duración:** ~230 ticks (3.3s)
 
 ---
 
@@ -85,7 +86,7 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 **Texto:**
 > *"Ni idea de qué era. Ni idea de por qué su abuelo lo quería de vuelta."*
 
-**Duración:** ~180 ticks (2.5s)
+**Duración:** ~230 ticks (3.3s)
 
 ---
 
@@ -95,7 +96,7 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 **Texto:**
 > *"Y entonces Eric hizo lo único que no debía hacer: activarlo."*
 
-**Duración:** ~130 ticks (1.9s) — corto, es el golpe de efecto.
+**Duración:** ~170 ticks (2.4s) — corto, es el golpe de efecto.
 
 ---
 
@@ -105,7 +106,23 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 **Texto:**
 > *"Tres fragmentos, tres épocas. Y Eric, atrapado entre medias, sin más opción que ir a buscarlos."*
 
-**Duración:** ~200 ticks (2.9s), después fade a negro y directo al primer frame jugable de Prehistoria — mismo criterio de fusión sin costuras que ya comentamos.
+**Duración:** ~260 ticks (3.7s), después el **fundido final prolongado** (ver punto 2.1 más abajo) antes de pasar al menú del juego.
+
+---
+
+### 2.1 — Fundido final prolongado
+
+A diferencia de las transiciones normales entre paneles (fundido rápido + 1s de hueco), el cierre de la intro necesita un **fundido a negro sostenido de ~819 ticks (11.7s)** antes de mostrar el menú — es lo que hace que la duración total de la secuencia visual cuadre con los 54.7s del jingle, dejando que la música termine de sonar sobre pantalla en negro en vez de cortarse de golpe.
+
+```c
+vga_fade_out(16, 4);
+vga_clear(0);
+vga_flip();
+timer_wait(819);   /* deja sonar el resto del jingle sobre negro */
+/* -> transicion al menu / new_game() */
+```
+
+**Aviso de UX**: 11.7s de pantalla en negro es bastante tiempo si el jugador no sabe que es intencionado. La tecla de salto global (punto 2) cubre este riesgo — quien no quiera esperar, salta directo al menú. Si al probarlo se siente demasiado largo incluso sabiendo que es a propósito, las opciones son: alargar más los paneles (menos negro, secuencia visual más larga) o recortar el propio `JINGLE.WAV` a ~45s antes de convertirlo a XM.
 
 ---
 
@@ -128,7 +145,7 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 
 ## 4. Nota de música
 
-Igual que en la versión anterior: un tema con arco simple, tono ligero/cotidiano en los paneles 1-6, gira a tenso en el panel 7 (la activación), y resuelve en `PRETHEME.XM` en cuanto se fusiona con el arranque real de Prehistoria — sin necesidad de componer nada exclusivo para la intro si no queréis.
+`JINGLE.WAV` → convertido a `JINGLE.XM` (mismo proceso que `FIREAMB.WAV`→`FIRE.XM`, pero **sin activar el loop del sample** — esta vez es una pieza con principio y fin, no un bucle ambiental). Suena de principio a fin de toda la secuencia (desde el logo del concurso hasta el fundido final de 11.7s), sin necesidad de que cambie de tema en ningún punto intermedio. `PRETHEME.XM` entra ya directamente al arrancar la partida real en Prehistoria, después del fundido final — no hay solape ni transición que gestionar entre ambos.
 
 ---
 

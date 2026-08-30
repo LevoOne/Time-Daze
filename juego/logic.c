@@ -130,7 +130,6 @@ static int logic_prehistory(int screen)
     int fire_x,    fire_y;
     int liana_x,   liana_y;
     int ex4,       ex7;
-    static const char *monolith_hint[2];
 
 
     handled    = 0;
@@ -269,6 +268,7 @@ static int logic_prehistory(int screen)
                 puzzle_solve(PUZZLE_SHAMAN);
                 fragment_collect(FRAGMENT_1);
                 save_game();
+                dialog_open(DIALOG_TALK, NULL, g_dialog_shaman);
                 handled = 1;
             }
         }
@@ -289,9 +289,7 @@ static int logic_prehistory(int screen)
         {
             if (eric_near(monolith_x, monolith_y) && eric_action())
             {
-                monolith_hint[0] = "SIMBOLOS: ^ O < # ~ (anotalos)";
-                monolith_hint[1] = NULL;
-                dialog_open(DIALOG_HINT, NULL, monolith_hint);
+                dialog_open(DIALOG_HINT, &g_ericfrm_sprite, g_dialog_monolith);
                 handled = 1;
             }
         }
@@ -359,7 +357,7 @@ static int logic_prehistory(int screen)
         if (eric_near(fire_x, fire_y) && eric_action())
         {
             static const char *confirm[] = { "Guardar la partida?", NULL };
-            dialog_open(DIALOG_YESNO, NULL, confirm);
+            dialog_open(DIALOG_YESNO, &g_ericfrm_sprite, confirm);
             handled = 1;
         }
         if (!dialog_is_open() && dialog_got_yes())
@@ -756,26 +754,22 @@ void logic_update(void)
 
     /* --------------------------------------------------------
      * INDICADOR HUD + RECOGIDA GENERAL DE OBJETOS DEL SUELO
-     * Una sola llamada a inv_find_near_player sirve para el
-     * indicador del HUD y para la recogida al pulsar accion.
+     * La deteccion del objeto cercano se hace SIEMPRE, aunque Eric
+     * lleve algo encima, para que el HUD pueda mostrarlo (tapando
+     * temporalmente al objeto llevado) y avisar al jugador de que
+     * hay algo ahi. La recogida en si sigue exigiendo manos libres.
      * -------------------------------------------------------- */
-    if (inv_is_carrying(ITEM_NONE))
-    {
-        inst = inv_find_near_player(epoch, screen,
-                                    (int)g_game.player.x,
-                                    (int)g_game.player.y);
-        hud_set_nearby_item(inst != NULL ? inst->item_id : ITEM_NONE);
+    inst = inv_find_near_player(epoch, screen,
+                                (int)g_game.player.x,
+                                (int)g_game.player.y);
+    hud_set_nearby_item(inst != NULL ? inst->item_id : ITEM_NONE);
 
-        if (!handled && inst != NULL && eric_action())
-        {
-            inv_remove_instance(inst->item_id, inst->epoch, inst->screen);
-            inv_pick(inst->item_id);
-            handled = 1;
-        }
-    }
-    else
+    if (!handled && inst != NULL && inv_is_carrying(ITEM_NONE) && eric_action())
     {
-        hud_set_nearby_item(ITEM_NONE);
+        inv_remove_instance(inst->item_id, inst->epoch, inst->screen);
+        inv_pick(inst->item_id);
+        sfx_play(SFX_PICKUP, 40, MIDDLE);
+        handled = 1;
     }
 
     /* --------------------------------------------------------
@@ -797,10 +791,8 @@ void logic_update(void)
         g_game.inv.carried != ITEM_NONE &&
         eric_action())
     {
-        inv_drop(epoch, screen,
-                 (int)g_game.player.x + PLAYER_WIDTH / 2,
-                 (int)g_game.player.y + PLAYER_HEIGHT
-                     - inv_item_height(g_game.inv.carried));
+        inv_drop(epoch, screen, (int)g_game.player.x + PLAYER_WIDTH / 2, (int)g_game.player.y + PLAYER_HEIGHT - inv_item_height(g_game.inv.carried));
+        sfx_play(SFX_DROP, 40, MIDDLE);
     }
 
     /* --------------------------------------------------------
@@ -834,7 +826,9 @@ void logic_update(void)
             action_was_pressed = 1;
             hint_wrap[0] = g_hints[epoch][screen];
             hint_wrap[1] = NULL;
-            dialog_open(DIALOG_HINT, NULL, hint_wrap);
+            //dialog_open(DIALOG_HINT, &g_ericfrm_sprite, hint_wrap);
+            //dialog_open(DIALOG_HINT, NULL, hint_wrap)
+            dialog_open(DIALOG_HINT, &g_ericfrm_sprite, g_hints[epoch][screen]);
         }
     }
 

@@ -79,7 +79,7 @@ void dialog_draw(void);
  * TEXTOS: hints por pantalla y dialogos de personajes
  * Definidos en dialog.c; declarados aqui para uso externo opcional.
  * ---------------------------------------------------------------- */
-extern const char *g_hints[3][9];
+extern const char *g_hints[3][9][3];
 
 extern const char *g_dialog_shaman[];
 extern const char *g_dialog_monolith[];

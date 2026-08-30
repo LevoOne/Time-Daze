@@ -312,6 +312,8 @@ int main(void)
     font_init();
     sound_init();
     sfx_load(SFX_JUMP, "jump.wav");
+    sfx_load(SFX_PICKUP, "PICKUP.WAV");
+    sfx_load(SFX_DROP,   "DROP.WAV");
     music_load_xm("PRETHEME.XM");
 
     /* Secuencia de presentación */

@@ -38,6 +38,7 @@ extern BITMAP g_frag2_dim;
 extern BITMAP g_frag2_collected;
 extern BITMAP g_frag3_dim;
 extern BITMAP g_frag3_collected;
+extern BITMAP g_ericfrm_sprite;
 
 /* ----------------------------------------------------------------
  * FUNCIONES

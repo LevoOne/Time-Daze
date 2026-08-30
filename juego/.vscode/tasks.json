@@ -9,6 +9,34 @@
             "args": [
                 "-l=dos4g",
                 "-w4",
+                "timed.c",
+                "player.c",
+                "enemies.c",
+                "puzzles.c",
+                "inventory.c",
+                "screen.c",
+                "save.c",
+                "hud.c",
+                "logic.c",
+                "engine.c",
+                "game.c",
+                "dialog.c",
+                "judas.lib"
+            ],
+            "group":
+            {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Compilar (DEBUG) Time Daze con Watcom DOS4GW",
+            "type": "shell",
+            "command": "wcl386",
+            "args": [
+                "-l=dos4g",
+                "-w4",
                 "-dDEBUG",
                 "timed.c",
                 "player.c",

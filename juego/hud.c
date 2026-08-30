@@ -108,8 +108,63 @@ static void hud_draw_normal(void)
             draw_bitmap_buf_t(&g_eric_head, x, HUD_Y + 4);
     }
 
-    /* Objeto actual: icono real si es palo o huevo, rectangulo si no */
-    if (g_game.inv.carried != ITEM_NONE)
+    /* Objeto cercano en el suelo: tiene prioridad temporal sobre lo que
+     * Eric lleve encima, para avisar al jugador de que hay algo ahi
+     * aunque tenga las manos ocupadas. En cuanto se aleje, vuelve a
+     * verse lo que lleva con normalidad. */
+    if (g_hud.nearby_item != ITEM_NONE)
+    {
+        /* Objeto cercano en el suelo: mostrar icono + nombre en color tenue */
+        x = 60;
+        icon_w = 0;
+
+        if (g_hud.nearby_item == ITEM_STICK && g_stick_sprite.data != NULL)
+        {
+            icon_w = g_stick_sprite.width;
+            draw_bitmap_buf_t(&g_stick_sprite, x+10, HUD_Y + 6);
+        }
+        else if (g_hud.nearby_item == ITEM_DINO_EGG && g_egg_icon.data != NULL)
+        {
+            icon_w = g_egg_icon.width;
+            draw_bitmap_buf_t(&g_egg_icon, x + 10, HUD_Y + 4);
+        }
+        else if (g_hud.nearby_item == ITEM_CUP && g_cup_icon.data != NULL)
+        {
+            icon_w = g_cup_icon.width;
+            draw_bitmap_buf_t(&g_cup_icon, x+10, HUD_Y + 4);
+        }
+        else if (g_hud.nearby_item == ITEM_CUP_HONEY && g_cuphoney_icon.data != NULL)
+        {
+            icon_w = g_cuphoney_icon.width;
+            draw_bitmap_buf_t(&g_cuphoney_icon, x, HUD_Y + 4);
+        }
+        else if (g_hud.nearby_item == ITEM_LOG  && g_log_icon.data != NULL)
+        {
+            icon_w = g_log_icon.width;
+            draw_bitmap_buf_t(&g_log_icon, x+10, HUD_Y + 4);
+        }
+
+        switch (g_hud.nearby_item)
+        {
+            case ITEM_STICK:        item_name = "palo";                 break;
+            case ITEM_CUP:          item_name = "recipiente";           break;
+            case ITEM_CUP_HONEY:    item_name = "recipiente con miel";  break;
+            case ITEM_LOG:          item_name = "palanca";              break;
+            case ITEM_DINO_EGG:     item_name = "huevo";                break;
+            case ITEM_CRANK:        item_name = "MANIVELA";             break;
+            case ITEM_KEY:          item_name = "LLAVE";                break;
+            case ITEM_TORCH:        item_name = "ANTORCHA";             break;
+            case ITEM_TORCH_LIT:    item_name = "ANTORCH.LIT";          break;
+            case ITEM_LEVITATOR:    item_name = "LEVITADOR";            break;
+            case ITEM_VOLCANIC_MIN: item_name = "MINERAL";              break;
+            case ITEM_SEALANT:      item_name = "SELLANTE";             break;
+            case ITEM_QUARTZ:       item_name = "CUARZO";               break;
+            case ITEM_QUARTZ_CHARGED: item_name = "CUARZO+";            break;
+            default:                item_name = "";                     break;
+        }
+        draw_string(item_name, x + icon_w + 14, HUD_Y + 10, 8);
+    }
+    else if (g_game.inv.carried != ITEM_NONE)
     {
         x = 60;
         if (g_game.inv.carried == ITEM_STICK && g_stick_sprite.data != NULL)
@@ -166,58 +221,6 @@ static void hud_draw_normal(void)
         }
 
         draw_string(item_name, x + icon_w + 14, HUD_Y + 10, 15);
-    }
-    else if (g_hud.nearby_item != ITEM_NONE)
-    {
-        /* Objeto cercano en el suelo: mostrar icono + nombre en color tenue */
-        x = 60;
-        icon_w = 0;
-
-        if (g_hud.nearby_item == ITEM_STICK && g_stick_sprite.data != NULL)
-        {
-            icon_w = g_stick_sprite.width;
-            draw_bitmap_buf_t(&g_stick_sprite, x+10, HUD_Y + 6);
-        }
-        else if (g_hud.nearby_item == ITEM_DINO_EGG && g_egg_icon.data != NULL)
-        {
-            icon_w = g_egg_icon.width;
-            draw_bitmap_buf_t(&g_egg_icon, x + 10, HUD_Y + 4);
-        }
-        else if (g_hud.nearby_item == ITEM_CUP && g_cup_icon.data != NULL)
-        {
-            icon_w = g_cup_icon.width;
-            draw_bitmap_buf_t(&g_cup_icon, x+10, HUD_Y + 4);
-        }
-        else if (g_hud.nearby_item == ITEM_CUP_HONEY && g_cuphoney_icon.data != NULL)
-        {
-            icon_w = g_cuphoney_icon.width;
-            draw_bitmap_buf_t(&g_cuphoney_icon, x, HUD_Y + 4);
-        }
-        else if (g_hud.nearby_item == ITEM_LOG  && g_log_icon.data != NULL)
-        {
-            icon_w = g_log_icon.width;
-            draw_bitmap_buf_t(&g_log_icon, x+10, HUD_Y + 4);
-        }
-
-        switch (g_hud.nearby_item)
-        {
-            case ITEM_STICK:        item_name = "palo";                 break;
-            case ITEM_CUP:          item_name = "recipiente";           break;
-            case ITEM_CUP_HONEY:    item_name = "recipiente con miel";  break;
-            case ITEM_LOG:          item_name = "palanca";              break;
-            case ITEM_DINO_EGG:     item_name = "huevo";                break;
-            case ITEM_CRANK:        item_name = "MANIVELA";             break;
-            case ITEM_KEY:          item_name = "LLAVE";                break;
-            case ITEM_TORCH:        item_name = "ANTORCHA";             break;
-            case ITEM_TORCH_LIT:    item_name = "ANTORCH.LIT";          break;
-            case ITEM_LEVITATOR:    item_name = "LEVITADOR";            break;
-            case ITEM_VOLCANIC_MIN: item_name = "MINERAL";              break;
-            case ITEM_SEALANT:      item_name = "SELLANTE";             break;
-            case ITEM_QUARTZ:       item_name = "CUARZO";               break;
-            case ITEM_QUARTZ_CHARGED: item_name = "CUARZO+";            break;
-            default:                item_name = "";                     break;
-        }
-        draw_string(item_name, x + icon_w + 14, HUD_Y + 10, 8);
     }
 
     /* Fragmentos: sprite apagado (gris, paleta de Eric) si no recogido,

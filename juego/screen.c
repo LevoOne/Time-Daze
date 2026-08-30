@@ -681,6 +681,7 @@ BITMAP      g_frag2_dim;
 BITMAP      g_frag2_collected;
 BITMAP      g_frag3_dim;
 BITMAP      g_frag3_collected;
+BITMAP      g_ericfrm_sprite;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -1077,7 +1078,13 @@ void screen_init(void)
     
     if (!try_load_bmp("F3COL.BMP", &g_frag3_collected))
         g_frag3_collected.data = NULL;    
+
+    /* Cargar el sprite del cuadro de diálogo de Eric */
+    if(!try_load_bmp("ericfrm.bmp", &g_ericfrm_sprite))
+        g_ericfrm_sprite.data = NULL;
 }
+
+
 
 /* ----------------------------------------------------------------
  * TRY LOAD BMP
@@ -1478,13 +1485,21 @@ void screen_travel(int new_epoch)
 
     screen = g_game.screen.current_screen;
 
+    /* SFX de viaje temporal */
+    sfx_free(1);
+    sfx_load(1, "TRAVEL.WAV");
+    sfx_play(1, 45, MIDDLE);
+
     /* Parar musica antes del fade para vaciar el buffer */
     music_free();
     timer_wait(3);
 
+    /* Fade out hacia la nueva época */
     vga_fade_out(16, 4);
     vga_clear(0);
     vga_flip();
+
+    
 
     /* Cargar nueva musica con pantalla en negro */
     if (new_epoch == EPOCH_PREHISTORY && screen == 4)
