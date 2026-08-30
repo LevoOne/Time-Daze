@@ -61,9 +61,9 @@ static void new_game(void)
     hud_init();
     logic_init();
 
-    /* TEMP: pantalla inicial modificada para pruebas */
-    screen_load(EPOCH_PREHISTORY,8);
-    enemies_load(EPOCH_PREHISTORY, 8);
+    /* TEMP: pantalla inicial modificada para pruebas. El juego deberá empezar en P1 (0) de Prehistoria */
+    screen_load(EPOCH_PREHISTORY,0);
+    enemies_load(EPOCH_PREHISTORY, 0);
 
    /* Cargar SFX de la pantalla inicial */
     sfx_free(1);

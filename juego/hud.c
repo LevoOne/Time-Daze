@@ -10,10 +10,6 @@
 #include "puzzles.h"
 #include "screen.h"
 
-
-
-
-
 /* ----------------------------------------------------------------
  * VARIABLE GLOBAL
  * ---------------------------------------------------------------- */
@@ -95,10 +91,22 @@ static void hud_draw_normal(void)
     int i, x;
     const char* item_name;
     int icon_w = 0;
+    int iEpochPal = 0;
 
     /* Fondo negro de la franja del HUD */
+    switch(g_game.screen.current_epoch)
+    {
+        case EPOCH_PREHISTORY: iEpochPal = 129; break;
+        case EPOCH_MEDIEVAL: iEpochPal = 1; break;
+        default: break;
+    }
+
     for (i = HUD_Y; i < HUD_Y + HUD_HEIGHT; i++)
-        memset(&back_buffer[i * SCREEN_W], 129, SCREEN_W);
+    {
+       memset(&back_buffer[i * SCREEN_W], iEpochPal, SCREEN_W);
+    }
+        
+    
 
     /* Vidas: cabeza de Eric */
     for (i = 0; i < g_game.player.lives; i++)
