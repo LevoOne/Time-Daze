@@ -412,6 +412,8 @@ void draw_int(int n, int x, int y, unsigned char color);
 #define KEY_ESC        0x01
 #define KEY_1          0x02
 #define KEY_2          0x03
+#define KEY_3          0x04
+#define KEY_4          0x05
 #define KEY_LEFT       0x4B
 #define KEY_RIGHT      0x4D
 #define KEY_UP         0x48

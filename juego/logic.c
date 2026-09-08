@@ -32,10 +32,10 @@ void logic_init(void)
     action_was_pressed = 0;
 
     /* Colocar objetos iniciales en el mundo */
-    inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 104, 134); /* P3: palo   */
-    inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 180, 132); /* P9: tronco */
-    inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 117); /* P8: huevo  */
-    inv_place(ITEM_CUP,      EPOCH_PREHISTORY, 0, 244, 132); /* P1: taza TEMP */
+    inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 104, 134);    /* P3: palo   */
+    inv_place(ITEM_LOG,      EPOCH_PREHISTORY, 8, 180, 132);    /* P9: tronco */
+    inv_place(ITEM_DINO_EGG, EPOCH_PREHISTORY, 7, 264, 117);    /* P8: huevo  */
+    inv_place(ITEM_CUP,      EPOCH_MEDIEVAL, 2, 215, 97);       /* P3: recipiente */
 }
 
 /* ----------------------------------------------------------------
@@ -241,6 +241,7 @@ static int logic_prehistory(int screen)
                 g_game.player.x     = 160.0f;
                 g_game.player.vel_x = 0.0f;
             }
+
             if (inv_is_carrying(ITEM_LOG) && eric_near(160, 118) && eric_action())
             {
                 inv_transform(ITEM_NONE);
@@ -250,6 +251,7 @@ static int logic_prehistory(int screen)
         }
 
         /* TODO TEMP: taza en P1 para pruebas del puzzle taza/miel/oso */
+        /*
         if (inv_is_carrying(ITEM_NONE) &&
             inv_instance_exists(ITEM_CUP, EPOCH_PREHISTORY, screen))
         {
@@ -260,6 +262,7 @@ static int logic_prehistory(int screen)
                 handled = 1;
             }
         }
+        */
 
         if (!puzzle_is_solved(PUZZLE_SHAMAN))
         {
@@ -268,7 +271,7 @@ static int logic_prehistory(int screen)
                 puzzle_solve(PUZZLE_SHAMAN);
                 fragment_collect(FRAGMENT_1);
                 save_game();
-                dialog_open(DIALOG_TALK, NULL, g_dialog_shaman);
+                dialog_open(DIALOG_TALK, &g_chafrm_sprite, g_dialog_shaman);
                 handled = 1;
             }
         }
@@ -806,7 +809,7 @@ void logic_update(void)
             alt_was_pressed = 1;
             next_epoch = (epoch + 1) % EPOCH_COUNT;
             screen_travel(next_epoch);
-            enemies_load(next_epoch, screen);
+            enemies_load(next_epoch, g_game.screen.current_screen);
         }
     }
     else
@@ -824,10 +827,6 @@ void logic_update(void)
         if (key_pressed(KEY_SPACE) && !action_was_pressed)
         {
             action_was_pressed = 1;
-            hint_wrap[0] = g_hints[epoch][screen];
-            hint_wrap[1] = NULL;
-            //dialog_open(DIALOG_HINT, &g_ericfrm_sprite, hint_wrap);
-            //dialog_open(DIALOG_HINT, NULL, hint_wrap)
             dialog_open(DIALOG_HINT, &g_ericfrm_sprite, g_hints[epoch][screen]);
         }
     }

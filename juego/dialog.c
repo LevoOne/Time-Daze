@@ -14,27 +14,27 @@ const char *g_hints[3][9][3] =
 {
     /* PREHISTORIA */
     {
-        { "El anciano guarda",        "un secreto...",         NULL },  /* P1 */
-        { "La colmena gotea",         "cuando se agita",       NULL },  /* P2 */
-        { "El oso goloso me",         "cierra el paso",        NULL },  /* P3 */
-        { "Algo grande ronda",        "por aqui",              NULL },  /* P4 */
-        { "La hoguera es un buen",    "sitio para descansar",  NULL },  /* P5 */
-        { "El viento arrastra olor",  "a tierra mojada",       NULL },  /* P6 */
-        { "Las sombras se mueven",    "solas aqui",            NULL },  /* P7 */
-        { "El rio no perdona a",      "quien lo cruza solo",   NULL },  /* P8 */
-        { "Las marcas en la piedra",  "dicen algo",            NULL },  /* P9 */
+        { "El abuelo chalao",           "guarda un secreto",        NULL },  /* P1 */
+        { "Un panel de rica miel",      "",                         NULL },  /* P2 */
+        { "El oso goloso me",           "cierra el paso",           NULL },  /* P3 */
+        { "Vaya bicho...",              "lo tengo que esquivar",    NULL },  /* P4 */
+        { "Al lado de la hoguera",      "se esta de lujo",               NULL },  /* P5 */
+        { "Nada por aqui",              "",                         NULL },  /* P6 */
+        { "Jodo floro con el lagarto",  "",                         NULL },  /* P7 */
+        { "Osti tu!! Que no me",        "rocen esos peces",         NULL },  /* P8 */
+        { "Parece que hay un",          "mensaje en la piedra",             NULL },  /* P9 */
     },
     /* EDAD MEDIA */
     {
-        { "Las murallas ocultan mas", "de lo que muestran",    NULL },  /* P1 */
-        { "El puente es viejo pero",  "aun resiste",           NULL },  /* P2 */
-        { "Un guardia descuidado es", "una oportunidad",       NULL },  /* P3 */
-        { "La fragua trabaja dia",    "y noche",               NULL },  /* P4 */
-        { "La capilla guarda",        "secretos del pasado",   NULL },  /* P5 */
-        { "El mercado oculta mas",    "de lo que vende",       NULL },  /* P6 */
-        { "Las mazmorras no",         "estan vacias",          NULL },  /* P7 */
-        { "El laboratorio del",       "alquimista humea",      NULL },  /* P8 */
-        { "La torre mas alta guarda", "lo mas valioso",        NULL },  /* P9 */
+        { "Resaca temporal",                "tope de gama!",     NULL },  /* P1 */
+        { "Una casa!",                      "Habra alguien?",   NULL },  /* P2 */
+        { "Parece util...",                 "igual lo cojo",                       NULL },  /* P3 */
+        { "La fragua trabaja dia",          "y noche",               NULL },  /* P4 */
+        { "La capilla guarda",              "secretos del pasado",   NULL },  /* P5 */
+        { "El mercado oculta mas",          "de lo que vende",       NULL },  /* P6 */
+        { "Las mazmorras no",               "estan vacias",          NULL },  /* P7 */
+        { "El laboratorio del",             "alquimista humea",      NULL },  /* P8 */
+        { "La torre mas alta guarda",       "lo mas valioso",        NULL },  /* P9 */
     },
     /* FUTURO */
     {
@@ -56,8 +56,10 @@ const char *g_hints[3][9][3] =
  * ---------------------------------------------------------------- */
 const char *g_dialog_shaman[] =
 {
-    "Forastero... has llegado lejos.",
-    "Toma...un fragmento del tiempo roto.",
+    "Bien hecho, Eric! ",
+    "Toma un fragmento...",
+    "...del tiempo roto.",
+    "Guardalo con cuidado",
     NULL
 };
 
@@ -97,9 +99,9 @@ static unsigned char dialog_col_bg(void)
 {
     switch (g_game.screen.current_epoch)
     {
-        case EPOCH_PREHISTORY: return 130;  /* eric_palette, mas oscuro (4,1,1) */
-        case EPOCH_MEDIEVAL:   return 130;  /* TODO: ajustar con la paleta de Edad Media */
-        case EPOCH_FUTURE:     return 130;  /* TODO: ajustar con la paleta de Futuro */
+        case EPOCH_PREHISTORY: return 130;  
+        case EPOCH_MEDIEVAL:   return 130;  
+        case EPOCH_FUTURE:     return 130;  
         default:                return 130;
     }
 }
@@ -108,9 +110,9 @@ static unsigned char dialog_col_border(void)
 {
     switch (g_game.screen.current_epoch)
     {
-        case EPOCH_PREHISTORY: return 37;  /* cup_palette, mas claro (54,52,49) */
-        case EPOCH_MEDIEVAL:   return 199;  /* TODO: ajustar con la paleta de Edad Media */
-        case EPOCH_FUTURE:     return 199;  /* TODO: ajustar con la paleta de Futuro */
+        case EPOCH_PREHISTORY: return 37;  
+        case EPOCH_MEDIEVAL:   return 96;  
+        case EPOCH_FUTURE:     return 199;  
         default:                return 199;
     }
 }
@@ -119,9 +121,9 @@ static unsigned char dialog_col_dim(void)
 {
     switch (g_game.screen.current_epoch)
     {
-        case EPOCH_PREHISTORY: return 37;  /* eric_palette, gris medio (31,32,32) */
-        case EPOCH_MEDIEVAL:   return 174;  /* TODO: ajustar con la paleta de Edad Media */
-        case EPOCH_FUTURE:     return 174;  /* TODO: ajustar con la paleta de Futuro */
+        case EPOCH_PREHISTORY: return 37;  
+        case EPOCH_MEDIEVAL:   return 96;  
+        case EPOCH_FUTURE:     return 174;  
         default:                return 174;
     }
 }
@@ -221,7 +223,6 @@ void dialog_draw(void)
     
     /* Coordenadas del texto dentro de la ventana */
     int tx, ty;
-
     
     if (s_type == DIALOG_NONE) return;
 
@@ -264,16 +265,15 @@ void dialog_draw(void)
     {
         if (s_lines != NULL && s_lines[0] != NULL)
             draw_string(s_lines[0], tx+7, ty+13, col_text);
-        draw_string("[S] Si    [N] No", tx, DLG_Y + DLG_H - 14, col_dim);
+        draw_string("    [S]i    [N]o", tx, DLG_Y + DLG_H - 25, col_dim);
     }
     else if (s_type == DIALOG_TALK)
     {
         if (s_lines != NULL && s_lines[s_line] != NULL)
-            draw_string(s_lines[s_line], tx+7, ty+13, col_text);
-        if (s_lines != NULL && s_lines[s_line + 1] != NULL)
-            draw_string("[ ESPACIO ]", tx, DLG_Y + DLG_H - 14, col_dim);
-        else
-            draw_string("[ ESPACIO ] Cerrar", tx, DLG_Y + DLG_H - 14, col_dim);
+            draw_string(s_lines[s_line], tx+10, ty+16, col_text);
+
+        if (s_lines != NULL && s_lines[s_line + 1] == NULL)
+            draw_string("     [Cerrar]", tx, DLG_Y + DLG_H - 25, col_dim);
     }
 
     vga_flip();

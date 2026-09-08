@@ -10,6 +10,7 @@
  * C89: todas las variables declaradas al inicio del bloque.
  */
 
+#include <stdlib.h>
 #include "engine.h"
 #include "game.h"
 #include "screen.h"
@@ -35,6 +36,7 @@ GameState g_game;
 #define STATE_GAME      1
 #define STATE_GAMEOVER  2
 #define STATE_END       3
+#define STATE_MENU      4
 
 static int g_state = STATE_TITLE;
 
@@ -49,6 +51,9 @@ static void new_game(void);
 static void game_loop(void);
 static void draw_frame(void);
 static void show_presentation(void);
+static void show_game_over(void);
+static void show_instructions(void);
+static void show_menu(void);
 
 /* ----------------------------------------------------------------
  * NEW GAME
@@ -62,7 +67,7 @@ static void new_game(void)
     logic_init();
 
     /* TEMP: pantalla inicial modificada para pruebas. El juego deberá empezar en P1 (0) de Prehistoria */
-    screen_load(EPOCH_PREHISTORY,0);
+    screen_load(EPOCH_PREHISTORY, 0);
     enemies_load(EPOCH_PREHISTORY, 0);
 
    /* Cargar SFX de la pantalla inicial */
@@ -148,6 +153,8 @@ static void game_loop(void)
 {
     int player_event;
     int epoch, screen;
+    static const char *confirm[] = { "Terminar partida?", NULL };
+    static int esc_was_pressed = 0;
 
     while (g_state == STATE_GAME)
     {
@@ -224,7 +231,15 @@ static void game_loop(void)
             g_state = STATE_END;
 
         /* 7. SALIDA RAPIDA */
-        if (key_pressed(KEY_ESC))
+        if (key_pressed(KEY_ESC) && !esc_was_pressed)
+        {
+            esc_was_pressed = 1;
+            dialog_open(DIALOG_YESNO, &g_ericfrm_sprite, confirm);
+        }
+        if (!key_pressed(KEY_ESC))
+            esc_was_pressed = 0;
+
+        if (!dialog_is_open() && dialog_got_yes())
             g_state = STATE_GAMEOVER;
 
         /* 8. ACTUALIZAR CONTADOR DEL CRISTAL */
@@ -251,7 +266,7 @@ static void game_loop(void)
 }
 
 /* ----------------------------------------------------------------
- * PRESENTATION
+ * Secuencia inicial antes del menú
  * ---------------------------------------------------------------- */
 static void show_presentation(void)
 {
@@ -303,11 +318,96 @@ static void show_presentation(void)
 }
 
 /* ----------------------------------------------------------------
- * MAIN
+ * SHOW INSTRUCTIONS
+ * TODO: secuencia de bitmaps encadenados, similar a show_presentation().
+ * De momento vacia: opcion 1 del menu vuelve directamente al menu.
  * ---------------------------------------------------------------- */
+static void show_instructions(void)
+{
+}
+
+/* ----------------------------------------------------------------
+ * Secuencia de game over
+ * ---------------------------------------------------------------- */
+static void show_game_over(void)
+{
+}
+
+/* ----------------------------------------------------------------
+ * SHOW MENU
+ * Menu principal tras la intro. Seleccion por numero (1-4), sin
+ * cursor. Dos bitmaps segun si existe partida guardada, para no
+ * tener que dibujar "Cargar partida" atenuado en tiempo de
+ * ejecucion: MENUS.BMP (con guardado) / MENUN.BMP (sin guardado).
+ * ---------------------------------------------------------------- */
+static void show_menu(void)
+{
+    BITMAP menu_bg;
+    int    has_save;
+    int    choice;
+    int    done;
+
+    done = 0;
+    while (!done)
+    {
+        has_save = save_exists();
+
+        load_bmp(has_save ? "MENUS.BMP" : "MENUN.BMP", &menu_bg);
+        vga_clear_screen(0);
+        set_palette_silent(menu_bg.palette);
+        draw_bitmap(&menu_bg, (SCREEN_W - menu_bg.width) >> 1, (SCREEN_H - menu_bg.height) >> 1);
+        vga_fade_in(16, 7);
+        
+
+        choice = 0;
+        while (choice == 0)
+        {
+            if (key_pressed(KEY_1))
+                choice = 1;
+            else if (key_pressed(KEY_2) && has_save)
+                choice = 2;
+            else if (key_pressed(KEY_3))
+                choice = 3;
+            else if (key_pressed(KEY_4))
+                choice = 4;
+        }
+
+        free(menu_bg.data);
+
+        switch (choice)
+        {
+            case 1:
+                show_instructions();
+                break;   /* vuelve a mostrar el menu */
+
+            case 2:
+                load_game();
+                done = 1;
+                break;
+
+            case 3:
+                new_game();
+                done = 1;
+                break;
+
+            case 4:
+                music_free();
+                sfx_free(SFX_JUMP);
+                sfx_free(1);
+                sound_shutdown();
+                engine_shutdown();
+                exit(0);
+                break;
+        }
+    }
+}
+
+
 int main(void)
 {
-    /* Inicializar sub-sistemas */
+    /* ----------------------------
+     * Inicializar sub-sistemas 
+     * ---------------------------- */
     engine_init();
     font_init();
     sound_init();
@@ -316,26 +416,32 @@ int main(void)
     sfx_load(SFX_DROP,   "DROP.WAV");
     music_load_xm("PRETHEME.XM");
 
-    /* Secuencia de presentación */
-    /* TEMP: comentar esta función para que arranque más rápido el juego
-    show_presentation();*/
+    /* ----------------------------
+     * Secuencia de presentación 
+     * ---------------------------- */
+    /* TEMP: comentar esta función para que arranque más rápido el juego 
+    show_presentation(); */
 
     /* Cargamos los assets gráficos */
     screen_init();
 
-    /* Comprueba si existe una partida salvada */
-    if (save_exists())
-        load_game();
-    else
-        new_game();
+    /* ---------------------------------------------------------------
+     * Menu principal: decide entre cargar partida, empezar nueva,
+     * ver instrucciones o salir al DOS. screen_init() ya se hizo
+     * arriba porque hace falta tanto para cargar como para empezar. 
+     * --------------------------------------------------------------- */
+    show_menu();
 
     g_state = STATE_GAME;
     music_play(0);
 
+    /* Bucle principal del juego */
     game_loop();
 
     /* TODO: pantalla de fin o game over */
+    show_game_over();
 
+    /* Preparamos la salida al DOS */
     music_free();
     sfx_free(SFX_JUMP);
     sfx_free(1);

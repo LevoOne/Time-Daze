@@ -92,21 +92,30 @@ static void hud_draw_normal(void)
     const char* item_name;
     int icon_w = 0;
     int iEpochPal = 0;
+    unsigned char color_text;
+
+    /* Determinamos color fuente HUD según época */
+    switch (g_game.screen.current_epoch)
+    {
+        case EPOCH_PREHISTORY: color_text = 37; break;  
+        case EPOCH_MEDIEVAL:   color_text = 96; break;  
+        case EPOCH_FUTURE:     color_text = 37; break;  
+        default:               color_text = 37;
+    }
+
 
     /* Fondo negro de la franja del HUD */
     switch(g_game.screen.current_epoch)
     {
         case EPOCH_PREHISTORY: iEpochPal = 129; break;
-        case EPOCH_MEDIEVAL: iEpochPal = 1; break;
+        case EPOCH_MEDIEVAL: iEpochPal = 129; break;
         default: break;
     }
 
     for (i = HUD_Y; i < HUD_Y + HUD_HEIGHT; i++)
     {
        memset(&back_buffer[i * SCREEN_W], iEpochPal, SCREEN_W);
-    }
-        
-    
+    }  
 
     /* Vidas: cabeza de Eric */
     for (i = 0; i < g_game.player.lives; i++)
@@ -170,7 +179,7 @@ static void hud_draw_normal(void)
             case ITEM_QUARTZ_CHARGED: item_name = "CUARZO+";            break;
             default:                item_name = "";                     break;
         }
-        draw_string(item_name, x + icon_w + 14, HUD_Y + 10, 8);
+        draw_string(item_name, x + icon_w + 14, HUD_Y + 10, color_text);
     }
     else if (g_game.inv.carried != ITEM_NONE)
     {
@@ -228,7 +237,7 @@ static void hud_draw_normal(void)
             default:                item_name = "";                     break;
         }
 
-        draw_string(item_name, x + icon_w + 14, HUD_Y + 10, 15);
+        draw_string(item_name, x + icon_w + 14, HUD_Y + 10, color_text);
     }
 
     /* Fragmentos: sprite apagado (gris, paleta de Eric) si no recogido,

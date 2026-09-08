@@ -682,11 +682,15 @@ BITMAP      g_frag2_collected;
 BITMAP      g_frag3_dim;
 BITMAP      g_frag3_collected;
 BITMAP      g_ericfrm_sprite;
+BITMAP      g_chafrm_sprite;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
 static BITMAP g_backgrounds[EPOCH_COUNT][SCREEN_COUNT];
 static int    g_bg_loaded[EPOCH_COUNT][SCREEN_COUNT];
+
+/* Pantalla actual antes de empezar el viaje */
+static int s_epoch_last_screen[EPOCH_COUNT] = {0,0,0};  
 
 /* ----------------------------------------------------------------
  * NOMBRES DE FICHEROS DE FONDO
@@ -853,9 +857,9 @@ static const Platform platforms_med[SCREEN_COUNT][MAX_PLATFORMS] =
    
     /* P3: casa con taza */
     {
-        { 0,   175, 320, 8 },
-        { 60,  155,  40, 8 },
-        { 0, 0, 0, 0 }
+        { 0,150,320,8 },
+        { 60,155,40,8 },
+        { 0,0,0,0 }
     },
     /* P4: herreria, escalera */
     {
@@ -1082,6 +1086,10 @@ void screen_init(void)
 
     /* Cargar el sprite del cuadro de diálogo de Eric */
     if(!try_load_bmp("ericfrm.bmp", &g_ericfrm_sprite))
+        g_ericfrm_sprite.data = NULL;
+
+    /* Cargar el sprite del cuadro de diálogo del Chamán */
+    if(!try_load_bmp("chafrm.bmp", &g_chafrm_sprite))
         g_ericfrm_sprite.data = NULL;
 }
 
@@ -1484,7 +1492,12 @@ void screen_travel(int new_epoch)
 {
     int screen;
 
-    screen = g_game.screen.current_screen;
+    /* Recordar dónde estamos antes de viajar entre épocas */
+    s_epoch_last_screen[g_game.screen.current_epoch] = g_game.screen.current_screen;
+
+    /* Nos dirigimos a la pantalla donde estuvimos por última vez en la época destino */
+    screen = s_epoch_last_screen[new_epoch];
+
 
     /* SFX de viaje temporal */
     sfx_free(1);
@@ -1499,8 +1512,6 @@ void screen_travel(int new_epoch)
     vga_fade_out(16, 4);
     vga_clear(0);
     vga_flip();
-
-    
 
     /* Cargar nueva musica con pantalla en negro */
     if (new_epoch == EPOCH_PREHISTORY && screen == 4)
