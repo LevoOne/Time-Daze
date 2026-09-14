@@ -67,8 +67,8 @@ static void new_game(void)
     logic_init();
 
     /* TEMP: pantalla inicial modificada para pruebas. El juego deberá empezar en P1 (0) de Prehistoria */
-    screen_load(EPOCH_PREHISTORY, 0);
-    enemies_load(EPOCH_PREHISTORY, 0);
+    screen_load(EPOCH_PREHISTORY, 8);
+    enemies_load(EPOCH_PREHISTORY, 8);
 
    /* Cargar SFX de la pantalla inicial */
     sfx_free(1);
@@ -419,8 +419,8 @@ int main(void)
     /* ----------------------------
      * Secuencia de presentación 
      * ---------------------------- */
-    /* TEMP: comentar esta función para que arranque más rápido el juego 
-    show_presentation(); */
+    /* TEMP: comentar esta función para que arranque más rápido el juego
+    show_presentation();*/
 
     /* Cargamos los assets gráficos */
     screen_init();

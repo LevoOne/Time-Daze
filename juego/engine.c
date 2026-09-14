@@ -759,7 +759,14 @@ int sfx_load(int index, char *filename)
     if (index < 0 || index >= SFX_MAX) return 0;
 
     if (sfx_samples[index])
+    {
+        /* Parar el canal antes de liberar: si el sample todavia esta
+         * sonando (p.ej. TRAVEL.WAV al volver de otra epoca), liberar
+         * su memoria sin pararlo primero deja al mezclador leyendo
+         * datos ya liberados. */
+        judas_stopsample(SFX_FIRST + (index % SFX_CHANNELS));
         judas_freesample(sfx_samples[index]);
+    }
 
     sfx_samples[index] = judas_loadwav(filename);
     return (sfx_samples[index] != NULL) ? 1 : 0;
@@ -770,6 +777,7 @@ void sfx_free(int index)
     if (index < 0 || index >= SFX_MAX) return;
     if (sfx_samples[index])
     {
+        judas_stopsample(SFX_FIRST + (index % SFX_CHANNELS));
         judas_freesample(sfx_samples[index]);
         sfx_samples[index] = NULL;
     }
@@ -837,11 +845,21 @@ void music_play(int rounds)
         case MUSIC_MOD: judas_playmod(rounds); break;
         case MUSIC_S3M: judas_plays3m(rounds); break;
     }
+
+    /* Restaurar volumen tras arrancar: ver nota en music_stop(). */
+    judas_setmusicmastervolume(SFX_FIRST, 255);
 }
 
 void music_stop(void)
 {
     if (!sound_ready) return;
+
+    /* Silenciar antes de parar: si el buffer de salida de Judas sigue
+     * repitiendo el ultimo trozo mezclado mientras dura el hueco hasta
+     * el siguiente music_play() (carga de pantalla, fade...), que se
+     * repita en silencio y no como zumbido audible. */
+    judas_setmusicmastervolume(SFX_FIRST, 0);
+
     switch (music_format)
     {
         case MUSIC_XM:  judas_stopxm();  break;
@@ -853,6 +871,13 @@ void music_stop(void)
 void music_free(void)
 {
     if (!sound_ready) return;
+
+    /* Parar la reproduccion antes de liberar los datos: si el mixer
+     * sigue leyendo el XM/MOD/S3M actual mientras se libera su memoria,
+     * se oye como distorsion/corte al cambiar de tema (viajes de epoca,
+     * entrada/salida de P5). */
+    music_stop();
+
     switch (music_format)
     {
         case MUSIC_XM:  judas_freexm();  break;

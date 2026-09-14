@@ -800,16 +800,28 @@ void logic_update(void)
 
     /* --------------------------------------------------------
      * VIAJE TEMPORAL
-     * ALT cicla entre epocas con deteccion de flanco
+     * Seleccion directa de epoca con 1/2/3, con deteccion de
+     * flanco compartida (solo puede haber una pulsacion de viaje
+     * activa a la vez). No viaja si ya estas en esa epoca.
      * -------------------------------------------------------- */
-    if (key_pressed(KEY_A))
+    if (key_pressed(KEY_1) || key_pressed(KEY_2) || key_pressed(KEY_3))
     {
         if (!alt_was_pressed)
         {
             alt_was_pressed = 1;
-            next_epoch = (epoch + 1) % EPOCH_COUNT;
-            screen_travel(next_epoch);
-            enemies_load(next_epoch, g_game.screen.current_screen);
+
+            if (key_pressed(KEY_1))
+                next_epoch = EPOCH_PREHISTORY;
+            else if (key_pressed(KEY_2))
+                next_epoch = EPOCH_MEDIEVAL;
+            else
+                next_epoch = EPOCH_FUTURE;
+
+            if (next_epoch != epoch)
+            {
+                screen_travel(next_epoch);
+                enemies_load(next_epoch, g_game.screen.current_screen);
+            }
         }
     }
     else

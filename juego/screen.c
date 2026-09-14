@@ -24,6 +24,7 @@
 
 /* Prototipo interno */
 static int try_load_bmp(char *file, BITMAP *b);
+static void sfx_sync_dynamic_slot(int epoch, int screen);
 
 /* ----------------------------------------------------------------
  * PALETA DE ERIC
@@ -850,8 +851,8 @@ static const Platform platforms_med[SCREEN_COUNT][MAX_PLATFORMS] =
     {
         { 0,   148, 320, 8 },
         { 40,  116,  28, 2 },/*
-        { 134, 110,  64, 2 },
-        { 245, 133,  59, 2 },*/
+        { 134, 110,  64, 2 },*/
+        { 245, 133,  59, 2 },
         { 0, 0, 0, 0 }
     },
    
@@ -1392,6 +1393,30 @@ int screen_get_connection(int dir)
 }
 
 /* ----------------------------------------------------------------
+ * SFX SYNC DYNAMIC SLOT
+ * El indice 1 de SFX se comparte entre varios efectos que nunca
+ * suenan a la vez en la misma pantalla (limite real de Judas: 3 SFX
+ * simultaneos). Esta funcion deja ese slot con el sonido que
+ * corresponde a la pantalla de destino, tanto si se llega caminando
+ * (screen_change) como por viaje de epoca (screen_travel) - antes
+ * solo screen_change() lo hacia, asi que llegar por viaje dejaba el
+ * slot con TRAVEL.WAV hasta el siguiente cambio de pantalla a pie.
+ * ---------------------------------------------------------------- */
+static void sfx_sync_dynamic_slot(int epoch, int screen)
+{
+    if (epoch != EPOCH_PREHISTORY) return;
+
+    if (screen == 0)
+        sfx_load(SFX_ROCK_ROLL,  "moverock.wav");
+    else if (screen == 1 && s_honey_active)
+        sfx_load(SFX_HONEY_DROP, "drops.wav");
+    else if (screen == 2 || screen == 3 || screen == 6)
+        sfx_load(SFX_BEAR_STEP,  "woso.wav");
+    else if (screen == 7)
+        sfx_load(SFX_BEAR_STEP,  "splash.wav");
+}
+
+/* ----------------------------------------------------------------
  * SCREEN CHANGE
  * Cambia de pantalla en una direccion con fade
  * ---------------------------------------------------------------- */
@@ -1399,6 +1424,7 @@ int screen_change(int dir)
 {
     int next;
     int py;
+    int music_changed = 0;
 
     next = screen_get_connection(dir);
     if (next == NO_SCREEN) return 0;
@@ -1415,35 +1441,28 @@ int screen_change(int dir)
   
     /* Cargar SFX / XM especifico de la pantalla-época */
     sfx_free(1);
+    sfx_sync_dynamic_slot(g_game.screen.current_epoch, next);
+
     if (g_game.screen.current_epoch == EPOCH_PREHISTORY)
     {
-        /* SFX segun la pantalla de destino */
-        if (next == 0)
-            sfx_load(SFX_ROCK_ROLL,  "moverock.wav");
-        else if (next == 1 && s_honey_active)
-            sfx_load(SFX_HONEY_DROP, "drops.wav");
-        else if (next == 2 || next == 3 || next == 6)
-            sfx_load(SFX_BEAR_STEP,  "woso.wav");
-        else if (next == 7)
-            sfx_load(SFX_BEAR_STEP,  "splash.wav");
-
-        /* Musica: independiente del SFX, se evalua siempre */
+        /* Musica: independiente del SFX, se evalua siempre.
+         * No hace falta un music_free() explicito aqui: music_load_xm()
+         * ya para y libera el tema anterior por dentro. */
         if (next == 4)
         {
-            music_free();
             music_load_xm("fire.xm");
-            music_play(0);
+            music_changed = 1;
         }
         else if (g_game.screen.current_screen == 4) /* saliendo de P5 */
         {
-            music_free();
             music_load_xm("PRETHEME.XM");
-            music_play(0);
+            music_changed = 1;
         }
     }
 
     /* Cargar la nueva pantalla y su paleta */
     screen_load(g_game.screen.current_epoch, next);
+    sound_update();  /* screen_load() puede tardar por encima de un tick */
 
     /* Reposicionar a Eric segun la direccion de entrada */
     switch (dir)
@@ -1468,6 +1487,7 @@ int screen_change(int dir)
     /* antes del fade in para que se vea la nueva pantalla   */
     screen_draw();
     vga_flip();
+    sound_update();  /* screen_draw()/vga_flip() tambien cuentan como tiempo sin servicio */
 
     /* Inyectar paleta de Eric en saved_palette y en el hardware */
     palette_inject(130, eric_palette, 56);
@@ -1478,6 +1498,11 @@ int screen_change(int dir)
     screen_inject_egg_palette();
     palette_inject(232, stick_palette, 10);
     screen_inject_stick_palette();
+    sound_update();
+
+    if (music_changed)
+        music_play(0);
+
     vga_fade_in(16, 4);
 
     return 1;
@@ -1504,9 +1529,11 @@ void screen_travel(int new_epoch)
     sfx_load(1, "TRAVEL.WAV");
     sfx_play(1, 45, MIDDLE);
 
-    /* Parar musica antes del fade para vaciar el buffer */
-    music_free();
-    timer_wait(3);
+    /* No hay music_free() aqui: la musica de la epoca que dejamos sigue
+     * sonando con normalidad durante el fade out y screen_load() (se
+     * sirve bien via vga_fade_out/sound_update). music_load_xm(), mas
+     * abajo, ya para y libera el tema anterior por dentro justo en el
+     * instante en que carga el nuevo. */
 
     /* Fade out hacia la nueva época */
     vga_fade_out(16, 4);
@@ -1530,12 +1557,21 @@ void screen_travel(int new_epoch)
     {
         music_load_xm("PRETHEME.XM");
     }
-    music_play(0);
+    /* music_play() se retrasa hasta justo antes del fade in (ver mas abajo) */
 
     screen_load(new_epoch, screen);
+    sound_update();  /* screen_load() puede tardar por encima de un tick */
+
+    /* El slot dinamico de SFX (indice 1) lo dejo TRAVEL.WAV; ponerlo
+     * ahora con el sonido que corresponde a la pantalla de llegada,
+     * igual que hace screen_change() al caminar. */
+    sfx_sync_dynamic_slot(new_epoch, screen);
+
     player_place((int)g_game.player.x, 100);
     screen_draw();
     vga_flip();
+    sound_update();  /* screen_draw()/vga_flip() tambien cuentan como tiempo sin servicio */
+
     palette_inject(130, eric_palette, 56);
     screen_inject_eric_palette();
     palette_inject(186, cup_palette, 14);
@@ -1544,6 +1580,10 @@ void screen_travel(int new_epoch)
     screen_inject_egg_palette();
     palette_inject(232, stick_palette, 10);
     screen_inject_stick_palette();
+    sound_update();
+
+    music_play(0);
+
     vga_fade_in(16, 4);
 }
 

@@ -103,7 +103,6 @@ static void hud_draw_normal(void)
         default:               color_text = 37;
     }
 
-
     /* Fondo negro de la franja del HUD */
     switch(g_game.screen.current_epoch)
     {
@@ -153,7 +152,7 @@ static void hud_draw_normal(void)
         else if (g_hud.nearby_item == ITEM_CUP_HONEY && g_cuphoney_icon.data != NULL)
         {
             icon_w = g_cuphoney_icon.width;
-            draw_bitmap_buf_t(&g_cuphoney_icon, x, HUD_Y + 4);
+            draw_bitmap_buf_t(&g_cuphoney_icon, x+10, HUD_Y + 4);
         }
         else if (g_hud.nearby_item == ITEM_LOG  && g_log_icon.data != NULL)
         {

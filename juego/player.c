@@ -104,6 +104,7 @@ int player_update(void)
     }
 
     g_game.player.vel_y += PLAYER_GRAVITY;
+
     /* Limitar velocidad maxima de caida */
     if (g_game.player.vel_y > 8.0f)
         g_game.player.vel_y = 8.0f;
@@ -128,10 +129,10 @@ int player_update(void)
     }
 
     /* Comprobar si Eric ha salido por algun borde */
-    if (g_game.player.x < 0)                    return PLAYER_LEFT;
+    if (g_game.player.x < 0)                        return PLAYER_LEFT;
     if (g_game.player.x > SCREEN_W - PLAYER_WIDTH)  return PLAYER_RIGHT;
-    if (g_game.player.y < 0)                     return PLAYER_UP;
-    if (g_game.player.y > SCREEN_H)              return PLAYER_DEAD;
+    if (g_game.player.y < 0)                        return PLAYER_UP;
+    if (g_game.player.y > SCREEN_H)                 return PLAYER_DEAD;
 
     return PLAYER_NONE;
 }
