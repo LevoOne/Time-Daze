@@ -324,6 +324,70 @@ static void show_presentation(void)
  * ---------------------------------------------------------------- */
 static void show_instructions(void)
 {
+    BITMAP bmp;
+
+    /* Pantalla 1 de las instrucciones: SINOPSIS */
+    load_bmp("INSTR1.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+
+    while (!key_pressed(KEY_SPACE));
+
+    vga_fade_out(16, 7);
+    free(bmp.data);
+
+    /* Pantalla 2: mecánicas del juego */
+    load_bmp("INSTR2.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+
+    while (key_pressed(KEY_SPACE));   /* por si venia ya pulsada de la pantalla anterior */
+    while (!key_pressed(KEY_SPACE));
+
+    /* Pantalla 3: controles del juego */
+    load_bmp("INSTR3.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+
+    while (key_pressed(KEY_SPACE));   /* por si venia ya pulsada de la pantalla anterior */
+    while (!key_pressed(KEY_SPACE));
+
+    /* Pantalla 4: HUD (1 / 3) */
+    load_bmp("INSTR4-1.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+
+    while (key_pressed(KEY_SPACE));   /* por si venia ya pulsada de la pantalla anterior */
+    while (!key_pressed(KEY_SPACE));
+
+    /* Pantalla 4: HUD (2 / 3) */
+    load_bmp("INSTR4-2.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+
+    while (key_pressed(KEY_SPACE));   /* por si venia ya pulsada de la pantalla anterior */
+    while (!key_pressed(KEY_SPACE));
+
+    /* Pantalla 4: HUD (3 / 3) */
+    load_bmp("INSTR4-3.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+
+    while (key_pressed(KEY_SPACE));   /* por si venia ya pulsada de la pantalla anterior */
+    while (!key_pressed(KEY_SPACE));
+    
 }
 
 /* ----------------------------------------------------------------
