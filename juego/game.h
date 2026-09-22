@@ -138,6 +138,7 @@ typedef struct {
  * Definida en game.c, accesible desde todos los sistemas
  * ---------------------------------------------------------------- */
 extern GameState g_game;
+extern int g_debug_infinite_lives;   /* puerta trasera de calibracion: tecla 7 en el menu */
 
 /* ----------------------------------------------------------------
  * INDICES DE EFECTOS DE SONIDO
@@ -149,6 +150,7 @@ extern GameState g_game;
 #define SFX_FIRE        1
 #define SFX_PICKUP      2
 #define SFX_DROP        3
+#define SFX_HURT        4
 
 
 #endif /* GAME_H */

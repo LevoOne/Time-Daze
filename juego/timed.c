@@ -66,9 +66,10 @@ static void new_game(void)
     hud_init();
     logic_init();
 
-    /* TEMP: pantalla inicial modificada para pruebas. El juego deberá empezar en P1 (0) de Prehistoria */
-    screen_load(EPOCH_PREHISTORY, 8);
-    enemies_load(EPOCH_PREHISTORY, 8);
+    /* El juego empieza en P0 de Prehistoria */
+    /* TEMP no olvidar dejar esto en pantalla 0 de PRE */
+    screen_load(EPOCH_PREHISTORY, 0);
+    enemies_load(EPOCH_PREHISTORY, 0);
 
    /* Cargar SFX de la pantalla inicial */
     sfx_free(1);
@@ -170,6 +171,7 @@ static void game_loop(void)
 
         /* 3. ACTUALIZAR ERIC */
         player_event = player_update();
+
         /* 4. COLISION CON ENEMIGOS */
         if (enemies_check_collision())
         {
@@ -305,13 +307,85 @@ static void show_presentation(void)
     free(bmp.data);
     timer_wait(70);
 
-    /* TODO: secuencia de intro */
-    load_bmp("intro.bmp", &bmp);
+    /* ------------------
+     * Secuencia de intro
+     * ------------------ */
+    load_bmp("INTRO1.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(140);
+    timer_wait(230);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    load_bmp("INTRO2.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(280);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    load_bmp("INTRO3.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(280);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    load_bmp("INTRO4.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(280);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    load_bmp("INTRO5.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(280);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    load_bmp("INTRO6.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(280);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    load_bmp("INTRO7.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(280);
+    vga_fade_out(16, 7);
+    free(bmp.data);
+    timer_wait(70);
+
+    load_bmp("INTRO8.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+    timer_wait(280);
     vga_fade_out(16, 7);
     free(bmp.data);
     timer_wait(70);
@@ -319,8 +393,6 @@ static void show_presentation(void)
 
 /* ----------------------------------------------------------------
  * SHOW INSTRUCTIONS
- * TODO: secuencia de bitmaps encadenados, similar a show_presentation().
- * De momento vacia: opcion 1 del menu vuelve directamente al menu.
  * ---------------------------------------------------------------- */
 static void show_instructions(void)
 {
@@ -434,6 +506,8 @@ static void show_menu(void)
                 choice = 3;
             else if (key_pressed(KEY_4))
                 choice = 4;
+            else if (key_pressed(KEY_7))
+                choice = 5;   /* puerta trasera: como 3, pero vidas infinitas */
         }
 
         free(menu_bg.data);
@@ -450,6 +524,12 @@ static void show_menu(void)
                 break;
 
             case 3:
+                new_game();
+                done = 1;
+                break;
+
+            case 5:
+                g_debug_infinite_lives = 1;
                 new_game();
                 done = 1;
                 break;
@@ -478,13 +558,13 @@ int main(void)
     sfx_load(SFX_JUMP, "jump.wav");
     sfx_load(SFX_PICKUP, "PICKUP.WAV");
     sfx_load(SFX_DROP,   "DROP.WAV");
+    sfx_load(SFX_HURT,   "HURT.WAV");
     music_load_xm("PRETHEME.XM");
 
     /* ----------------------------
      * Secuencia de presentación 
-     * ---------------------------- */
-    /* TEMP: comentar esta función para que arranque más rápido el juego
-    show_presentation();*/
+     * ---------------------------- 
+    show_presentation(); */
 
     /* Cargamos los assets gráficos */
     screen_init();
@@ -496,10 +576,9 @@ int main(void)
      * --------------------------------------------------------------- */
     show_menu();
 
+    /* Bucle principal del juego */
     g_state = STATE_GAME;
     music_play(0);
-
-    /* Bucle principal del juego */
     game_loop();
 
     /* TODO: pantalla de fin o game over */

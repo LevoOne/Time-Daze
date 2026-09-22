@@ -38,6 +38,36 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 
 **Duración:** ~230 ticks (3.3s)
 
+**Prompt para Gemini:**
+```
+Create a 320x200 pixel illustration for a DOS-era 2D game intro 
+sequence ("Time Daze"), panel 1 of 8. Pixel art style, clear black 
+outlines, no gradients, no dithering, warm earthy color palette 
+matching the game's established look.
+
+Scene: the entrance/lobby of an old secondary school, decorated with 
+a modest anniversary banner (something like "Promocion del 85" on a 
+simple cloth banner). Eric, now an adult in his mid-20s, walks in 
+among a handful of other adult former classmates dressed casually/
+semi-formally, mid-conversation, nostalgic mood. In the background, 
+partially visible, a trophy/photo display cabinet on the wall — inside 
+it, barely noticeable among the framed class photos, one small old 
+photo shows a mischievous-looking kid making a face or caught mid-
+prank (a subtle nostalgic easter egg, not the focus of the scene).
+
+Reserve a solid black band across the bottom ~40 pixels of the image 
+for a text caption. Within that black band, render this exact text in 
+a clean, legible pixel-art font, off-white/cream color, centered:
+"Tres generaciones de su familia pasaron por este colegio. Eric no
+venia por nostalgia."
+(wrap across 2 lines if needed to fit the width, keep it readable at 
+this resolution)
+
+Use a MAXIMUM of 256 colors in the image palette (this is a standalone 
+screen, no palette-sharing constraint).
+Output as a 320x200 BMP file with 256-color indexed palette.
+```
+
 ---
 
 ### Panel 2 — "El encargo"
@@ -47,6 +77,35 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 > *"— Recupera lo que escondí en la caja fuerte del colegio. No preguntes por qué — le había dicho su abuelo."*
 
 **Duración:** ~280 ticks (4.0s) — hay una cita textual, dale tiempo de lectura.
+
+**Prompt para Gemini:**
+```
+Create a 320x200 pixel illustration for a DOS-era 2D game intro 
+sequence ("Time Daze"), panel 2 of 8. Pixel art style, clear black 
+outlines, no gradients, no dithering, warm earthy color palette 
+matching the game's established look and the previous intro panel.
+
+Scene: close-up/medium shot of Eric alone, stepped slightly away from 
+the reunion crowd, looking thoughtful and distant — remembering a 
+conversation. His expression is pensive, maybe looking down at a phone 
+in his hand or just staring into the middle distance. No other 
+characters visible; this is an internal, quiet moment amid the 
+reunion's background noise (a blurred/softened hint of the lobby scene 
+behind him is fine).
+
+Reserve a solid black band across the bottom ~48 pixels of the image 
+for a text caption (this one is longer, needs 2-3 lines). Within that 
+black band, render this exact text in a clean, legible pixel-art font, 
+off-white/cream color, centered:
+"— Recupera lo que escondi en la caja fuerte del colegio. No preguntes
+por que — le habia dicho su abuelo."
+(wrap naturally across 2-3 lines to fit the width, keep it readable at 
+this resolution)
+
+Use a MAXIMUM of 256 colors in the image palette (standalone screen, 
+no palette-sharing constraint).
+Output as a 320x200 BMP file with 256-color indexed palette.
+```
 
 ---
 
@@ -58,6 +117,33 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 
 **Duración:** ~230 ticks (3.3s)
 
+**Prompt para Gemini:**
+```
+Create a 320x200 pixel illustration for a DOS-era 2D game intro 
+sequence ("Time Daze"), panel 3 of 8. Pixel art style, clear black 
+outlines, no gradients, no dithering, warm earthy color palette 
+matching the game's established look and the previous intro panels.
+
+Scene: a school assembly hall, seen from behind the seated rows of 
+adult former classmates. The headmaster/director stands at a podium 
+at the front, mid-speech, visibly droning on (exaggerated long-winded 
+body language is fine). Most of the seated crowd looks politely bored. 
+Eric is seated near the back or an aisle, turned slightly, glancing 
+toward a side door — clearly about to slip away unnoticed.
+
+Reserve a solid black band across the bottom ~40 pixels of the image 
+for a text caption. Within that black band, render this exact text in 
+a clean, legible pixel-art font, off-white/cream color, centered:
+"Mientras el director se perdia en su decimo agradecimiento, Eric
+encontro su salida."
+(wrap across 2 lines if needed to fit the width, keep it readable at 
+this resolution)
+
+Use a MAXIMUM of 256 colors in the image palette (standalone screen, 
+no palette-sharing constraint).
+Output as a 320x200 BMP file with 256-color indexed palette.
+```
+
 ---
 
 ### Panel 4 — "Los pasillos"
@@ -67,6 +153,29 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 > *"Los pasillos no habían cambiado tanto como él."*
 
 **Duración:** ~190 ticks (2.7s)
+
+**Prompt para Gemini:**
+```
+Create a 320x200 pixel illustration for a DOS-era 2D game intro 
+sequence ("Time Daze"), panel 4 of 8. Pixel art style, clear black 
+outlines, no gradients, no dithering, warm earthy color palette 
+matching the game's established look and the previous intro panels.
+
+Scene: Eric walking alone down an empty school hallway — rows of 
+lockers on one side, a trophy display case or bulletin board on the 
+other, quiet and still, nobody else around. Soft late-afternoon light 
+through a window at the end of the hall. Atmosphere of quiet 
+familiarity, like he could walk this route with his eyes closed.
+
+Reserve a solid black band across the bottom ~40 pixels of the image 
+for a text caption. Within that black band, render this exact text in 
+a clean, legible pixel-art font, off-white/cream color, centered:
+"Los pasillos no habian cambiado tanto como el."
+
+Use a MAXIMUM of 256 colors in the image palette (standalone screen, 
+no palette-sharing constraint).
+Output as a 320x200 BMP file with 256-color indexed palette.
+```
 
 ---
 
@@ -78,6 +187,34 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 
 **Duración:** ~230 ticks (3.3s)
 
+**Prompt para Gemini:**
+```
+Create a 320x200 pixel illustration for a DOS-era 2D game intro 
+sequence ("Time Daze"), panel 5 of 8. Pixel art style, clear black 
+outlines, no gradients, no dithering, warm earthy color palette 
+matching the game's established look and the previous intro panels.
+
+Scene: Eric crouched in front of an old-fashioned combination safe 
+(dial-style, built into an office wall or a storage room), one hand on 
+the dial, focused expression, mid-turn. The room around him (a 
+headmaster's office, trophy room, or basement storage — pick whichever 
+best matches the school setting) is dim and slightly cluttered with 
+old furniture/boxes, lit mostly by a single desk lamp or window light.
+
+Reserve a solid black band across the bottom ~48 pixels of the image 
+for a text caption (this one may need 2 lines). Within that black 
+band, render this exact text in a clean, legible pixel-art font, 
+off-white/cream color, centered:
+"La combinacion seguia siendo la misma de siempre. Algunas cosas, en
+este colegio, nunca cambian."
+(wrap naturally across 2 lines to fit the width, keep it readable at 
+this resolution)
+
+Use a MAXIMUM of 256 colors in the image palette (standalone screen, 
+no palette-sharing constraint).
+Output as a 320x200 BMP file with 256-color indexed palette.
+```
+
 ---
 
 ### Panel 6 — "El artilugio"
@@ -87,6 +224,33 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 > *"Ni idea de qué era. Ni idea de por qué su abuelo lo quería de vuelta."*
 
 **Duración:** ~230 ticks (3.3s)
+
+**Prompt para Gemini:**
+```
+Create a 320x200 pixel illustration for a DOS-era 2D game intro 
+sequence ("Time Daze"), panel 6 of 8. Pixel art style, clear black 
+outlines, no gradients, no dithering, warm earthy color palette 
+matching the game's established look and the previous intro panels.
+
+Scene: close-up on the now-open safe from the previous panel, with an 
+old, strange, ornate device resting inside — an antique brass/bronze 
+mechanical artifact (astrolabe-like, with visible gears and a small 
+crystal or hourglass-like element), clearly out of place among the 
+otherwise mundane contents of the safe. Eric's hand reaches in, about 
+to lift it out; his face shows curiosity and confusion, not recognition.
+
+Reserve a solid black band across the bottom ~48 pixels of the image 
+for a text caption (this one may need 2 lines). Within that black 
+band, render this exact text in a clean, legible pixel-art font, 
+off-white/cream color, centered:
+"Ni idea de que era. Ni idea de por que su abuelo lo queria de vuelta."
+(wrap naturally across 2 lines to fit the width, keep it readable at 
+this resolution)
+
+Use a MAXIMUM of 256 colors in the image palette (standalone screen, 
+no palette-sharing constraint).
+Output as a 320x200 BMP file with 256-color indexed palette.
+```
 
 ---
 
@@ -98,6 +262,34 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 
 **Duración:** ~170 ticks (2.4s) — corto, es el golpe de efecto.
 
+**Prompt para Gemini:**
+```
+Create a 320x200 pixel illustration for a DOS-era 2D game intro 
+sequence ("Time Daze"), panel 7 of 8 — the dramatic turning point of 
+the sequence. Pixel art style, clear black outlines, no dithering.
+
+Unlike the previous panels (which use a warm, muted, slightly dim 
+earthy palette), THIS panel should break that mood deliberately: 
+Eric, holding the brass artifact from the previous panel, has just 
+pressed/turned something on it, and it is erupting in a sudden burst 
+of bright, saturated light — vivid golds, whites, and electric blues 
+radiating outward from the device, silhouetting Eric's startled 
+expression and posture (leaning back, eyes wide) against the flash. 
+This should feel like a jarring visual climax compared to the calm 
+tone of the earlier panels — full vivid color saturation, strong 
+contrast, dynamic light rays.
+
+Reserve a solid black band across the bottom ~40 pixels of the image 
+for a text caption. Within that black band, render this exact text in 
+a clean, legible pixel-art font, off-white/cream color, centered:
+"Y entonces Eric hizo lo único que no debía hacer: activarlo."
+
+Use a MAXIMUM of 256 colors in the image palette (standalone screen, 
+no palette-sharing constraint) — use this generous color budget for 
+the bright flash effect specifically.
+Output as a 320x200 BMP file with 256-color indexed palette.
+```
+
 ---
 
 ### Panel 8 — "Atrapado en el tiempo"
@@ -107,6 +299,36 @@ Eso cambia el planteamiento de la intro respecto a la primera versión: **el gui
 > *"Tres fragmentos, tres épocas. Y Eric, atrapado entre medias, sin más opción que ir a buscarlos."*
 
 **Duración:** ~260 ticks (3.7s), después el **fundido final prolongado** (ver punto 2.1 más abajo) antes de pasar al menú del juego.
+
+**Prompt para Gemini:**
+```
+Create a 320x200 pixel illustration for a DOS-era 2D game intro 
+sequence ("Time Daze"), panel 8 of 8 — the final panel before the 
+game begins. Pixel art style, clear black outlines, no dithering.
+
+Scene: a swirling vortex of light and energy fills most of the frame, 
+in the same vivid gold/white/electric-blue palette as the previous 
+panel's flash. Within the vortex, three distinct glowing fragments of 
+the brass artifact spin outward in different directions, each with a 
+faint colored tint hinting at a different era (one with a faint mossy 
+green tint, one with a cool grey-stone tint, one with a faint neon 
+cyan tint). Eric's silhouette is caught in the middle of the vortex, 
+arms out, being pulled off-balance, clearly being swept away rather 
+than standing on solid ground anymore.
+
+Reserve a solid black band across the bottom ~48 pixels of the image 
+for a text caption (this one may need 2 lines). Within that black 
+band, render this exact text in a clean, legible pixel-art font, 
+off-white/cream color, centered:
+"Tres fragmentos, tres epocas. Y Eric, atrapado entre medias, sin mas
+opcion que ir a buscarlos."
+(wrap naturally across 2 lines to fit the width, keep it readable at 
+this resolution)
+
+Use a MAXIMUM of 256 colors in the image palette (standalone screen, 
+no palette-sharing constraint).
+Output as a 320x200 BMP file with 256-color indexed palette.
+```
 
 ---
 

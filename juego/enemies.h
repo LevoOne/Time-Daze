@@ -39,6 +39,26 @@
 #define ENEMY_ROBOT_W    24
 #define ENEMY_ROBOT_H    32
 
+/* Offset de centrado: para tipos cuyo hitbox es mas pequeno que su
+ * sprite visual real (jabali/reptil, dibujados a 64px de ancho pero
+ * con hitbox mucho mas estrecho), sin este offset el hitbox queda
+ * anclado a la esquina superior izquierda del sprite en vez de
+ * centrado -- provoca colision asimetrica segun por que lado te
+ * acerques. El oso no lo necesita: su hitbox ya coincide exacto con
+ * el tamano real de su sprite (48x32). */
+#define ENEMY_BOAR_XOFF     ((64 - ENEMY_BOAR_W) / 2)
+#define ENEMY_BOAR_YOFF     ((64 - ENEMY_BOAR_H) / 2)
+#define ENEMY_REPTILE_XOFF  ((64 - ENEMY_REPTILE_W) / 2)
+#define ENEMY_REPTILE_YOFF  ((24 - ENEMY_REPTILE_H) / 2)
+
+#define ENEMY_XOFF(type) ( \
+    (type)==ENEMY_BOAR    ? ENEMY_BOAR_XOFF    : \
+    (type)==ENEMY_REPTILE ? ENEMY_REPTILE_XOFF : 0)
+
+#define ENEMY_YOFF(type) ( \
+    (type)==ENEMY_BOAR    ? ENEMY_BOAR_YOFF    : \
+    (type)==ENEMY_REPTILE ? ENEMY_REPTILE_YOFF : 0)
+
 /* Macro para obtener el ancho de un enemigo segun su tipo */
 #define ENEMY_W(type) ( \
     (type)==ENEMY_BEAR    ? ENEMY_BEAR_W    : \
@@ -65,6 +85,7 @@
 #define PAT_HORIZONTAL  0   /* patrulla izquierda-derecha    */
 #define PAT_VERTICAL    1   /* salta verticalmente (peces)   */
 #define PAT_FIXED       2   /* posicion fija                 */
+#define PAT_ZIGZAG      3   /* rebote horizontal + vertical  */
 
 #define MAX_ENEMIES     8
 

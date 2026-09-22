@@ -99,7 +99,7 @@ static void hud_draw_normal(void)
     {
         case EPOCH_PREHISTORY: color_text = 37; break;  
         case EPOCH_MEDIEVAL:   color_text = 96; break;  
-        case EPOCH_FUTURE:     color_text = 37; break;  
+        case EPOCH_FUTURE:     color_text = 101; break;  
         default:               color_text = 37;
     }
 
@@ -108,6 +108,7 @@ static void hud_draw_normal(void)
     {
         case EPOCH_PREHISTORY: iEpochPal = 129; break;
         case EPOCH_MEDIEVAL: iEpochPal = 129; break;
+        case EPOCH_FUTURE: iEpochPal = 129; break;
         default: break;
     }
 
@@ -121,7 +122,7 @@ static void hud_draw_normal(void)
     {
         x = 4 + i * 20;
         if (g_eric_head.data != NULL)
-            draw_bitmap_buf_t(&g_eric_head, x, HUD_Y + 4);
+            draw_bitmap_buf_t(&g_eric_head, x, HUD_Y + 6);
     }
 
     /* Objeto cercano en el suelo: tiene prioridad temporal sobre lo que

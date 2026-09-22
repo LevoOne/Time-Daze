@@ -1,5 +1,5 @@
 /*
- * engine.h - Motor base VGA para MS-DOS con OpenWatcom 2.0
+ * engine.h - Motor base VGA para MS-DOS con Watcom 2.0
  *
  * Subsistemas:
  *   - Video VGA modo 13h (320x200, NUM_COLORS colores)
@@ -395,6 +395,8 @@ void draw_char(char c, int x, int y, unsigned char color);
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void draw_string(const char *s, int x, int y, unsigned char color);
+void draw_char_direct(char c, int x, int y, unsigned char color);
+void draw_string_direct(const char *s, int x, int y, unsigned char color);
 
 /* -----------------------------------------------------------------------------------------
  * draw_int()
@@ -414,6 +416,7 @@ void draw_int(int n, int x, int y, unsigned char color);
 #define KEY_2          0x03
 #define KEY_3          0x04
 #define KEY_4          0x05
+#define KEY_7          0x08
 #define KEY_LEFT       0x4B
 #define KEY_RIGHT      0x4D
 #define KEY_UP         0x48
@@ -527,7 +530,7 @@ void speaker_stop(void);
  *   sound_shutdown()
  * ---------------------------------------------------------------- */
 
-#define SFX_CHANNELS   4
+#define SFX_CHANNELS   5
 #define SFX_FIRST      (32 - SFX_CHANNELS)
 #define SFX_MAX        16
 
@@ -601,6 +604,8 @@ void sfx_play(int index, unsigned short volume, unsigned char panning);
  * Salida:  ninguna
  * -----------------------------------------------------------------------------------------*/
 void sfx_stop(int index);
+
+void sfx_set_loop(int index, int loop);
 
 /* -----------------------------------------------------------------------------------------
  * music_load_xm()

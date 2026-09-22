@@ -74,19 +74,13 @@ static const Enemy enemies_pre[SCREEN_COUNT][MAX_ENEMIES] =
     },
     */
 
-    /* He pedido a Claude que busque una combinación más asequible para el jugador. De momento dejo esta.*/
+    /* Alternativa, funciona mejor con el Bounding Box cambiado */
     {
-        { ENEMY_FISH, 1, 110.0f, 125.0f, 0.0f, -4.0f, PAT_VERTICAL, -4.0f, 0.15f, 55.0f, 125.0f, 0,0 },
+        //{ ENEMY_FISH, 1, 110.0f, 125.0f, 0.0f, -4.0f, PAT_VERTICAL, -4.0f, 0.15f, 55.0f, 125.0f, 0,0 },
+        { ENEMY_FISH, 1, 110.0f, 125.0f, 0.0f, -3.0f, PAT_VERTICAL, -3.0f, 0.15f, 55.0f, 125.0f, 0,0 }, 
         { ENEMY_FISH, 1, 145.0f, 125.0f, 0.0f, -3.5f, PAT_VERTICAL, -3.5f, 0.06f, 84.0f, 125.0f, 0,0 },
         { ENEMY_FISH, 1, 186.0f, 125.0f, 0.0f, -3.8f, PAT_VERTICAL, -3.8f, 0.10f, 65.0f, 125.0f, 0,0 },
     },
-
-
-
-
-
-
-
 
     /* P9: monolito, sin enemigos */
     { END_ENEMY },
@@ -138,22 +132,23 @@ static const Enemy enemies_fut[SCREEN_COUNT][MAX_ENEMIES] =
 {
     /* P1: cima, dron */
     {
-        { ENEMY_DRONE, 1, 60.0f,100.0f, 1.0f,0.0f,
-          PAT_HORIZONTAL, 20.0f,280.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_DRONE, 1, 290.0f,120.0f, 1.0f,0.8f, PAT_ZIGZAG, 20.0f,280.0f, 100.0f,140.0f, 0,0 },
         END_ENEMY
     },
+
     /* P2: ladera, sin enemigos */
-    { END_ENEMY },
+    {
+        END_ENEMY
+    },
+
     /* P3: pie colina, dron */
     {
-        { ENEMY_DRONE, 1, 100.0f,120.0f, 1.0f,0.0f,
-          PAT_HORIZONTAL, 40.0f,260.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_DRONE, 1, 290.0f,120.0f, 1.0f,0.8f, PAT_ZIGZAG, 20.0f,280.0f, 70.0f,140.0f, 0,0 },
         END_ENEMY
     },
     /* P4: nivel medio, dron */
     {
-        { ENEMY_DRONE, 1, 80.0f,110.0f, 1.2f,0.0f,
-          PAT_HORIZONTAL, 20.0f,280.0f, 0.0f,0.0f, 0,0 },
+        { ENEMY_DRONE, 1, 80.0f,110.0f, 1.2f,0.0f, PAT_HORIZONTAL, 20.0f,280.0f, 0.0f,0.0f, 0,0 },
         END_ENEMY
     },
     /* P5: terminal, sin enemigos */
@@ -338,6 +333,32 @@ void enemies_update(void)
                 }
                 break;
 
+            case PAT_ZIGZAG:
+                e->x += e->vel_x;
+                if (e->x <= e->min_x)
+                {
+                    e->x     = e->min_x;
+                    e->vel_x = -e->vel_x;
+                }
+                if (e->x >= e->max_x)
+                {
+                    e->x     = e->max_x;
+                    e->vel_x = -e->vel_x;
+                }
+
+                e->y += e->vel_y;
+                if (e->y <= e->min_y)
+                {
+                    e->y     = e->min_y;
+                    e->vel_y = -e->vel_y;
+                }
+                if (e->y >= e->max_y)
+                {
+                    e->y     = e->max_y;
+                    e->vel_y = -e->vel_y;
+                }
+                break;
+
         }
 
         if (++e->anim_timer >= 15)
@@ -381,9 +402,6 @@ int enemies_check_collision(void)
     int px, py, ex, ey, ew, eh;
     Enemy *e;
 
-    /* TEMP: desactivado para pruebas */
-    return 0; 
-
     px = (int)g_game.player.x;
     py = (int)g_game.player.y;
 
@@ -392,15 +410,28 @@ int enemies_check_collision(void)
         e = &g_enemies.enemies[i];
         if (!e->active) continue;
 
-        ex = (int)e->x;
-        ey = (int)e->y;
+        ex = (int)e->x + ENEMY_XOFF(e->type);
+        ey = (int)e->y + ENEMY_YOFF(e->type);
         ew = ENEMY_W(e->type);
         eh = ENEMY_H(e->type);
 
-        if (px + PLAYER_WIDTH - 4 <= ex)  continue;
-        if (px + 4 >= ex + ew)            continue;
-        if (py + PLAYER_HEIGHT - 4 <= ey) continue;
-        if (py + 4 >= ey + eh)            continue;
+        /* Check de Bounding Box para jabali, oso y lagarto */
+        if(e->type != ENEMY_FISH)
+        {
+            
+            if (px + PLAYER_WIDTH - 4 <= ex)  continue;
+            if (px +4 >= ex + ew)            continue; 
+            if (py + PLAYER_HEIGHT - 4 <= ey) continue;
+            if (py + 4 >= ey + eh)            continue;
+        }
+        else
+        {
+            /* Check de Bounding Box para peces */
+            if (px + PLAYER_WIDTH - 14 <= ex)  continue;
+            if (px + 3 >= ex + ew)            continue;
+            if (py - 0 <= ey) continue;
+            if (py + 0 >= ey + eh)            continue;
+        }
 
         return 1;
     }

@@ -112,7 +112,7 @@ static unsigned char dialog_col_border(void)
     {
         case EPOCH_PREHISTORY: return 37;  
         case EPOCH_MEDIEVAL:   return 96;  
-        case EPOCH_FUTURE:     return 199;  
+        case EPOCH_FUTURE:     return 101;  
         default:                return 199;
     }
 }
@@ -123,7 +123,7 @@ static unsigned char dialog_col_dim(void)
     {
         case EPOCH_PREHISTORY: return 37;  
         case EPOCH_MEDIEVAL:   return 96;  
-        case EPOCH_FUTURE:     return 174;  
+        case EPOCH_FUTURE:     return 101;  
         default:                return 174;
     }
 }

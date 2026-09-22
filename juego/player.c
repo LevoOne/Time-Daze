@@ -197,7 +197,23 @@ void player_draw(void)
  * ---------------------------------------------------------------- */
 void player_hit(void)
 {
-    g_game.player.lives--;
+    int i;
+
+    /* Reproucir sonido de pérdida de vida */
+    sfx_play(SFX_HURT, 45, MIDDLE);
+
+    /* Pausa breve trasladando el impacto, troceada en pasos pequenos
+     * con sound_update() entre medias -- timer_wait() por si solo no
+     * alimenta el mezclador de audio, y una espera larga de un tiron
+     * distorsiona la musica de fondo al reanudar. */
+    for (i = 0; i < 95; i += 4)
+    {
+        sound_update();
+        timer_wait(4);
+    }
+
+    if (!g_debug_infinite_lives)
+        g_game.player.lives--;
     player_place(20, 100);
 }
 

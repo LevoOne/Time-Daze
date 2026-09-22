@@ -1434,52 +1434,93 @@ cambio de `PLAYER_GRAVITY` y `PLAYER_JUMP`, tambien en player.h.
 
 ### Sonido
 
-Solo existe por ahora el SFX de salto (SFX_JUMP). Pendiente anadir:
-- SFX puntuales: coger objeto, depositar objeto, activar un puzzle/mecanismo,
-  chapoteo de agua al llegar a P8 de Prehistoria, sonido de la roca rodando.
-  Se cargan una vez con `sfx_load()` al arrancar y se disparan con
-  `sfx_play()` en el punto exacto de la logica donde ocurre la accion.
-  El motor soporta 4 canales SFX simultaneos (SFX_CHANNELS).
-- Musica XM ambiental especifica de P1 (tono mistico), distinta de la
-  musica general. El sistema de musica XM es monofonico (solo una pista a
-  la vez, `music_load_xm` libera la anterior automaticamente), asi que se
-  cargaria/pararia desde la logica de cambio de pantalla, igual que ya
-  ocurre con la carga del fondo.
+✅ Sistema de sonido implementado con 5 canales SFX fijos/dinamicos
+(`SFX_CHANNELS=5`, ampliado desde 4 para dar hueco a `SFX_HURT` sin
+reciclar el slot dinamico):
+- Indice 0 `SFX_JUMP`: salto, cargado una vez al arrancar.
+- Indice 1: dinamico, recargado por pantalla/evento (roca rodando,
+  pisadas del oso/jabali/reptil, goteo de miel, salpicadura de los
+  peces, viaje entre epocas). `sfx_sync_dynamic_slot()` recarga el
+  sonido correcto de la pantalla de destino tras cada viaje temporal,
+  evitando que un sonido puntual (p.ej. `TRAVEL.WAV`) se quede pegado
+  indefinidamente en pantallas que necesitan su propio sonido continuo
+  (p.ej. el goteo de miel).
+- Indice 2 `SFX_PICKUP` / Indice 3 `SFX_DROP`: coger/soltar objetos,
+  cargados una vez al arrancar.
+- Indice 4 `SFX_HURT`: perdida de vida, cargado una vez al arrancar.
+  `player_hit()` incluye una pausa breve (~1.36s, la duracion real del
+  WAV) trasladando el impacto, servida en pasos de 4 ticks con
+  `sound_update()` intercalado para no distorsionar la musica de fondo
+  durante la pausa.
+
+**Leccion aprendida (bug real, resuelto)**: recargar el mismo canal
+SFX repetidamente durante una partida larga (`sfx_free()`+`sfx_load()`
+muchas veces sobre el mismo indice) puede acabar dejando el sample en
+bucle indefinido de forma impredecible — posiblemente degradacion de
+los punteros internos de Judas tras multiples recargas. La solucion
+fiable para sonidos puntuales que no dependen de la pantalla (como el
+golpe) es cargarlos **una sola vez** en un canal fijo propio, igual
+que ya funcionaba `SFX_JUMP`, en vez de reciclar el slot dinamico.
+
+Musica: XM (`PRETHEME.XM`, `MEDTHEME.XM`, `FIRE.XM` para P5, pendiente
+tema de Futuro definitivo) cargada con `music_load_xm()`, que libera el
+tema anterior automaticamente. Memoria por epoca (`s_epoch_last_screen`)
+implementada: al volver a una epoca tras viajar, Eric reaparece en la
+ultima pantalla real en la que estuvo, no siempre en P1.
 
 ### Cuadro de dialogo
 
-⬜ Dialogo estatico, sin opciones ni ramificacion: secuencia lineal de
-retrato (Eric u otro personaje, p.ej. el chaman) + texto, que avanza
-linea a linea con una tecla. Al terminar la secuencia, vuelve al estado
-de juego normal (STATE_GAME) y a la pantalla donde estaba antes de
-iniciarse. Los retratos podrian salir del spritesheet de alta resolucion
-ya generado para Eric. Requiere un estado de juego nuevo dedicado
-(p.ej. STATE_DIALOG) que pause player/enemigos mientras esta activo.
+✅ Sistema implementado en `dialog.c`. Tres tipos:
+- `DIALOG_HINT`: mensaje de 1-2 lineas, se cierra con un solo ESPACIO.
+  Usado para las pistas de pantalla (`g_hints[3][9][3]`) y para
+  mensajes cortos de un personaje (chaman, monolito).
+- `DIALOG_TALK`: conversacion real multi-pagina, cada ESPACIO avanza a
+  la siguiente linea del array; en la ultima pagina el pie cambia a
+  "Cerrar" en vez de "[ ESPACIO ]" (reservado para cuando haga falta
+  una conversacion de verdad con varias frases separadas).
+- `DIALOG_YESNO`: confirmacion S/N, usado en el punto de guardado de
+  la hoguera y en la confirmacion de salida con ESC.
+
+Retrato: `ERICFRM.BMP`, recortado a su bbox real (42x37) y remapeado a
+`eric_palette` (130-185, permanente) para que funcione en cualquier
+pantalla sin conflicto de paleta.
+
+**Colores del cuadro dependientes de la epoca activa**: `dialog_col_bg()`,
+`dialog_col_border()`, `dialog_col_dim()` en `dialog.c` calculan el
+indice segun `g_game.screen.current_epoch`, en vez de usar una
+constante fija. Bug real resuelto: los colores originales usaban
+indices del rango compartido de fondos (0-129), que varian segun que
+imagen de fondo este activa (en una pantalla concreta el "negro" real
+resultaba ser un naranja del cielo del fondo) — corregido apuntando a
+tonos permanentes fiables (negro real = mas oscuro de `eric_palette`,
+blanco/crema real = mas claro de `cup_palette`). Los casos de Edad
+Media/Futuro estan con los mismos valores de Prehistoria como
+placeholder, pendientes de ajustar cuando se defina la paleta
+permanente de esas epocas.
 
 ### HUD
 
-⬜ Dejar el HUD en su forma definitiva una vez cerrado el resto del arte,
-incluyendo ajustar el color de fondo del HUD.
+✅ **Pistas contextuales por pantalla** — implementado como
+`g_hints[3][9][3]` (2 lineas + NULL por pantalla/epoca), mostrado via
+`DIALOG_HINT` con el retrato de Eric al pulsar ESPACIO sin ninguna
+interaccion especifica pendiente ese frame. Las 27 frases de las 3
+epocas ya estan escritas (Edad Media/Futuro con contenido, pendiente
+de revisar una vez cerrado el arte definitivo de esas pantallas).
 
-⬜ **Pistas contextuales por pantalla**: al entrar en cada pantalla, en la
-primera fila del HUD se muestra una frase corta que da una pista sobre
-algo relevante de esa pantalla. La pista debe ser suficientemente vaga
-para no resolver el puzzle directamente, pero no tan enigmática que
-resulte inútil. Si la pantalla no tiene nada relevante, la frase
-describe brevemente el entorno.
+✅ **Indicador de objeto cercano, aunque Eric lleve algo encima** — el
+HUD muestra temporalmente el objeto del suelo (icono + nombre en gris)
+tapando lo que Eric lleva, mientras este cerca; en cuanto se aleja,
+vuelve a mostrar lo que lleva con normalidad. La deteccion se hace
+siempre (no solo con manos libres), la recogida real sigue exigiendo
+manos libres.
 
-  - La pista cambia cada vez que Eric entra en una pantalla nueva.
-  - Se muestra durante unos segundos y luego desaparece (o se queda
-    fija, a decidir).
-  - Implementación sugerida: array de strings indexado por
-    [epoca][pantalla], dibujado con draw_string() en el HUD.
-  - Las frases para las 27 pantallas (9 x 3 epocas) se definen en
-    hud.c o en un fichero de texto/header separado.
-  - Ejemplos de tono:
-    - P1 Prehistoria (roca/chaman): "El anciano guarda un secreto... y algo pesa demasiado"
-    - P3 Prehistoria (oso): "Los osos no suelen compartir su territorio"
-    - P8 Prehistoria (rio): "El agua siempre encuentra su camino"
-    - Pantalla sin puzzle: "El viento arrastra el olor a tierra mojada"
+✅ **Fragmentos del artilugio en el HUD** — 3 iconos de 20x20 (ampliado
+desde el indicador de 8x8 original), remapeados a dos paletas
+permanentes ya existentes sin gastar presupuesto nuevo: estado "no
+recogido" en tonos neutros de `eric_palette`, estado "recogido" en
+tonos calidos de `cup_palette`.
+
+⬜ Dejar el HUD en su forma definitiva una vez cerrado el resto del arte.
 
 ### Paleta VGA de Edad Media y Futuro
 
@@ -1490,6 +1531,56 @@ para Eric, objetos interactivos y sprites animados propios de esa
 epoca. Ver seccion 9.3 para el detalle del reparto de Prehistoria como
 plantilla y el proceso a seguir (verificacion byte a byte de los
 fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
+
+### Menu, instrucciones y flujo de partida
+
+✅ **Menu principal** (`show_menu()`, `timed.c`) — pantalla estatica
+tras la intro, seleccion directa por numero (1-4, sin cursor):
+1 Instrucciones, 2 Cargar partida, 3 Partida nueva, 4 Salir al DOS.
+Dos bitmaps (`MENUS.BMP` con partida guardada disponible, `MENUN.BMP`
+con la opcion 2 atenuada en gris) segun `save_exists()`. Reutiliza el
+mismo patron de dibujado que `show_presentation()`
+(`vga_clear_screen`+`set_palette`+`draw_bitmap` centrado+`vga_fade_in`)
+en vez del patron de doble buffer del resto del juego. Bug real
+resuelto: `set_palette_silent()` no aplica la paleta al hardware por
+si sola (solo actualiza la copia en memoria que usa `vga_fade_in()`) —
+sin el fade posterior, el bitmap se veia con colores completamente
+descuadrados.
+
+✅ **Viaje entre epocas por seleccion directa** — sustituido el ciclo
+con una sola tecla por 1/2/3 = Prehistoria/Edad Media/Futuro
+directamente, sin viajar si ya se esta en esa epoca. Tecla A liberada
+sin uso.
+
+✅ **Memoria de pantalla por epoca** — al volver a una epoca ya
+visitada, Eric reaparece en la ultima pantalla real en la que estuvo
+alli (`s_epoch_last_screen[EPOCH_COUNT]`), no siempre en P1.
+
+✅ **Confirmacion de salida con ESC** — `DIALOG_YESNO` antes de salir
+al DOS, reutilizando la misma rutina de cierre limpio que el final
+normal de partida (`music_free()`, `sfx_free()`, `sound_shutdown()`,
+`engine_shutdown()`).
+
+⬜ **Pantalla de instrucciones** (`show_instructions()`, actualmente
+vacia/placeholder) — 4 paginas encadenadas, mismo patron de bitmap
+centrado + avance por ESPACIO que la intro:
+1. Sinopsis (narrativa)
+2. Mecanica (exploracion, esquivar peligros, timing de salto, objetos
+   entre epocas — sin dar pistas de puzzles concretos)
+3. Controles (teclado ilustrado con las teclas relevantes resaltadas)
+4. HUD (captura real del juego con 3 llamadas: vidas, objeto
+   llevado/cercano, fragmentos)
+
+Arte de las 4 paginas ya generado y cuantizado (256 colores, sin
+dithering — estas pantallas son aisladas, no comparten paleta con
+ninguna otra capa, no aplica el limite de 129 colores de los fondos de
+gameplay). Paginas 1 y 2 generadas SIN texto integrado en el bitmap,
+pensadas para efecto de maquina de escribir (`typewriter_text()`,
+revela caracter a caracter con `draw_char()`, ESPACIO completa la
+frase actual de golpe). Paginas 3 y 4 con texto/llamadas ya integrados
+en la imagen (ancladas a elementos ilustrados concretos). Pendiente:
+integracion final en `show_instructions()` (el usuario la esta
+aplicando directamente en su copia de `timed.c`).
 
 ### Checklist para cerrar la fase de Prehistoria
 
@@ -1503,12 +1594,16 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
    -✅ Sprite de peces P8
    -✅ Sprite de reptil
    -✅ Sprite de jabali gigante P4
-   - Bitmap del fragmento 1
+   -✅ Bitmap del fragmento 1 (y fragmentos 2/3 del HUD: diseno de
+     astrolabio original partido en 3 cuñas, evitando deliberadamente
+     cualquier parecido con IP de terceros)
    -✅ Bitmap del tronco a recoger en P9
 
-3. ⬜ **Codigos del monolito P9** — representar via ventana de dialogo
-   (ver punto 8). Los codigos son simbolos tipo runas dibujados como BMP
-   que se muestran en la ventana emergente al interactuar con el monolito.
+3. ✅ **Codigos del monolito P9** — implementado via `DIALOG_HINT` +
+   `g_dialog_monolith[]`. Contenido placeholder ("SOL - LUNA -
+   ESTRELLA"), pendiente definir los simbolos reales del codigo del
+   portal de Futuro y mantener coherencia con la segunda mitad del
+   codigo en las ruinas de la torre de esa epoca.
 
 4. ✅ **Frases de pistas por pantalla** — mostrar via ventana emergente.
    Decidir si se muestran al entrar en la pantalla o solo al pulsar
@@ -1526,9 +1621,9 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
    BMP con la cabeza de Eric recortada del spritesheet hi-res.
    Dejar para el HUD definitivo.
 
-8. ⬜ **Ventana emergente de dialogo** — sistema para mostrar texto largo,
-   retratos de personajes, codigos del monolito y frases de pistas.
-   Cubre los puntos 3, 4 y 8 de esta lista.
+8. ✅ **Ventana emergente de dialogo** — ver detalle completo en la
+   seccion "Cuadro de dialogo" mas arriba. Cubre los puntos 3, 4 y 8
+   de esta lista.
 
 9. ✅ **Prueba puzzle planta** — colocar la planta temporalmente en una
    pantalla accesible de Prehistoria para probar el flujo completo,
@@ -1538,11 +1633,15 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
 - ✅ Eliminar gatillo temporal de la roca (TODO TEST en logic.c) y
   sustituir por logica real del tronco/palanca (la animacion de la
   roca rodando ya esta implementada).
-- ⬜ **SFX coger/depositar objetos** — disparar un SFX al recoger un
-  objeto del suelo y otro al depositarlo. Reutilizar el slot dinamico
-  (indice 1) segun la pantalla activa.
-- ⬜ **SFX viaje entre epocas** — sonido al pulsar ALT para viajar,
-  integrar en screen_travel() antes del fade out.
+- ✅ **SFX coger/depositar objetos** — `SFX_PICKUP`/`SFX_DROP`, canales
+  fijos propios (indices 2/3), cargados una vez al arrancar.
+- ✅ **SFX viaje entre epocas** — `TRAVEL.WAV` en el slot dinamico
+  (indice 1), integrado en `screen_travel()`. Limitacion conocida sin
+  resolver: queda un ligero solape/distorsion de audio en el instante
+  de la carga de la nueva musica (`music_load_xm()` llama a
+  `judas_loadxm()`, funcion cerrada de la libreria sin codigo fuente
+  disponible, que no cede tiempo al mezclador durante la lectura del
+  XM). Ver seccion de backlog al final del documento.
 - ✅ **Ambiente sonoro hoguera P5** — implementado como musica XM en vez
   de SFX (loop nativo del sample, mas limpio que relanzar un WAV a mano).
   `FIREAMB.WAV` grabado normalizado (8-bit mono 22050Hz) y convertido a
@@ -1558,3 +1657,37 @@ fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
   mostrar confirmacion (S/N) y llamar a save_game() si el jugador
   confirma.
 - ✅ Modificar P3 de prehistoria para que aparezca la liana en la derecha para bajar a P5
+
+### ⚠️ TAREA OBLIGATORIA PARA EL 30 DE SEPTIEMBRE
+
+⬜ **`show_game_over()`** — pantalla de fin de partida por derrota
+(vidas agotadas). No implementada todavia; `timed.c` tiene el estado
+`STATE_GAMEOVER` ya definido y se le asigna en varios puntos
+(`player.lives <= 0`, caida fuera de los limites, etc.) pero no existe
+ninguna funcion que reaccione a ese estado — hace falta comprobar que
+`game_loop()` sale correctamente al llegar a `STATE_GAMEOVER` y llama
+a esta funcion. Contenido minimo razonable: pantalla estatica (mismo
+patron que el resto de pantallas aisladas: `vga_clear_screen`+
+`set_palette`+`draw_bitmap` centrado+`vga_fade_in`) con mensaje de
+derrota, esperar una pulsacion, y volver a `show_menu()` en vez de
+cerrar el programa. Decidir con el usuario: ¿se reinicia la partida
+automaticamente o vuelve al menu para elegir cargar/empezar de nuevo?
+
+## Backlog — mejoras post-30 de septiembre (no bloqueantes)
+
+- **Precarga de musica en memoria**: `screen_travel()` sigue teniendo
+  un ligero solape/distorsion de audio en el instante de cargar la
+  musica de la nueva epoca. La causa raiz es `judas_loadxm()` (funcion
+  cerrada de la libreria Judas, sin codigo fuente disponible), que
+  aparentemente no cede tiempo al mezclador durante la lectura del
+  archivo XM del disco — no se puede instrumentar con `sound_update()`
+  por dentro. Ya resuelto el mismo problema en `try_load_bmp()`
+  (`screen.c`) anadiendo `sound_update()` una vez por fila leida, pero
+  ese arreglo no cubre la carga de musica en si. Posible solucion de
+  fondo: precargar todos los temas de las 3 epocas en memoria al
+  arrancar el juego (o durante la intro), y que `screen_travel()` solo
+  cambie que tema ya cargado esta sonando, sin volver a leer del disco
+  cada vez. Pendiente confirmar si la API de Judas permite mantener
+  varios modulos cargados simultaneamente y alternar sin recarga.
+  Aceptado como limitacion conocida para la demo shareware: el viaje
+  entre epocas es un evento puntual, no continuo.

@@ -809,6 +809,18 @@ void sfx_stop(int index)
     judas_stopsample(SFX_FIRST + (index % SFX_CHANNELS));
 }
 
+void sfx_set_loop(int index, int loop)
+{
+    if (index < 0 || index >= SFX_MAX) return;
+    if (!sfx_samples[index])           return;
+
+    if (loop)
+        sfx_samples[index]->voicemode |= VM_LOOP;
+    else
+        sfx_samples[index]->voicemode &= ~VM_LOOP;
+}
+
+
 int music_load_xm(char *filename)
 {
     if (!sound_ready) return 0;

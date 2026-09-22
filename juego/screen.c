@@ -776,7 +776,7 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     {
         { 0,   148, 320, 8 },   /* suelo principal */
         { 40,  116,  20, 2 },   /* dolmen izquierdo */
-        { 136, 110,  60, 2 },   /* roca plana central, chaman */
+        { 136, 110,  57, 2 },   /* roca plana central, chaman */
         { 0, 0, 0, 0 }
     },
     /* P2: ladera, colmena */
@@ -820,9 +820,9 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     /* P8: cruce del rio */
     {
         { 0, 87, 36, 8 },     /* plataforma izquierda */
-        { 39, 101, 41, 8 },   /* 2da plataforma  izquierda */
+        { 39, 101, 30, 8 },   /* 2da plataforma  izquierda */
         { 0,   148, 60, 8 },    /* orilla izquierda */
-        { 231, 148, 89, 8 },    /* orilla derecha */
+        { 245, 148, 89, 8 },    /* orilla derecha */
         { 102,  112, 10, 2 },   /* roca 1 */
         { 136, 107, 5, 2 },     /* roca 2 */
         { 176, 100, 5, 2 },     /* roca 3 */
@@ -843,7 +843,7 @@ static const Platform platforms_med[SCREEN_COUNT][MAX_PLATFORMS] =
     {
         { 0,   148, 320, 8 },
         { 40,  116,  20, 2 },
-        { 136, 110,  60, 2 },
+        { 136, 110,  57, 2 },
         { 0, 0, 0, 0 }
     },
    
@@ -862,6 +862,7 @@ static const Platform platforms_med[SCREEN_COUNT][MAX_PLATFORMS] =
         { 60,155,40,8 },
         { 0,0,0,0 }
     },
+
     /* P4: herreria, escalera */
     {
         { 0,   175, 320, 8 },
@@ -906,25 +907,28 @@ static const Platform platforms_fut[SCREEN_COUNT][MAX_PLATFORMS] =
 {
     /* P1: megalitos derruidos */
     {
-        { 0,   175, 320, 8 },
-        { 40,  158,  40, 8 },
-        { 160, 148,  50, 8 },
-        { 260, 162,  40, 8 },
+        { 0,   148, 320, 8 },
+        { 40,  116,  20, 2 },
+        { 136, 110,  57, 2 },
         { 0, 0, 0, 0 }
     },
+
     /* P2: ladera arida */
     {
-        { 0,   175, 320, 8 },
-        { 30,  158,  40, 8 },
-        { 150, 145,  50, 8 },
+        { 0,   148, 320, 8 },
+        { 40,  116,  28, 2 },/*
+        { 134, 110,  64, 2 },*/
+        { 245, 133,  59, 2 },
         { 0, 0, 0, 0 }
     },
+
     /* P3: empedrado, postes laser */
     {
-        { 0,   175, 320, 8 },
-        { 60,  158,  40, 8 },
+        { 0, 150, 320, 8 },
+        { 60, 155, 40, 8 },
         { 0, 0, 0, 0 }
     },
+
     /* P4: ruinas industriales */
     {
         { 0,   175, 320, 8 },
@@ -1523,7 +1527,6 @@ void screen_travel(int new_epoch)
     /* Nos dirigimos a la pantalla donde estuvimos por última vez en la época destino */
     screen = s_epoch_last_screen[new_epoch];
 
-
     /* SFX de viaje temporal */
     sfx_free(1);
     sfx_load(1, "TRAVEL.WAV");
@@ -1557,20 +1560,18 @@ void screen_travel(int new_epoch)
     {
         music_load_xm("PRETHEME.XM");
     }
-    /* music_play() se retrasa hasta justo antes del fade in (ver mas abajo) */
 
     screen_load(new_epoch, screen);
-    sound_update();  /* screen_load() puede tardar por encima de un tick */
 
     /* El slot dinamico de SFX (indice 1) lo dejo TRAVEL.WAV; ponerlo
      * ahora con el sonido que corresponde a la pantalla de llegada,
      * igual que hace screen_change() al caminar. */
     sfx_sync_dynamic_slot(new_epoch, screen);
 
-    player_place((int)g_game.player.x, 100);
+    /* player_place((int)g_game.player.x, 100); */
+    player_place(4, 100);   /* ñapa para que Eric siempre llegue a la pantalla destino en la misma coordenada X */
     screen_draw();
     vga_flip();
-    sound_update();  /* screen_draw()/vga_flip() tambien cuentan como tiempo sin servicio */
 
     palette_inject(130, eric_palette, 56);
     screen_inject_eric_palette();
@@ -1580,9 +1581,9 @@ void screen_travel(int new_epoch)
     screen_inject_egg_palette();
     palette_inject(232, stick_palette, 10);
     screen_inject_stick_palette();
-    sound_update();
 
     music_play(0);
+    sound_update();
 
     vga_fade_in(16, 4);
 }

@@ -250,20 +250,6 @@ static int logic_prehistory(int screen)
             }
         }
 
-        /* TODO TEMP: taza en P1 para pruebas del puzzle taza/miel/oso */
-        /*
-        if (inv_is_carrying(ITEM_NONE) &&
-            inv_instance_exists(ITEM_CUP, EPOCH_PREHISTORY, screen))
-        {
-            if (eric_near(244, 116) && eric_action())
-            {
-                if (inv_remove_instance(ITEM_CUP, EPOCH_PREHISTORY, screen))
-                    inv_pick(ITEM_CUP);
-                handled = 1;
-            }
-        }
-        */
-
         if (!puzzle_is_solved(PUZZLE_SHAMAN))
         {
             if (eric_near(shaman_x, shaman_y) && eric_action())
@@ -282,13 +268,14 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 8)
     {
-        /* Gateado por inv_is_carrying(ITEM_NONE): de lo contrario,
-         * este interactuable (que aun es un TODO sin implementar)
-         * se comia el ENTER en cuanto Eric estaba cerca del
-         * monolito, sin mirar el inventario para nada -bloqueando
-         * RECOGIDA/DEPOSITO GENERAL si llevabas algo encima, p.ej.
-         * el huevo, justo en esa zona de la pantalla. */
-        if (inv_is_carrying(ITEM_NONE))
+        /* Ya no se gatea por inv_is_carrying(ITEM_NONE): el monolito
+         * debe poder leerse lleve Eric algo encima o no. En su lugar,
+         * cede prioridad solo si Eric esta justo sobre el punto de
+         * recogida/deposito del tronco (unico conflicto real posible
+         * en esta pantalla con RECOGIDA/DEPOSITO GENERAL), usando el
+         * radio ajustado de eric_near_item() en vez del generoso
+         * INTERACT_DIST de eric_near(). */
+        if (!eric_near_item(log_x, log_y))
         {
             if (eric_near(monolith_x, monolith_y) && eric_action())
             {
