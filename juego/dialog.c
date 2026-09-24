@@ -40,7 +40,7 @@ const char *g_hints[3][9][3] =
     {
         { "Las maquinas hablan si",   "sabes escuchar",        NULL },  /* P1 */
         { "La radiacion no",          "perdona errores",       NULL },  /* P2 */
-        { "El Mecha duerme...",       "por ahora",             NULL },  /* P3 */
+        { "Los drones patrullan",     "sin descanso",          NULL },  /* P3 */
         { "Los drones patrullan",     "sin descanso",          NULL },  /* P4 */
         { "El nucleo late en las",    "profundidades",         NULL },  /* P5 */
         { "La puerta hermetica",      "lleva semanas cerrada", NULL },  /* P6 */

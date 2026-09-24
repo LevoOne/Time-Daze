@@ -17,6 +17,7 @@
 #include "screen.h"
 #include "player.h"
 #include "puzzles.h"
+#include "dialog.h"
 
 /* Animación del chamán */
 #define SHAMAN_FRAMES     4
@@ -924,7 +925,7 @@ static const Platform platforms_fut[SCREEN_COUNT][MAX_PLATFORMS] =
 
     /* P3: empedrado, postes laser */
     {
-        { 0, 150, 320, 8 },
+        { 0, 148, 320, 8 },
         { 60, 155, 40, 8 },
         { 0, 0, 0, 0 }
     },
@@ -1432,6 +1433,14 @@ int screen_change(int dir)
 
     next = screen_get_connection(dir);
     if (next == NO_SCREEN) return 0;
+
+    /* ******************************************
+     * TEMP: transiciones prohibidas en modo demo
+     * ****************************************** */
+     if(next == 3 && (g_game.screen.current_epoch == EPOCH_MEDIEVAL || g_game.screen.current_epoch == EPOCH_FUTURE)
+     {
+        dialog_open(DIALOG_HINT, &g_ericfrm_sprite, "Paso cerrado!");
+     }
 
     py = (int)g_game.player.y;
 

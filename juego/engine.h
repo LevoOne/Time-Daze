@@ -491,6 +491,19 @@ void timer_uninstall(void);
  * -----------------------------------------------------------------------------------------*/
 void timer_wait(unsigned long ticks_per_frame);
 
+/* -----------------------------------------------------------------------------------------
+ * audio_safe_wait()
+ *  Espera 'ticks' sirviendo el mezclador de audio en cada uno, en vez
+ *  de una sola vez al principio/final como hace timer_wait(). Usar
+ *  SIEMPRE que la espera ocurra mientras suena musica o un SFX largo
+ *  (mas de un par de segundos) -- timer_wait() a secas deja el
+ *  mezclador sin servicio durante toda la espera, y se nota como
+ *  distorsion/corte en el audio.
+ * Entrada: ticks (in) = ticks a esperar
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void audio_safe_wait(int ticks);
+
 /* ----------------------------------------------------------------
  * PC SPEAKER
  * ---------------------------------------------------------------- */

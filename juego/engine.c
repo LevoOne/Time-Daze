@@ -104,6 +104,7 @@ void vga_fade_out(int steps, unsigned long ticks_per_step)
 {
     int s;
     int step_size;
+    unsigned long t;
 
     step_size = 64 / steps;
     vga_read_palette();
@@ -112,8 +113,11 @@ void vga_fade_out(int steps, unsigned long ticks_per_step)
     {
         wait_for_retrace();
         vga_write_palette_scaled(s);
-        sound_update();
-        timer_wait(ticks_per_step);
+        for (t = 0; t < ticks_per_step; t++)
+        {
+            sound_update();
+            timer_wait(1);
+        }
     }
     vga_write_palette_scaled(0);
 }
@@ -122,6 +126,7 @@ void vga_fade_in(int steps, unsigned long ticks_per_step)
 {
     int s;
     int step_size;
+    unsigned long t;
 
     step_size = 64 / steps;
 
@@ -129,8 +134,11 @@ void vga_fade_in(int steps, unsigned long ticks_per_step)
     {
         wait_for_retrace();
         vga_write_palette_scaled(s);
-        sound_update();
-        timer_wait(ticks_per_step);
+        for (t = 0; t < ticks_per_step; t++)
+        {
+            sound_update();
+            timer_wait(1);
+        }
     }
     vga_write_palette_scaled(64);
 }
@@ -667,6 +675,17 @@ void timer_wait(unsigned long ticks_per_frame)
     while (timer_ticks - last_tick < ticks_per_frame) {}
     last_tick = timer_ticks;
 }
+
+ void audio_safe_wait(int ticks)
+ {
+    int i;
+
+    for(i=0;i<ticks;i++)
+    {
+        sound_update();
+        timer_wait(1);
+    }
+ }
 
 /* ----------------------------------------------------------------
  * PC SPEAKER

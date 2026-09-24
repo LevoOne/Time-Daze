@@ -694,9 +694,9 @@ static int logic_future(int screen)
                 logic_screen_change(DIR_UP);
     }
 
-    /* --------------------------------------------------------
+    /* ******************************************
      * P5: terminal, punto de guardado
-     * -------------------------------------------------------- */
+     * ****************************************** */
     if (screen == 4)
     {
         if (eric_near(terminal_x, terminal_y) && eric_action())
@@ -709,9 +709,9 @@ static int logic_future(int screen)
     return handled;
 }
 
-/* ================================================================
+/* *******************************************************
  * LOGIC UPDATE - PUNTO DE ENTRADA PRINCIPAL
- * ================================================================ */
+ * ******************************************************* */
 void logic_update(void)
 {
     static int alt_was_pressed = 0;
@@ -819,7 +819,7 @@ void logic_update(void)
     /* --------------------------------------------------------
      * PISTA DE PANTALLA
      * Solo si ninguna interaccion especifica ocurrio este frame.
-     * Sin condicion sobre nearby_item: igual en todas las pantallas.
+     * Sin condicion sobre nearby_item, igual wque en todas las pantallas.
      * -------------------------------------------------------- */
     if (!handled && !dialog_is_open())
     {

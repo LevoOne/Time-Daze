@@ -273,23 +273,31 @@ static void game_loop(void)
 static void show_presentation(void)
 {
     BITMAP bmp;
+    int i;
 
     /* Logo del concurso */
     load_bmp("contest.bmp", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+    sfx_free(1);
+    sfx_load(1, "CONTEST.WAV");
+    sfx_set_loop(1, 0);
+    sfx_play(1, 50, MIDDLE);
     vga_fade_in(16, 7);
-    timer_wait(140);
+    audio_safe_wait(150);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     /* Logo del grupo de programacion */
     load_bmp("h3logo.bmp", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
+   
+    sfx_free(1);
+
     vga_fade_in(16, 7);
     timer_wait(140);
     vga_fade_out(16, 7);
@@ -564,7 +572,7 @@ int main(void)
     /* ----------------------------
      * Secuencia de presentación 
      * ---------------------------- 
-    show_presentation(); */
+    show_presentation();*/
 
     /* Cargamos los assets gráficos */
     screen_init();
