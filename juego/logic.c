@@ -394,8 +394,16 @@ static int logic_medieval(int screen)
      * -------------------------------------------------------- */
     if (screen == 2)
     {
-        if (eric_near(295, 159) && eric_action())
-            logic_screen_change(DIR_DOWN);
+        /* TEMP descomentar este código para la versión final
+        if (eric_near(295, 132) && eric_action())
+            logic_screen_change(DIR_DOWN); */
+
+        /* TEMP no hay paso a P5 en versión demo del concurso */
+        if (!dialog_is_open() && eric_near(295,132) && eric_action())
+        {
+            dialog_open(DIALOG_HINT, &g_ericfrm_sprite, g_dialog_demo_limit);
+            handled = 1;
+        }
     }
 
     /* --------------------------------------------------------
@@ -594,8 +602,16 @@ static int logic_future(int screen)
      * -------------------------------------------------------- */
     if (screen == 2)
     {
+        /* TEMP descomentar este código para la versión final
         if (eric_near(295, 159) && eric_action())
-            logic_screen_change(DIR_DOWN);
+            logic_screen_change(DIR_DOWN); */
+
+         /* TEMP no hay paso a P5 en versión demo del concurso */
+        if (!dialog_is_open() && eric_near(295,132) && eric_action())
+        {
+            dialog_open(DIALOG_HINT, &g_ericfrm_sprite, g_dialog_demo_limit);
+            handled = 1;
+        }
     }
 
     /* --------------------------------------------------------

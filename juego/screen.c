@@ -170,6 +170,37 @@ void screen_inject_log_palette(void)
 }
 
 /* ----------------------------------------------------------------
+ * PALETA DEL DRON (época FUT solo)
+ * ---------------------------------------------------------------- */
+static const byte drone_palette[14 * 3] =
+{
+    29, 26, 22,  /* indice 242 */
+     7,  7,  5,  /* indice 243 */
+    47, 42, 35,  /* indice 244 */
+    37, 34, 30,  /* indice 245 */
+    50, 48, 43,  /* indice 246 */
+    20, 19, 16,  /* indice 247 */
+     1,  1,  1,  /* indice 248 */
+    14, 11, 12,  /* indice 249 */
+    35, 31, 27,  /* indice 250 */
+    26, 23, 19,  /* indice 251 */
+    21, 30, 18,  /* indice 252 */
+    21, 61, 19,  /* indice 253 */
+     9, 23, 10,  /* indice 254 */
+     3, 12,  2,  /* indice 255 */
+};
+
+
+/* Inyecta los colores del dron en la paleta VGA activa */
+void screen_inject_drone_palette(void)
+{
+    int i;
+    outp(0x3C8, 242);
+    for (i = 0; i < 14 * 3; i++)
+        outp(0x3C9, drone_palette[i]);
+}
+
+/* ----------------------------------------------------------------
  * PALETA DEL HUEVO DE DINOSAURIO
  * Indices 220-231 reservados para los colores del huevo.
  * Se inyectan en la paleta activa antes de dibujar el huevo.
@@ -685,6 +716,7 @@ BITMAP      g_frag3_dim;
 BITMAP      g_frag3_collected;
 BITMAP      g_ericfrm_sprite;
 BITMAP      g_chafrm_sprite;
+BITMAP      g_drone_sprite;
 
 /* Fondos BMP: uno por pantalla y epoca (27 en total)      */
 /* Se cargan bajo demanda y se cachean en memoria          */
@@ -918,8 +950,8 @@ static const Platform platforms_fut[SCREEN_COUNT][MAX_PLATFORMS] =
     {
         { 0,   148, 320, 8 },
         { 40,  116,  28, 2 },/*
-        { 134, 110,  64, 2 },*/
-        { 245, 133,  59, 2 },
+        { 134, 110,  64, 2 },
+        { 245, 133,  59, 2 },*/
         { 0, 0, 0, 0 }
     },
 
@@ -1097,6 +1129,10 @@ void screen_init(void)
     /* Cargar el sprite del cuadro de diálogo del Chamán */
     if(!try_load_bmp("chafrm.bmp", &g_chafrm_sprite))
         g_ericfrm_sprite.data = NULL;
+
+    /* Cargar el sprite del dron para las pantallas P1 y P3 de FUT */
+    if(!try_load_bmp("DRON.BMP", &g_drone_sprite))
+        g_drone_sprite.data = NULL;
 }
 
 
@@ -1432,17 +1468,12 @@ int screen_change(int dir)
     int music_changed = 0;
 
     next = screen_get_connection(dir);
+
+    /* Salimos si no hay salida según el mapa de conexiones */
     if (next == NO_SCREEN) return 0;
 
-    /* ******************************************
-     * TEMP: transiciones prohibidas en modo demo
-     * ****************************************** */
-     if(next == 3 && (g_game.screen.current_epoch == EPOCH_MEDIEVAL || g_game.screen.current_epoch == EPOCH_FUTURE)
-     {
-        dialog_open(DIALOG_HINT, &g_ericfrm_sprite, "Paso cerrado!");
-     }
-
-    py = (int)g_game.player.y;
+    /* Cargamos la y actual de Eric */
+    py = g_game.player.y;
 
     /* Fade out de la pantalla actual */
     vga_fade_out(16, 4);
@@ -1552,7 +1583,7 @@ void screen_travel(int new_epoch)
     vga_clear(0);
     vga_flip();
 
-    /* Cargar nueva musica con pantalla en negro */
+      /* Cargar nueva musica con pantalla en negro */
     if (new_epoch == EPOCH_PREHISTORY && screen == 4)
     {
         music_load_xm("fire.xm");

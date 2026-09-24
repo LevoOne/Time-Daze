@@ -70,6 +70,9 @@ const char *g_dialog_monolith[] =
     NULL
 };
 
+/* TEMP solo para la versión de demo del concurso*/
+const char *g_dialog_demo_limit[] = { "Inaccesible en la demo", NULL };
+
 /* ----------------------------------------------------------------
  * ESTADO INTERNO
  * ---------------------------------------------------------------- */

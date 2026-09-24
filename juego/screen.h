@@ -40,6 +40,7 @@ extern BITMAP g_frag3_dim;
 extern BITMAP g_frag3_collected;
 extern BITMAP g_ericfrm_sprite;
 extern BITMAP g_chafrm_sprite;
+extern BITMAP g_drone_sprite;
 
 /* ----------------------------------------------------------------
  * FUNCIONES
@@ -94,6 +95,7 @@ void screen_inject_cup_palette(void);
 void screen_inject_log_palette(void);
 void screen_inject_reptile_palette(void);
 void screen_inject_fish_palette(void);
+void screen_inject_drone_palette(void);
 
 /* -----------------------------------------------------------------------------------------
  * screen_draw_shaman()

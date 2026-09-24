@@ -374,17 +374,22 @@ void enemies_update(void)
             }
             else if (e->type == ENEMY_BOAR)
             {
-                /* BOAR.BMP tiene 4 frames reales de ciclo de carrera */
+                /* BOAR.BMP tiene 4 frames reales de animación */
                 e->anim_frame = (e->anim_frame + 1) % 4;
                 if (e->anim_frame == 0 || e->anim_frame == 3)
                     sfx_play(SFX_BEAR_STEP, 39, MIDDLE);
             }
             else if (e->type == ENEMY_REPTILE)
             {
-                /* REPTILE.BMP también tiene 4 frames reales de ciclo de carrera */
+                /* REPTILE.BMP también tiene 4 frames */
                 e->anim_frame = (e->anim_frame + 1) % 3;
                 if(e->anim_frame == 1)
                     sfx_play(SFX_BEAR_STEP, 38, MIDDLE);
+            }
+            else if (e->type == ENEMY_DRONE)
+            {
+                /* DRONE.BMP solo 3 frames */
+                e->anim_frame = (e->anim_frame + 1) % 3;
             }
             else
                 e->anim_frame = (e->anim_frame + 1) % 3;
@@ -600,6 +605,16 @@ void enemies_draw(void)
                     }
                 }
             }
+            continue;
+        }
+
+        /* Dron: como es una esfera girando sobre si misma, no hay que espejar por dirección. Sin espejado por direccion ya que el
+            giro del contenido interior ya transmite el movimiento, a diferencia de un animal que necesita mirar hacia donde camina. */
+        if (e->type == ENEMY_DRONE && g_drone_sprite.data != NULL)
+        {
+            sfx_play(SFX_PICKUP, 40, MIDDLE);
+            screen_inject_drone_palette();
+            bmp_draw_tile(&g_drone_sprite, e->anim_frame, 0, 32, 32, x, y);
             continue;
         }
 

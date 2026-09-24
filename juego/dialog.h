@@ -84,4 +84,7 @@ extern const char *g_hints[3][9][3];
 extern const char *g_dialog_shaman[];
 extern const char *g_dialog_monolith[];
 
+/* TEMP: Solo para versión demo */
+extern const char *g_dialog_demo_limit[];
+
 #endif /* DIALOG_H */
