@@ -158,7 +158,12 @@ int dialog_is_open(void)
 
 int dialog_got_yes(void)
 {
-    return s_got_yes;
+     int result;
+
+    result = s_got_yes;
+    s_got_yes = 0;
+    
+    return result;
 }
 
 void dialog_update(void)

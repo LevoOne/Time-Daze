@@ -477,8 +477,7 @@ static void show_game_over(void)
 {
     BITMAP bmp;
 
-    //load_bmp("GAMEOVER.BMP", &bmp);
-    load_bmp("FUT_P1.BMP", &bmp);
+    load_bmp("GAMEOVER.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width) >> 1, (SCREEN_H - bmp.height) >> 1);
@@ -593,11 +592,13 @@ int main(void)
 
     do
     {
+        g_state = STATE_GAME;
+
        /* Menu principal */
         show_menu();
 
         /* Bucle principal del juego */
-        g_state = STATE_GAME;
+        //g_state = STATE_GAME;
         music_play(0);
         game_loop();
 
