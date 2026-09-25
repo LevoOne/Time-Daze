@@ -1131,7 +1131,7 @@ void screen_init(void)
         g_ericfrm_sprite.data = NULL;
 
     /* Cargar el sprite del dron para las pantallas P1 y P3 de FUT */
-    if(!try_load_bmp("DRON.BMP", &g_drone_sprite))
+    if(!try_load_bmp("DRONE.BMP", &g_drone_sprite))
         g_drone_sprite.data = NULL;
 }
 

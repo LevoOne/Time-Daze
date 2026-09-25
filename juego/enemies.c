@@ -132,7 +132,7 @@ static const Enemy enemies_fut[SCREEN_COUNT][MAX_ENEMIES] =
 {
     /* P1: cima, dron */
     {
-        { ENEMY_DRONE, 1, 290.0f,120.0f, 1.0f,0.8f, PAT_ZIGZAG, 20.0f,280.0f, 100.0f,140.0f, 0,0 },
+        { ENEMY_DRONE, 1, 290.0f,120.0f, 1.5f,0.8f, PAT_ZIGZAG, 10.0f,280.0f,80.0f,120.0f, 0,0 },
         END_ENEMY
     },
 
@@ -143,7 +143,7 @@ static const Enemy enemies_fut[SCREEN_COUNT][MAX_ENEMIES] =
 
     /* P3: pie colina, dron */
     {
-        { ENEMY_DRONE, 1, 290.0f,120.0f, 1.0f,0.8f, PAT_ZIGZAG, 20.0f,280.0f, 70.0f,140.0f, 0,0 },
+        { ENEMY_DRONE, 1, 290.0f,120.0f, 1.8f,3.5f, PAT_ZIGZAG, 20.0f,280.0f, 30.0f,120.0f, 0,0 },
         END_ENEMY
     },
     /* P4: nivel medio, dron */
@@ -612,7 +612,6 @@ void enemies_draw(void)
             giro del contenido interior ya transmite el movimiento, a diferencia de un animal que necesita mirar hacia donde camina. */
         if (e->type == ENEMY_DRONE && g_drone_sprite.data != NULL)
         {
-            sfx_play(SFX_PICKUP, 40, MIDDLE);
             screen_inject_drone_palette();
             bmp_draw_tile(&g_drone_sprite, e->anim_frame, 0, 32, 32, x, y);
             continue;

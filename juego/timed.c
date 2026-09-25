@@ -242,7 +242,7 @@ static void game_loop(void)
             esc_was_pressed = 0;
 
         if (!dialog_is_open() && dialog_got_yes())
-            g_state = STATE_GAMEOVER;
+            g_state = STATE_TITLE;
 
         /* 8. ACTUALIZAR CONTADOR DEL CRISTAL */
         if (g_hud.cristal_active)
@@ -475,6 +475,20 @@ static void show_instructions(void)
  * ---------------------------------------------------------------- */
 static void show_game_over(void)
 {
+    BITMAP bmp;
+
+    //load_bmp("GAMEOVER.BMP", &bmp);
+    load_bmp("FUT_P1.BMP", &bmp);
+    vga_clear_screen(0);
+    set_palette_silent(bmp.palette);
+    draw_bitmap(&bmp, (SCREEN_W - bmp.width) >> 1, (SCREEN_H - bmp.height) >> 1);
+    vga_fade_in(16, 7);
+
+    while (key_pressed(KEY_SPACE));    /* soltar, por si venia pulsada */
+    while (!key_pressed(KEY_SPACE));   /* esperar pulsacion real */
+
+    vga_fade_out(16, 7);
+    free(bmp.data);
 }
 
 /* ----------------------------------------------------------------
@@ -577,20 +591,20 @@ int main(void)
     /* Cargamos los assets gráficos */
     screen_init();
 
-    /* ---------------------------------------------------------------
-     * Menu principal: decide entre cargar partida, empezar nueva,
-     * ver instrucciones o salir al DOS. screen_init() ya se hizo
-     * arriba porque hace falta tanto para cargar como para empezar. 
-     * --------------------------------------------------------------- */
-    show_menu();
+    do
+    {
+       /* Menu principal */
+        show_menu();
 
-    /* Bucle principal del juego */
-    g_state = STATE_GAME;
-    music_play(0);
-    game_loop();
+        /* Bucle principal del juego */
+        g_state = STATE_GAME;
+        music_play(0);
+        game_loop();
 
-    /* TODO: pantalla de fin o game over */
-    show_game_over();
+        if (g_state == STATE_GAMEOVER)
+            show_game_over();
+
+    }   while (g_state == STATE_GAMEOVER || g_state == STATE_TITLE);
 
     /* Preparamos la salida al DOS */
     music_free();
