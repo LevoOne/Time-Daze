@@ -400,7 +400,7 @@ static int logic_medieval(int screen)
      * -------------------------------------------------------- */
     if (screen == 2)
     {
-        /* TEMP descomentar este código para la versión final
+        /* TEMP descomentar este código para la versión final cuando estén implementados todos los puzles y pantallas
         if (eric_near(295, 132) && eric_action())
             logic_screen_change(DIR_DOWN); */
 

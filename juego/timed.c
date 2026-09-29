@@ -623,10 +623,10 @@ int main(void)
     sfx_load(SFX_HURT,   "HURT.WAV");
     music_load_xm("PRETHEME.XM");
 
-    /* TEMP ----------------------------
+    /* ----------------------------
      * Secuencia de presentación 
-     * ---------------------------- 
-    show_presentation(); */
+     * ---------------------------- */
+    show_presentation();
 
     /* Cargamos los assets gráficos */
     screen_init();

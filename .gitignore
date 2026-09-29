@@ -5,6 +5,7 @@ juego/*.sym
 juego/*.bak
 juego/dosbox-x.conf
 juego/judas.lib
+juego/SAVEGAME.DAT
 
 hito001/
 CONTEXTO_TECNICO.md
