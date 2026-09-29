@@ -3,7 +3,7 @@
 **Version**: 1.0  
 **Fecha**: Abril 2026  
 **Autor**: Javier  
-**Concurso**: MS-DOS Club 2026 (tema: viajes en el tiempo)  
+**Concurso**: C:\DOS\CONTEST 2 (tema: viajes en el tiempo)  
 **Deadline**: 30 de septiembre de 2026  
 
 ---
@@ -11,10 +11,10 @@
 ## 1. Concepto
 
 **Time Daze** es un juego de plataformas 2D para MS-DOS en el que el protagonista
-viaja entre tres epocas historicas distintas para recuperar los fragmentos de un
+viaja entre tres épocas historicas distintas para recuperar los fragmentos de un
 artefacto temporal. La mecanica central combina plataformas clasicas de 8 bits con
 puzzles basados en el paso del tiempo al estilo Day of the Tentacle: las acciones
-realizadas en una epoca tienen consecuencias en las epocas futuras.
+realizadas en una época tienen consecuencias en las épocas futuras.
 
 El nombre es un homenaje a "Skool Daze" (ZX Spectrum, 1984), juego del que toma
 prestado al protagonista Eric, un estudiante universitario atrapado esta vez no en
@@ -31,9 +31,9 @@ que escondio en la caja fuerte del colegio hace decadas, sin darle ninguna expli
 Eric aprovecha una reunion de antiguos alumnos para escabullirse durante el discurso
 del director, recorrer los pasillos de su antigua escuela y abrir la caja fuerte.
 Al activar el artilugio sin saber lo que hace, el dispositivo se fragmenta: sus tres
-piezas salen disparadas a traves del tiempo y caen en tres epocas distintas.
+piezas salen disparadas a traves del tiempo y caen en tres épocas distintas.
 
-Eric queda atrapado en un bucle temporal. Puede viajar entre las tres epocas pero
+Eric queda atrapado en un bucle temporal. Puede viajar entre las tres épocas pero
 no puede volver a su presente hasta que recupere todos los fragmentos y reconstruya
 el artilugio.
 
@@ -50,12 +50,12 @@ el artilugio no se desvela, dejando abierta una segunda parte.
 **Descripcion**: Estudiante universitario, heredero espiritual del Eric de Skool Daze.
 Joven curioso y resolutivo, acostumbrado a resolver problemas por su cuenta. Tercera
 generacion de su familia en pasar por el mismo colegio.  
-**Aspecto**: El sprite de Eric se adapta visualmente a cada epoca con la ropa tipica
+**Aspecto**: El sprite de Eric se adapta visualmente a cada época con la ropa tipica
 del periodo, aunque su silueta y personalidad son reconocibles en las tres.
 
 ---
 
-## 4. Epocas
+## 4. Épocas
 
 El juego transcurre en el mismo lugar geografico en tres momentos distintos de la
 historia. El jugador puede reconocer que esta en el mismo sitio aunque todo haya
@@ -63,7 +63,7 @@ cambiado.
 
 ### 4.1 Prehistoria
 
-El terreno en su estado mas primitivo. Naturaleza salvaje sin domar, vegetacion
+El terreno en su estado mas primitivo. Naturaleza salvaje sin domar, vegetación
 exuberante, un rio caudaloso que divide el mapa. La estructura de referencia es
 una roca monolitica en la zona baja.
 
@@ -96,7 +96,7 @@ El mapa se divide en tres zonas geograficas:
 
 ### 5.2 Estructura del mapa
 
-Cada epoca tiene exactamente 9 pantallas estaticas con la misma estructura de
+Cada época tiene exactamente 9 pantallas estaticas con la misma estructura de
 conexiones. La navegacion entre pantallas se realiza mediante transiciones de
 fade negro. No hay scroll.
 
@@ -120,9 +120,9 @@ fade negro. No hay scroll.
 | 8 | Zona baja, centro derecha, junto al rio |
 | 9 | Zona baja, extremo derecho, estructura vertical |
 
-### 5.3 Accesibilidad por epoca
+### 5.3 Accesibilidad por época
 
-La accesibilidad del mapa cambia entre epocas segun el paso del tiempo:
+La accesibilidad del mapa cambia entre épocas segun el paso del tiempo:
 
 - **Prehistoria**: el rio en la zona baja es infranqueable. Pantallas 6-9
   inicialmente inaccesibles.
@@ -157,13 +157,13 @@ El Futuro es siempre el resultado de las acciones anteriores, nunca su causa.
 
 Eric puede llevar un unico objeto a la vez. Los objetos se pueden depositar en
 cualquier punto del mapa y recuperar mas tarde. Persisten entre viajes temporales
-dentro de la misma epoca.
+dentro de la misma época.
 
 ### 6.4 Rebobinado temporal
 
 Eric dispone de una reserva limitada de tiempo rebobinable por zona. Al activarlo,
 el estado completo del mundo vuelve atras: posicion de Eric, posicion de enemigos,
-estado de objetos y modificaciones del mapa en todas las epocas simultaneamente.
+estado de objetos y modificaciones del mapa en todas las épocas simultaneamente.
 
 El rebobinado es una mecanica exclusiva de puzzles, no de combate. Sirve para
 deshacer acciones incorrectas como colocar un objeto en el lugar equivocado o
@@ -173,7 +173,7 @@ La reserva se recarga al conseguir cada fragmento.
 
 ### 6.5 Enemigos
 
-Cada epoca tiene un tipo de enemigo con patrones de movimiento fijos:
+Cada época tiene un tipo de enemigo con patrones de movimiento fijos:
 
 - **Prehistoria**: animales prehistoricos que patrullan zonas concretas.
 - **Edad Media**: guardias con rutas fijas.
@@ -188,18 +188,18 @@ conservando los objetos que lleva.
 
 ### 7.1 Estructura
 
-Cada epoca tiene 3 puzzles:
+Cada época tiene 3 puzzles:
 
 - **1 puzzle principal**: da acceso al fragmento del artefacto. Implica cruce
-  temporal entre epocas.
+  temporal entre épocas.
 - **2 puzzles intermedios**: desbloquean zonas del mapa u objetos necesarios.
-  Pueden ser internos a la epoca o con cruce temporal menor.
+  Pueden ser internos a la época o con cruce temporal menor.
 
 Total: 9 puzzles. Ritmo aproximado de 1 puzzle cada 3 pantallas.
 
 ### 7.2 Ubicacion de los fragmentos
 
-| Fragmento | Epoca | Pantalla |
+| Fragmento | Época | Pantalla |
 |---|---|---|
 | 1 | Prehistoria | 1 (cima de la colina) |
 | 2 | Edad Media | 9 (estructura vertical) |
@@ -248,7 +248,7 @@ Dificultad: baja, introductoria
 ```
 
 Objetos: tronco (Prehistoria)
-Viajes temporales: ninguno, puzzle interno a la epoca
+Viajes temporales: ninguno, puzzle interno a la época
 Dificultad: media, introduce elemento arcade
 
 #### Puzzle Principal: La ofrenda al chaman (no implementado en esta versión inicial para el concurso)
@@ -258,7 +258,7 @@ Dificultad: media, introduce elemento arcade
 ```
 1. Eric llega a pantalla 1, encuentra el circulo de piedras
    El chaman custodia el fragmento y pide una planta sagrada como ofrenda
-2. Viaje a Edad Media: Eric encuentra la planta (todavia existe en esta epoca)
+2. Viaje a Edad Media: Eric encuentra la planta (todavia existe en esta época)
    Eric la entierra en un recipiente de barro sellado en un lugar marcado
 3. Viaje a Futuro: Eric desentierra el recipiente
    La planta sigue viva dentro, perfectamente conservada
@@ -901,7 +901,7 @@ como unico rastro de la valla de madera medieval. El arbol de la colmena
 sigue en pie pero seco y esqueletico, sin hojas. Ambiente desolado y silencioso.
 
 Plataformas: ladera irregular con rocas sueltas. Menos plataformas que en
-epocas anteriores por la erosion.
+épocas anteriores por la erosion.
 
 Enemigos: ninguno.
 
@@ -944,7 +944,7 @@ baja a la zona baja visible en el borde inferior, todavia funcional aunque
 deteriorada. Fondo distopico. Paleta clara y desaturada.
 
 Plataformas: estructuras metalicas y tuberias rotas como plataformas a
-distintas alturas. Mas variedad vertical que en epocas anteriores.
+distintas alturas. Mas variedad vertical que en épocas anteriores.
 
 Enemigos: un dron patrullando con trayectoria fija.
 
@@ -1095,11 +1095,11 @@ Eventos:
 | Evento | Tipo |
 |---|---|
 | Al iniciar el juego | Carga automatica si existe SAVEGAME.DAT |
-| Al llegar a pantalla 5 de cada epoca | Guardado manual en objeto especial |
+| Al llegar a pantalla 5 de cada época | Guardado manual en objeto especial |
 | Al conseguir cada fragmento | Guardado automatico |
 | Al completar el juego | Guardado automatico |
 
-El objeto de guardado manual en pantalla 5 es distinto en cada epoca:
+El objeto de guardado manual en pantalla 5 es distinto en cada época:
 
 - **Prehistoria**: hoguera ceremonial.
 - **Edad Media**: capilla o posada.
@@ -1113,13 +1113,13 @@ El objeto de guardado manual en pantalla 5 es distinto en cada epoca:
 
 Restricciones tecnicas: 320x200 pixeles, 256 colores indexados, paleta VGA.
 
-Cada epoca debe tener una identidad visual inmediata y reconocible. El jugador
-debe sentir el cambio de epoca antes de leer ningun texto.
+Cada época debe tener una identidad visual inmediata y reconocible. El jugador
+debe sentir el cambio de época antes de leer ningun texto.
 
-### 9.1 Continuidad visual entre epocas
+### 9.1 Continuidad visual entre épocas
 
 Uno de los requisitos artisticos mas importantes del juego es que el jugador
-pueda reconocer que esta en el mismo lugar geografico en las tres epocas.
+pueda reconocer que esta en el mismo lugar geografico en las tres épocas.
 El arte debe transmitir la evolucion del tiempo de forma visual sin necesidad
 de texto explicativo.
 
@@ -1130,37 +1130,37 @@ Recursos graficos para conseguirlo:
   estructura vista en la Edad Media.
 - **Elementos persistentes**: la roca monolitica de Prehistoria se convierte en
   cimiento de la torre medieval, que se convierte en el unico muro en pie del
-  Futuro. El jugador la reconoce en las tres epocas.
+  Futuro. El jugador la reconoce en las tres épocas.
 - **Paleta de colores que evoluciona**: tonos calidos y vivos en Prehistoria,
   grises y ocres en Edad Media, tonos desaturados y frios en Futuro.
 - **Detalles narrativos en el fondo**: en el Futuro, entre los escombros, restos
-  reconocibles de epocas anteriores: un escudo heraldico partido, piedras con
+  reconocibles de épocas anteriores: un escudo heraldico partido, piedras con
   inscripciones medievales, restos oxidados de mecanismos.
 
-### 9.2 Elementos a definir por epoca
+### 9.2 Elementos a definir por época
 
 - Paleta de colores predominante
-- Estilo de los fondos (BMP de 320x200 por pantalla y epoca)
+- Estilo de los fondos (BMP de 320x200 por pantalla y época)
 - Tileset de plataformas y elementos del entorno
-- Sprites de Eric (spritesheet por epoca)
+- Sprites de Eric (spritesheet por época)
 - Sprites de enemigos
 - Objeto de guardado manual
 
-### 9.3 Paleta VGA compartida por epoca (estado tecnico real y principio general)
+### 9.3 Paleta VGA compartida por época (estado tecnico real y principio general)
 
-Cada epoca tiene su PROPIA paleta VGA de 256 colores, compartida entre
-sus 9 fondos y todos los sprites/objetos de esa epoca. El reparto de
+Cada época tiene su PROPIA paleta VGA de 256 colores, compartida entre
+sus 9 fondos y todos los sprites/objetos de esa época. El reparto de
 indices descrito abajo es el ya implementado para Prehistoria, y debe
 servir como plantilla para Edad Media y Futuro cuando llegue su turno
 (18 pantallas restantes + sus respectivos sprites).
 
-**Estado por epoca:**
+**Estado por época:**
 - **Prehistoria**: ✅ implementado y verificado (detalle completo abajo).
 - **Edad Media**: ⬜ pendiente. Cuando se generen los 9 fondos, aplicar
   el mismo proceso: verificar que comparten los mismos colores en su
   rango de fondo (igual que se hizo aqui comparando byte a byte
   PRE_P1..P9), y reservar rangos propios para Eric (puede que distinto
-  spritesheet/paleta segun epoca), huevo si reaparece, y cualquier
+  spritesheet/paleta segun época), huevo si reaparece, y cualquier
   objeto interactivo propio de Edad Media (taza, antorcha, puente
   levadizo, escalera de madera, etc.).
 - **Futuro**: ⬜ pendiente, mismo proceso. Objetos propios conocidos:
@@ -1197,7 +1197,7 @@ servir como plantilla para Edad Media y Futuro cuando llegue su turno
 toque, en Edad Media y Futuro desde cero: extraer los colores reales
 del BMP final, cuantizarlos por frecuencia de pixel al numero de
 colores que haga falta, y colocarlos en huecos libres del rango de la
-epoca correspondiente si no chocan en pantalla con otros sprites que
+época correspondiente si no chocan en pantalla con otros sprites que
 ya usen ese rango, o reconsiderar el reparto (compartir tonos entre
 sprites de paleta similar, por ejemplo tierra/marron entre tronco y
 roca) si el rango se queda corto. Edad Media y Futuro empiezan con los
@@ -1220,7 +1220,7 @@ que no este verificada contra el codigo.
 
 ### Musica
 
-Una pista por epoca en formato XM, en bucle. Debe poder escucharse durante
+Una pista por época en formato XM, en bucle. Debe poder escucharse durante
 sesiones largas de exploracion sin resultar agotadora.
 
 - **Prehistoria**: organica, primitiva, mas atmosfera que melodia.
@@ -1236,7 +1236,7 @@ Efectos en formato WAV para:
 - Depositar objeto
 - Activar mecanismo
 - Contacto con enemigo
-- Viaje temporal (fade entre epocas)
+- Viaje temporal (fade entre épocas)
 - Guardado
 - Conseguir fragmento
 
@@ -1362,7 +1362,7 @@ Los siguientes objetos deben ser visibles en el fondo o como sprites separados:
 - P9: antorcha apagada en la torre (x=100, y=160)
 
 **Pendiente de revisar:** resto de objetos interactivos por pantalla
-al integrar el arte final de cada epoca.
+al integrar el arte final de cada época.
 
 ### Sprites animados pendientes
 
@@ -1412,10 +1412,10 @@ antes de que comience el juego. La secuencia debe narrar brevemente:
 - La reunion de ex-alumnos en el colegio
 - Eric descubriendo la caja fuerte y el artefacto
 - La activacion accidental del artefacto y su fragmentacion
-- Eric atrapado entre las tres epocas
+- Eric atrapado entre las tres épocas
 
 Formato sugerido: serie de pantallas estaticas de 320x200 con texto superpuesto
-y fade entre ellas, al estilo de las intros de juegos DOS de la epoca.
+y fade entre ellas, al estilo de las intros de juegos DOS de la época.
 La secuencia debe ser saltable con cualquier tecla.
 
 La intro se insertaria en show_presentation() en tempus.c, despues de los logos
@@ -1440,7 +1440,7 @@ reciclar el slot dinamico):
 - Indice 0 `SFX_JUMP`: salto, cargado una vez al arrancar.
 - Indice 1: dinamico, recargado por pantalla/evento (roca rodando,
   pisadas del oso/jabali/reptil, goteo de miel, salpicadura de los
-  peces, viaje entre epocas). `sfx_sync_dynamic_slot()` recarga el
+  peces, viaje entre épocas). `sfx_sync_dynamic_slot()` recarga el
   sonido correcto de la pantalla de destino tras cada viaje temporal,
   evitando que un sonido puntual (p.ej. `TRAVEL.WAV`) se quede pegado
   indefinidamente en pantallas que necesitan su propio sonido continuo
@@ -1464,8 +1464,8 @@ que ya funcionaba `SFX_JUMP`, en vez de reciclar el slot dinamico.
 
 Musica: XM (`PRETHEME.XM`, `MEDTHEME.XM`, `FIRE.XM` para P5, pendiente
 tema de Futuro definitivo) cargada con `music_load_xm()`, que libera el
-tema anterior automaticamente. Memoria por epoca (`s_epoch_last_screen`)
-implementada: al volver a una epoca tras viajar, Eric reaparece en la
+tema anterior automaticamente. Memoria por época (`s_epoch_last_screen`)
+implementada: al volver a una época tras viajar, Eric reaparece en la
 ultima pantalla real en la que estuvo, no siempre en P1.
 
 ### Cuadro de dialogo
@@ -1485,7 +1485,7 @@ Retrato: `ERICFRM.BMP`, recortado a su bbox real (42x37) y remapeado a
 `eric_palette` (130-185, permanente) para que funcione en cualquier
 pantalla sin conflicto de paleta.
 
-**Colores del cuadro dependientes de la epoca activa**: `dialog_col_bg()`,
+**Colores del cuadro dependientes de la época activa**: `dialog_col_bg()`,
 `dialog_col_border()`, `dialog_col_dim()` en `dialog.c` calculan el
 indice segun `g_game.screen.current_epoch`, en vez de usar una
 constante fija. Bug real resuelto: los colores originales usaban
@@ -1496,15 +1496,15 @@ tonos permanentes fiables (negro real = mas oscuro de `eric_palette`,
 blanco/crema real = mas claro de `cup_palette`). Los casos de Edad
 Media/Futuro estan con los mismos valores de Prehistoria como
 placeholder, pendientes de ajustar cuando se defina la paleta
-permanente de esas epocas.
+permanente de esas épocas.
 
 ### HUD
 
 ✅ **Pistas contextuales por pantalla** — implementado como
-`g_hints[3][9][3]` (2 lineas + NULL por pantalla/epoca), mostrado via
+`g_hints[3][9][3]` (2 lineas + NULL por pantalla/época), mostrado via
 `DIALOG_HINT` con el retrato de Eric al pulsar ESPACIO sin ninguna
 interaccion especifica pendiente ese frame. Las 27 frases de las 3
-epocas ya estan escritas (Edad Media/Futuro con contenido, pendiente
+épocas ya estan escritas (Edad Media/Futuro con contenido, pendiente
 de revisar una vez cerrado el arte definitivo de esas pantallas).
 
 ✅ **Indicador de objeto cercano, aunque Eric lleve algo encima** — el
@@ -1526,9 +1526,9 @@ tonos calidos de `cup_palette`.
 
 ⬜ Aplicar a las 18 pantallas restantes (9 Edad Media + 9 Futuro) el
 mismo principio ya implementado en Prehistoria: paleta compartida entre
-los 9 fondos de cada epoca, con rangos de indices reservados aparte
+los 9 fondos de cada época, con rangos de indices reservados aparte
 para Eric, objetos interactivos y sprites animados propios de esa
-epoca. Ver seccion 9.3 para el detalle del reparto de Prehistoria como
+época. Ver seccion 9.3 para el detalle del reparto de Prehistoria como
 plantilla y el proceso a seguir (verificacion byte a byte de los
 fondos, cuantizacion por frecuencia de pixel para cada sprite nuevo).
 
@@ -1547,12 +1547,12 @@ si sola (solo actualiza la copia en memoria que usa `vga_fade_in()`) —
 sin el fade posterior, el bitmap se veia con colores completamente
 descuadrados.
 
-✅ **Viaje entre epocas por seleccion directa** — sustituido el ciclo
+✅ **Viaje entre épocas por seleccion directa** — sustituido el ciclo
 con una sola tecla por 1/2/3 = Prehistoria/Edad Media/Futuro
-directamente, sin viajar si ya se esta en esa epoca. Tecla A liberada
+directamente, sin viajar si ya se esta en esa época. Tecla A liberada
 sin uso.
 
-✅ **Memoria de pantalla por epoca** — al volver a una epoca ya
+✅ **Memoria de pantalla por época** — al volver a una época ya
 visitada, Eric reaparece en la ultima pantalla real en la que estuvo
 alli (`s_epoch_last_screen[EPOCH_COUNT]`), no siempre en P1.
 
@@ -1566,7 +1566,7 @@ vacia/placeholder) — 4 paginas encadenadas, mismo patron de bitmap
 centrado + avance por ESPACIO que la intro:
 1. Sinopsis (narrativa)
 2. Mecanica (exploracion, esquivar peligros, timing de salto, objetos
-   entre epocas — sin dar pistas de puzzles concretos)
+   entre épocas — sin dar pistas de puzzles concretos)
 3. Controles (teclado ilustrado con las teclas relevantes resaltadas)
 4. HUD (captura real del juego con 3 llamadas: vidas, objeto
    llevado/cercano, fragmentos)
@@ -1603,7 +1603,7 @@ aplicando directamente en su copia de `timed.c`).
    `g_dialog_monolith[]`. Contenido placeholder ("SOL - LUNA -
    ESTRELLA"), pendiente definir los simbolos reales del codigo del
    portal de Futuro y mantener coherencia con la segunda mitad del
-   codigo en las ruinas de la torre de esa epoca.
+   codigo en las ruinas de la torre de esa época.
 
 4. ✅ **Frases de pistas por pantalla** — mostrar via ventana emergente.
    Decidir si se muestran al entrar en la pantalla o solo al pulsar
@@ -1635,7 +1635,7 @@ aplicando directamente en su copia de `timed.c`).
   roca rodando ya esta implementada).
 - ✅ **SFX coger/depositar objetos** — `SFX_PICKUP`/`SFX_DROP`, canales
   fijos propios (indices 2/3), cargados una vez al arrancar.
-- ✅ **SFX viaje entre epocas** — `TRAVEL.WAV` en el slot dinamico
+- ✅ **SFX viaje entre épocas** — `TRAVEL.WAV` en el slot dinamico
   (indice 1), integrado en `screen_travel()`. Limitacion conocida sin
   resolver: queda un ligero solape/distorsion de audio en el instante
   de la carga de la nueva musica (`music_load_xm()` llama a
@@ -1677,17 +1677,17 @@ automaticamente o vuelve al menu para elegir cargar/empezar de nuevo?
 
 - **Precarga de musica en memoria**: `screen_travel()` sigue teniendo
   un ligero solape/distorsion de audio en el instante de cargar la
-  musica de la nueva epoca. La causa raiz es `judas_loadxm()` (funcion
+  musica de la nueva época. La causa raiz es `judas_loadxm()` (funcion
   cerrada de la libreria Judas, sin codigo fuente disponible), que
   aparentemente no cede tiempo al mezclador durante la lectura del
   archivo XM del disco — no se puede instrumentar con `sound_update()`
   por dentro. Ya resuelto el mismo problema en `try_load_bmp()`
   (`screen.c`) anadiendo `sound_update()` una vez por fila leida, pero
   ese arreglo no cubre la carga de musica en si. Posible solucion de
-  fondo: precargar todos los temas de las 3 epocas en memoria al
+  fondo: precargar todos los temas de las 3 épocas en memoria al
   arrancar el juego (o durante la intro), y que `screen_travel()` solo
   cambie que tema ya cargado esta sonando, sin volver a leer del disco
   cada vez. Pendiente confirmar si la API de Judas permite mantener
   varios modulos cargados simultaneamente y alternar sin recarga.
   Aceptado como limitacion conocida para la demo shareware: el viaje
-  entre epocas es un evento puntual, no continuo.
+  entre épocas es un evento puntual, no continuo.

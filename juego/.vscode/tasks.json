@@ -3,6 +3,16 @@
     "tasks":
     [
         {
+            "label": "Limpiar objetos y errores",
+            "type": "shell",
+            "command": "Remove-Item",
+            "args": [
+                "*.obj,*.err",
+                "-ErrorAction", "SilentlyContinue"
+            ],
+            "problemMatcher": []
+        },
+        {
             "label": "Compilar Time Daze con Watcom DOS4GW",
             "type": "shell",
             "command": "wcl386",
@@ -23,6 +33,8 @@
                 "dialog.c",
                 "judas.lib"
             ],
+            "dependsOn": "Limpiar objetos y errores",
+            "dependsOrder": "sequence",
             "group":
             {
                 "kind": "build",
@@ -52,17 +64,14 @@
                 "dialog.c",
                 "judas.lib"
             ],
-            "group":
-            {
-                "kind": "build",
-                "isDefault": true
-            },
+            "dependsOn": "Limpiar objetos y errores",
+            "dependsOrder": "sequence",
+            "group": "build",
             "problemMatcher": []
         },
         {
             "label": "Ejecutar en DOSBox-X",
             "type": "shell",
-            "dependsOn": "Compilar con Watcom",
             "command": "dosbox-x",
             "args":
             [

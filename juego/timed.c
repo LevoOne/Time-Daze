@@ -25,11 +25,6 @@
 
 
 /* ----------------------------------------------------------------
- * DEFINICION DE LA VARIABLE GLOBAL
- * ---------------------------------------------------------------- */
-GameState g_game;
-
-/* ----------------------------------------------------------------
  * ESTADOS DEL JUEGO
  * ---------------------------------------------------------------- */
 #define STATE_TITLE     0
@@ -65,6 +60,7 @@ static void new_game(void)
     player_init();
     hud_init();
     logic_init();
+    screen_reset_session_state();
 
     /* El juego empieza en P0 de Prehistoria */
     /* TEMP no olvidar dejar esto en pantalla 0 de PRE */

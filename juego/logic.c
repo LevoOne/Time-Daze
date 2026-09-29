@@ -175,7 +175,8 @@ static int logic_prehistory(int screen)
     {
         /* TEMP igual que en la parte del chamán, dejamos eric_near() para revisar más adelante
         if (eric_near(beehive_x, beehive_y) && eric_action()) */
-        if ((int)g_game.player.x >= 165 && (int)g_game.player.x <= 205 && eric_action())
+        int eric_cx = (int)g_game.player.x + PLAYER_WIDTH / 2;
+        if (eric_cx >= 165 && eric_cx <= 205 && eric_action())
         {
             if (inv_is_carrying(ITEM_STICK))
             {

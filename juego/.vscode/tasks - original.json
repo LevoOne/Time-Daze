@@ -1,0 +1,77 @@
+{
+    "version": "2.0.0",
+    "tasks":
+    [
+        {
+            "label": "Compilar Time Daze con Watcom DOS4GW",
+            "type": "shell",
+            "command": "wcl386",
+            "args": [
+                "-l=dos4g",
+                "-w4",
+                "timed.c",
+                "player.c",
+                "enemies.c",
+                "puzzles.c",
+                "inventory.c",
+                "screen.c",
+                "save.c",
+                "hud.c",
+                "logic.c",
+                "engine.c",
+                "game.c",
+                "dialog.c",
+                "judas.lib"
+            ],
+            "group":
+            {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Compilar (DEBUG) Time Daze con Watcom DOS4GW",
+            "type": "shell",
+            "command": "wcl386",
+            "args": [
+                "-l=dos4g",
+                "-w4",
+                "-dDEBUG",
+                "timed.c",
+                "player.c",
+                "enemies.c",
+                "puzzles.c",
+                "inventory.c",
+                "screen.c",
+                "save.c",
+                "hud.c",
+                "logic.c",
+                "engine.c",
+                "game.c",
+                "dialog.c",
+                "judas.lib"
+            ],
+            "group":
+            {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Ejecutar en DOSBox-X",
+            "type": "shell",
+            "dependsOn": "Compilar con Watcom",
+            "command": "dosbox-x",
+            "args":
+            [
+                "-conf", "dosbox-x.conf",
+                "-c", "mount C .",
+                "-c", "C:",
+                "-c", "timed.exe"
+            ],
+            "group": "test"
+        }
+    ]
+}

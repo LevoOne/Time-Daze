@@ -146,4 +146,14 @@ int screen_get_connection(int dir);
  * -----------------------------------------------------------------------------------------*/
 int screen_is_honey_dripping(void);
 
+/* -----------------------------------------------------------------------------------------
+ * screen_reset_session_state()
+ *   Reinicia el estado interno de sesion de screen.c (animaciones en
+ *   curso, memoria de la ultima pantalla visitada por epoca). Llamar
+ *   siempre desde new_game(), antes de cargar la primera pantalla.
+ * Entrada: ninguna
+ * Salida:  ninguna
+ * -----------------------------------------------------------------------------------------*/
+void screen_reset_session_state(void);
+
 #endif /* SCREEN_SYS_H */

@@ -853,7 +853,7 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     /* P8: cruce del rio */
     {
         { 0, 87, 26, 8 },     /* plataforma izquierda */
-        { 39, 101, 26, 8 },   /* 2da plataforma  izquierda */
+        { 39, 101, 36, 8 },   /* 2da plataforma  izquierda */
         { 0, 148, 40, 8 },    /* orilla izquierda */
         { 245, 148, 89, 8 },    /* orilla derecha */
         { 102,  112, 10, 2 },   /* roca 1 */
@@ -1664,4 +1664,32 @@ void screen_draw_shaman(void)
 int screen_is_honey_dripping(void)
 {
     return s_honey_active;
+}
+
+/* ----------------------------------------------------------------
+ * SCREEN RESET SESSION STATE
+ * Reinicia todo el estado interno de sesion de screen.c que no
+ * depende de logic_init()/puzzle_init() (animaciones en curso,
+ * memoria de la ultima pantalla visitada por epoca). Llamar desde
+ * new_game() para que una partida nueva no arrastre estado suelto
+ * de una partida anterior dentro del mismo proceso -- por ejemplo,
+ * Eric viajando a la ultima pantalla de Edad Media que se visito
+ * antes de salir, en vez de siempre P1.
+ * ---------------------------------------------------------------- */
+void screen_reset_session_state(void)
+{
+    int i;
+    for (i = 0; i < EPOCH_COUNT; i++)
+        s_epoch_last_screen[i] = 0;
+
+    s_honey_active = 0;
+    s_honey_phase  = 0;
+    s_honey_timer  = 0;
+    s_honey_y      = 0;
+
+    s_rock_rolling   = 0;
+    s_roll_frame     = 0;
+    s_roll_timer     = 0;
+    s_roll_x         = 0;
+    s_roll_sfx_timer = 0;
 }
