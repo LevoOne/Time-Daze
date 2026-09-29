@@ -1,0 +1,1 @@
+ejecutar jugar.bat desde este mismo directorio para lanzar el juego
