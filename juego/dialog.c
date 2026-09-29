@@ -16,37 +16,39 @@ const char *g_hints[3][9][3] =
     {
         { "El abuelo chalao",           "guarda un secreto",        NULL },  /* P1 */
         { "Un panel de rica miel",      "",                         NULL },  /* P2 */
-        { "Podre bajar",           "por esa liana??",             NULL },  /* P3 */
-        { "Tengo que",                 "seguir bajando",    NULL },  /* P4 */
-        { "Que mejor sitio",      "para guardar progreso...",          NULL },  /* P5 */
+        { "Podre bajar",                "por esa liana??",             NULL },  /* P3 */
+        { "Tengo que",                  "seguir bajando",        NULL },  /* P4 */
+        { "Que mejor sitio",            "para guardar progreso",          NULL },  /* P5 */
         { "Nada por aqui",              "",                         NULL },  /* P6 */
         { "Jodo floro con el lagarto",  "",                         NULL },  /* P7 */
         { "Osti tu!! Que no me",        "rocen esos peces",         NULL },  /* P8 */
         { "Parece que hay un",          "mensaje en la piedra",             NULL },  /* P9 */
     },
+
     /* EDAD MEDIA */
     {
-        { "Resaca temporal",                "tope de gama!",     NULL },  /* P1 */
-        { "Una casa!",                      "Habra alguien?",   NULL },  /* P2 */
-        { "Parece util...",                 "igual lo cojo",                       NULL },  /* P3 */
-        { "La fragua trabaja dia",          "y noche",               NULL },  /* P4 */
-        { "La capilla guarda",              "secretos del pasado",   NULL },  /* P5 */
-        { "El mercado oculta mas",          "de lo que vende",       NULL },  /* P6 */
-        { "Las mazmorras no",               "estan vacias",          NULL },  /* P7 */
-        { "El laboratorio del",             "alquimista humea",      NULL },  /* P8 */
-        { "La torre mas alta guarda",       "lo mas valioso",        NULL },  /* P9 */
+        { "Alucina vecina",             "...donde estoy??",     NULL },  /* P1 */
+        { "Una casa...",                "Habra alguien?",   NULL },  /* P2 */
+        { "Parece util...",             "igual lo cojo",                       NULL },  /* P3 */
+        { "La fragua trabaja dia",      "y noche",               NULL },  /* P4 */
+        { "La capilla guarda",          "secretos del pasado",   NULL },  /* P5 */
+        { "El mercado oculta mas",      "de lo que vende",       NULL },  /* P6 */
+        { "Las mazmorras no",           "estan vacias",          NULL },  /* P7 */
+        { "El laboratorio del",         "alquimista humea",      NULL },  /* P8 */
+        { "La torre mas alta guarda",   "lo mas valioso",        NULL },  /* P9 */
     },
+
     /* FUTURO */
     {
-        { "Las maquinas hablan si",   "sabes escuchar",        NULL },  /* P1 */
-        { "La radiacion no",          "perdona errores",       NULL },  /* P2 */
-        { "Los drones patrullan",     "sin descanso",          NULL },  /* P3 */
-        { "Los drones patrullan",     "sin descanso",          NULL },  /* P4 */
-        { "El nucleo late en las",    "profundidades",         NULL },  /* P5 */
-        { "La puerta hermetica",      "lleva semanas cerrada", NULL },  /* P6 */
-        { "El aire aqui tiene",       "sabor metalico",        NULL },  /* P7 */
-        { "La terminal todavia",      "funciona",              NULL },  /* P8 */
-        { "El portal espera",         "ser activado",          NULL },  /* P9 */
+        { "Las maquinas hablan",        "si sabes escuchar",        NULL },  /* P1 */
+        { "La radiacion no",            "perdona errores",       NULL },  /* P2 */
+        { "Los drones patrullan",       "sin descanso",          NULL },  /* P3 */
+        { "Los drones patrullan",       "sin descanso",          NULL },  /* P4 */
+        { "El nucleo late en las",      "profundidades",         NULL },  /* P5 */
+        { "La puerta hermetica",        "lleva semanas cerrada", NULL },  /* P6 */
+        { "El aire aqui tiene",         "sabor metalico",        NULL },  /* P7 */
+        { "La terminal todavia",        "funciona",              NULL },  /* P8 */
+        { "El portal espera",           "ser activado",          NULL },  /* P9 */
     },
 };
 
@@ -69,6 +71,9 @@ const char *g_dialog_monolith[] =
     "SOL - LUNA - ESTRELLA",
     NULL
 };
+
+/* Mensaje alternativa una vez se recoge la taza */
+const char *g_dialog_med_p3_empty[] = { "Nada por aqui...", NULL };
 
 /* TEMP solo para la versión de demo del concurso*/
 const char *g_dialog_demo_limit[] = { "Inaccesible en la demo", NULL };
@@ -172,7 +177,7 @@ void dialog_update(void)
 
     if (s_type == DIALOG_HINT)
     {
-        if (key_pressed(KEY_SPACE))
+        if (key_pressed(KEY_SPACE) || key_pressed(KEY_A))
         {
             if (!s_space_was_pressed)
             {

@@ -71,6 +71,7 @@ int load_game(void)
     g_game.player.lives = sd.player_lives;
 
     screen_load(sd.epoch, sd.screen);
+    enemies_load(sd.epoch, sd.screen);
     screen_apply_palette();
     player_place(sd.player_x, sd.player_y);
 

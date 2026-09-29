@@ -23,6 +23,7 @@
  * ESTADO INTERNO
  * ---------------------------------------------------------------- */
 static int action_was_pressed = 0;
+static int hint_was_pressed = 0;
 
 /* ----------------------------------------------------------------
  * INIT
@@ -30,6 +31,7 @@ static int action_was_pressed = 0;
 void logic_init(void)
 {
     action_was_pressed = 0;
+    hint_was_pressed = 0;
 
     /* Colocar objetos iniciales en el mundo */
     inv_place(ITEM_STICK,    EPOCH_PREHISTORY, 2, 104, 134);    /* P3: palo   */
@@ -836,21 +838,27 @@ void logic_update(void)
         alt_was_pressed = 0;
     }
 
-    /* --------------------------------------------------------
+    /* -----------------------------------------------------------------------------------
      * PISTA DE PANTALLA
      * Solo si ninguna interaccion especifica ocurrio este frame.
      * Sin condicion sobre nearby_item, igual wque en todas las pantallas.
-     * -------------------------------------------------------- */
-    if (!handled && !dialog_is_open())
+     * TEMP: añadida casuística específica para P3 de MED cuando ya se ha recogido la taza
+     * ----------------------------------------------------------------------------------- */
+   if (!dialog_is_open())
     {
-        if (key_pressed(KEY_SPACE) && !action_was_pressed)
+        if (key_pressed(KEY_A) && !hint_was_pressed)
         {
-            action_was_pressed = 1;
-            dialog_open(DIALOG_HINT, &g_ericfrm_sprite, g_hints[epoch][screen]);
+            hint_was_pressed = 1;
+            if (epoch == EPOCH_MEDIEVAL && screen == 2 && !inv_instance_exists(ITEM_CUP, EPOCH_MEDIEVAL, 2))
+                dialog_open(DIALOG_HINT, &g_ericfrm_sprite, g_dialog_med_p3_empty);
+            else
+                dialog_open(DIALOG_HINT, &g_ericfrm_sprite, g_hints[epoch][screen]);
         }
     }
 
     /* Reset action_was_pressed cuando ESPACIO no esta pulsado */
     if (!key_pressed(KEY_SPACE))
         action_was_pressed = 0;
+    if (!key_pressed(KEY_A))
+        hint_was_pressed = 0;
 }

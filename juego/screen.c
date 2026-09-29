@@ -852,9 +852,9 @@ static const Platform platforms_pre[SCREEN_COUNT][MAX_PLATFORMS] =
     },
     /* P8: cruce del rio */
     {
-        { 0, 87, 36, 8 },     /* plataforma izquierda */
-        { 39, 101, 30, 8 },   /* 2da plataforma  izquierda */
-        { 0,   148, 60, 8 },    /* orilla izquierda */
+        { 0, 87, 26, 8 },     /* plataforma izquierda */
+        { 39, 101, 26, 8 },   /* 2da plataforma  izquierda */
+        { 0, 148, 40, 8 },    /* orilla izquierda */
         { 245, 148, 89, 8 },    /* orilla derecha */
         { 102,  112, 10, 2 },   /* roca 1 */
         { 136, 107, 5, 2 },     /* roca 2 */

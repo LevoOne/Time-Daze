@@ -181,13 +181,14 @@ static void game_loop(void)
         logic_update();
 
         /* 2. ACTUALIZAR ENEMIGOS */
-        enemies_update();
+        if(!dialog_is_open())
+            enemies_update();
 
         /* 3. ACTUALIZAR ERIC */
         player_event = player_update();
 
         /* 4. COLISION CON ENEMIGOS */
-        if (enemies_check_collision())
+        if (!dialog_is_open() && enemies_check_collision())
         {
             player_hit();
             screen_load(epoch, screen);
@@ -564,6 +565,12 @@ static void show_menu(void)
             else if (key_pressed(KEY_7))
                 choice = 5;   /* puerta trasera: como 3, pero vidas infinitas */
         }
+
+        /* Esperar a soltar la tecla elegida antes de continuar. Esto arregla
+         * el bug de solape con las teclas de viaje entre épocas nada más empezar
+         * con el primer frame de game_loop() */
+        while (key_pressed(KEY_1) || key_pressed(KEY_2) || key_pressed(KEY_3) ||
+            key_pressed(KEY_4) || key_pressed(KEY_7));
 
         free(menu_bg.data);
 

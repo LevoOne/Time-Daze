@@ -83,6 +83,7 @@ extern const char *g_hints[3][9][3];
 
 extern const char *g_dialog_shaman[];
 extern const char *g_dialog_monolith[];
+extern const char *g_dialog_med_p3_empty[];
 
 /* TEMP: Solo para versión demo */
 extern const char *g_dialog_demo_limit[];
