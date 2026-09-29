@@ -1594,7 +1594,7 @@ void screen_travel(int new_epoch)
     }
     else if (new_epoch == EPOCH_FUTURE)
     {
-        music_load_xm("MEDTHEME.XM");  /* pendiente */
+        music_load_xm("FUTTHEME.XM"); 
     }
     else
     {

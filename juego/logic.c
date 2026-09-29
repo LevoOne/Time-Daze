@@ -171,7 +171,9 @@ static int logic_prehistory(int screen)
      * -------------------------------------------------------- */
     if (screen == 1)
     {
-        if (eric_near(beehive_x, beehive_y) && eric_action())
+        /* TEMP igual que en la parte del chamán, dejamos eric_near() para revisar más adelante
+        if (eric_near(beehive_x, beehive_y) && eric_action()) */
+        if ((int)g_game.player.x >= 165 && (int)g_game.player.x <= 205 && eric_action())
         {
             if (inv_is_carrying(ITEM_STICK))
             {
@@ -252,7 +254,9 @@ static int logic_prehistory(int screen)
 
         if (!puzzle_is_solved(PUZZLE_SHAMAN))
         {
-            if (eric_near(shaman_x, shaman_y) && eric_action())
+            /* TEMP No me llega a convencer la precisión de eric_near(), paso a chech manual, a revisar más adelante
+            if (eric_near(shaman_x, shaman_y) && eric_action()) */
+            if ((int)g_game.player.x >= 35 && (int)g_game.player.x <= 75 && eric_action())
             {
                 puzzle_solve(PUZZLE_SHAMAN);
                 fragment_collect(FRAGMENT_1);

@@ -16,9 +16,9 @@ const char *g_hints[3][9][3] =
     {
         { "El abuelo chalao",           "guarda un secreto",        NULL },  /* P1 */
         { "Un panel de rica miel",      "",                         NULL },  /* P2 */
-        { "El oso goloso me",           "cierra el paso",           NULL },  /* P3 */
-        { "Vaya bicho...",              "lo tengo que esquivar",    NULL },  /* P4 */
-        { "Al lado de la hoguera",      "se esta de lujo",               NULL },  /* P5 */
+        { "Podre bajar",           "por esa liana??",             NULL },  /* P3 */
+        { "Tengo que",                 "seguir bajando",    NULL },  /* P4 */
+        { "Que mejor sitio",      "para guardar progreso...",          NULL },  /* P5 */
         { "Nada por aqui",              "",                         NULL },  /* P6 */
         { "Jodo floro con el lagarto",  "",                         NULL },  /* P7 */
         { "Osti tu!! Que no me",        "rocen esos peces",         NULL },  /* P8 */
@@ -281,7 +281,7 @@ void dialog_draw(void)
             draw_string(s_lines[s_line], tx+10, ty+16, col_text);
 
         if (s_lines != NULL && s_lines[s_line + 1] == NULL)
-            draw_string("     [Cerrar]", tx, DLG_Y + DLG_H - 25, col_dim);
+            draw_string("     [ESP]", tx, DLG_Y + DLG_H - 25, col_dim);
     }
 
     vga_flip();

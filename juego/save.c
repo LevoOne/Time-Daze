@@ -100,7 +100,7 @@ int load_game(void)
     }
     else if (g_game.screen.current_epoch == EPOCH_FUTURE)
     {
-        music_load_xm("MEDTHEME.XM");  /* pendiente */
+        music_load_xm("FUTTHEME.XM");  /* pendiente */
     }
     else
     {

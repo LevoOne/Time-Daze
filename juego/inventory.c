@@ -141,6 +141,13 @@ int inv_drop(int epoch, int screen, int x, int y)
     if (g_game.inv.carried == ITEM_NONE)            return 0;
     if (g_game.inv.instance_count >= MAX_ITEM_INSTANCES) return 0;
 
+    /* Chapú antes que ahcer nuevo repartop de índices de paleta.
+     * El tronco comparte el rango de paleta dinamica con el agua
+     * de P8 (indices 242-255) -- dejarlo alli corrompe el color
+     * de fondo de esa pantalla mientras siga en el suelo. */
+    if (g_game.inv.carried == ITEM_LOG && epoch == EPOCH_PREHISTORY && screen == 7)
+        return 0;
+
     /* No permitir depositar un objeto encima de otro ya presente
      * en el suelo (evita instancias superpuestas en logic_update,
      * p.ej. soltar el huevo justo donde esta el palo). */

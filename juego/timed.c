@@ -109,14 +109,28 @@ static void draw_frame(void)
     dialog_draw();
 
 #ifdef DEBUG
-    draw_string("EP:", 2, 2, 254);
-    draw_int(g_game.screen.current_epoch, 26, 2, 254);
-    draw_string("SC:", 50, 2, 254);
-    draw_int(g_game.screen.current_screen + 1, 74, 2, 254);
-    draw_string("X:", 2, 12, 254);
-    draw_int((int)g_game.player.x, 18, 12, 254);
-    draw_string("Y:", 50, 12, 254);
-    draw_int((int)g_game.player.y, 66, 12, 254);
+
+    /* Ajustamos color de tinta según época para que se lea bien */
+    {
+        int iTinta;
+
+        switch(g_game.screen.current_epoch)
+        {
+            case EPOCH_PREHISTORY: iTinta = 37; break;  
+            case EPOCH_MEDIEVAL:   iTinta = 96; break;  
+            case EPOCH_FUTURE:     iTinta = 254; break;  
+        }
+        
+        
+        draw_string("EP:", 2, 2, iTinta);
+        draw_int(g_game.screen.current_epoch, 26, 2, iTinta);
+        draw_string("SC:", 50, 2, iTinta);
+        draw_int(g_game.screen.current_screen + 1, 74, 2, iTinta);
+        draw_string("X:", 2, 12, iTinta);
+        draw_int((int)g_game.player.x, 18, 12, iTinta);
+        draw_string("Y:", 50, 12, iTinta);
+        draw_int((int)g_game.player.y, 66, 12, iTinta);
+    }
 
     /* Posicion de TODOS los objetos activos en la pantalla actual,
      * uno por linea, para comparar a ojo con X/Y del jugador sin
@@ -139,7 +153,7 @@ static void draw_frame(void)
             draw_int(g_game.inv.instances[di].y, 122, ly, 254);
 
             row++;
-            if (row >= 4) break; /* limite de filas visibles en el HUD */
+            if (row >= 4) break;
         }
     }
 #endif
@@ -242,7 +256,11 @@ static void game_loop(void)
             esc_was_pressed = 0;
 
         if (!dialog_is_open() && dialog_got_yes())
+        {
+            music_stop();
+            sfx_free(1);
             g_state = STATE_TITLE;
+        }
 
         /* 8. ACTUALIZAR CONTADOR DEL CRISTAL */
         if (g_hud.cristal_active)
@@ -273,7 +291,7 @@ static void game_loop(void)
 static void show_presentation(void)
 {
     BITMAP bmp;
-    int i;
+    int vol;
 
     /* Logo del concurso */
     load_bmp("contest.bmp", &bmp);
@@ -305,15 +323,17 @@ static void show_presentation(void)
     timer_wait(70);
 
     /* Logo Time Daze */
+    music_load_xm("INTRO.XM");
+    music_play(0);
     load_bmp("timed.bmp", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(210);
+    audio_safe_wait(210);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     /* ------------------
      * Secuencia de intro
@@ -323,81 +343,91 @@ static void show_presentation(void)
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(230);
+    audio_safe_wait(230);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     load_bmp("INTRO2.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(280);
+    audio_safe_wait(280);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     load_bmp("INTRO3.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(280);
+    audio_safe_wait(280);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     load_bmp("INTRO4.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(280);
+    audio_safe_wait(280);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     load_bmp("INTRO5.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(280);
+    audio_safe_wait(280);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     load_bmp("INTRO6.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(280);
+    audio_safe_wait(280);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     load_bmp("INTRO7.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(280);
+    audio_safe_wait(280);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
 
     load_bmp("INTRO8.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
     draw_bitmap(&bmp, (SCREEN_W - bmp.width)  >> 1, (SCREEN_H - bmp.height) >> 1);
     vga_fade_in(16, 7);
-    timer_wait(280);
+    audio_safe_wait(280);
     vga_fade_out(16, 7);
     free(bmp.data);
-    timer_wait(70);
+    audio_safe_wait(70);
+
+    /* Paramos meelodía de intro */
+    for (vol = 255; vol >= 0; vol -= 15)
+    {
+        judas_setmusicmastervolume(SFX_FIRST, (unsigned char)vol);
+        sound_update();
+        timer_wait(2);
+    }
+    music_stop();
 }
+
 
 /* ----------------------------------------------------------------
  * SHOW INSTRUCTIONS
@@ -477,6 +507,9 @@ static void show_game_over(void)
 {
     BITMAP bmp;
 
+    /* Detenemos la melodía en curso */
+    music_stop();
+
     load_bmp("GAMEOVER.BMP", &bmp);
     vga_clear_screen(0);
     set_palette_silent(bmp.palette);
@@ -505,6 +538,7 @@ static void show_menu(void)
     int    done;
 
     done = 0;
+
     while (!done)
     {
         has_save = save_exists();
@@ -582,23 +616,23 @@ int main(void)
     sfx_load(SFX_HURT,   "HURT.WAV");
     music_load_xm("PRETHEME.XM");
 
-    /* ----------------------------
+    /* TEMP ----------------------------
      * Secuencia de presentación 
      * ---------------------------- 
-    show_presentation();*/
+    show_presentation(); */
 
     /* Cargamos los assets gráficos */
     screen_init();
 
     do
     {
+        /* Estado inicial de la partida */
         g_state = STATE_GAME;
 
        /* Menu principal */
         show_menu();
 
         /* Bucle principal del juego */
-        //g_state = STATE_GAME;
         music_play(0);
         game_loop();
 

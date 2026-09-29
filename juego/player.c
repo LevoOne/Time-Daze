@@ -214,7 +214,11 @@ void player_hit(void)
 
     if (!g_debug_infinite_lives)
         g_game.player.lives--;
-    player_place(20, 100);
+
+    if (g_game.player.x < SCREEN_W / 2)
+        player_place(20, 100);                    /* estaba a la izquierda */
+    else
+        player_place(SCREEN_W - PLAYER_WIDTH - 20, 100);   /* estaba a la derecha */
 }
 
 /* ----------------------------------------------------------------
