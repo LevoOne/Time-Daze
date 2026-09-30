@@ -1261,7 +1261,7 @@ Efectos en formato WAV para:
 - **Video**: VGA modo 13h (320x200, 256 colores), double buffering
 - **Sonido**: Judas Sound System (Sound Blaster, XM + WAV)
 - **Emulacion**: DOSBox-X, PCem, 86Box
-- **Repositorio**: https://github.com/LevoOne/Tempus-Fugit (privado)
+- **Repositorio**: https://github.com/LevoOne/Time-Daze (público)
 
 ---
 
