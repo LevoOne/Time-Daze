@@ -1,6 +1,6 @@
-/*
+/* ----------------------------------------
  * hud.h - Sistema de HUD de Tempus Fugit
- */
+ * ---------------------------------------- */
 
 #ifndef HUD_H
 #define HUD_H

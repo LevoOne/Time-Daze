@@ -1,10 +1,10 @@
-/*
- * game.h - Estructuras y constantes globales de Tempus Fugit
+/* -----------------------------------------------------------
+ * game.h - Estructuras y constantes globales de Time Daze
  *
  * Este fichero es incluido por todos los sistemas del juego.
  * Define GameState y la variable global g_game.
  * C89: compatible con OpenWatcom 2.0
- */
+ * ----------------------------------------------------------- */
 
 #ifndef GAME_H
 #define GAME_H
@@ -133,12 +133,12 @@ typedef struct {
     ScreenManager screen;
 } GameState;
 
-/* ----------------------------------------------------------------
+/* -----------------------------------------------------------------------
  * VARIABLE GLOBAL
- * Definida en game.c, accesible desde todos los sistemas
- * ---------------------------------------------------------------- */
+ * Definida en game.c, accesible desde todos los sub-sistemas del código
+ * ----------------------------------------------------------------------- */
 extern GameState g_game;
-extern int g_debug_infinite_lives;   /* puerta trasera de calibracion: tecla 7 en el menu */
+extern int g_debug_infinite_lives;   /* puerta trasera para vidas infinitas (opción 7 del menú) */
 
 /* ----------------------------------------------------------------
  * INDICES DE EFECTOS DE SONIDO

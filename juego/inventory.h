@@ -1,6 +1,6 @@
-/*
- * inventory.h - Sistema de inventario de Tempus Fugit
- */
+/* -------------------------------------------------
+ * inventory.h - Sistema de inventario de Time Daze
+ * ------------------------------------------------- */
 
 #ifndef INVENTORY_H
 #define INVENTORY_H

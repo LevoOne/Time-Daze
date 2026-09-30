@@ -1,6 +1,6 @@
-/*
- * logic.h - Logica de puzzles y eventos de Tempus Fugit
- */
+/* -------------------------------------------------------
+ * logic.h - Logica de puzzles y eventos de Time Daze
+ * ------------------------------------------------------- */
 
 #ifndef LOGIC_H
 #define LOGIC_H

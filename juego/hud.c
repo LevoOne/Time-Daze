@@ -1,7 +1,7 @@
-/*
- * hud.c - Sistema de HUD de Tempus Fugit
- * C89: todas las variables declaradas al inicio del bloque.
- */
+/* -----------------------------------------------------------------------------------
+ * hud.c - Sistema de HUD de Time Daze
+ * C89: como siempre, declaramos todas las variables declaradas al inicio del bloque.
+ * ----------------------------------------------------------------------------------- */
 
 #include <string.h>
 #include "engine.h"

@@ -1,6 +1,6 @@
-/*
- * save.h - Sistema de guardado de Tempus Fugit
- */
+/* ---------------------------------------------
+ * save.h - Sistema de guardado de Time Daze
+ * --------------------------------------------- */
 
 #ifndef SAVE_H
 #define SAVE_H
@@ -11,7 +11,7 @@
  * CONSTANTES
  * ---------------------------------------------------------------- */
 #define SAVE_FILE     "SAVEGAME.DAT"
-#define SAVE_MAGIC    0x5446        /* 'TF' de Tempus Fugit */
+#define SAVE_MAGIC    0x5446        /* 'TF' de Tempus Fugit (nombre original del juego) */
 #define SAVE_VERSION  1
 
 /* ----------------------------------------------------------------

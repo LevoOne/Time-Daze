@@ -22,7 +22,7 @@ fragmentandolo en tres partes que se dispersan por el tiempo.
 Atrapado entre la Prehistoria, la Edad Media y un futuro post-apocaliptico, Eric
 debe recuperar los tres fragmentos del artefacto para poder regresar a su epoca.
 
-## Instrucciones (complementndo a las que se muestran en el menú del jeugo)
+## Instrucciones (complementando a las que se muestran en el menú del juego)
 
 Eric quedo atrapado entre tres épocas al activar por accidente un artefacto que su abuelo le había dicho que no tocara. Recuperar sus tres fragmentos, esparcidos por la Prehistoria, Edad Media y un Futuro distópico, es la unica forma de volver a casa -- y el camino rara vez es tan directo como parece a primera vista.
 

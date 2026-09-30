@@ -1,6 +1,7 @@
-/*
- * puzzles.h - Sistema de estado de puzzles de Tempus Fugit
- */
+/* ------------------------------------------------------
+ * puzzles.h - Sistema de estado de puzzles de Time Daze
+ * Referencia en GDD para más detalle
+ * ------------------------------------------------------ */
 
 #ifndef PUZZLES_H
 #define PUZZLES_H

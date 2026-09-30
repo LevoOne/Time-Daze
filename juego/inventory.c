@@ -1,10 +1,9 @@
-/*
- * inventory.c - Sistema de inventario de Tempus Fugit
+/* ------------------------------------------------------------
+ * inventory.c - Sistema de inventario de Time Daze
  *
- * Gestiona el objeto que lleva Eric y los objetos
- * depositados en el mapa.
+ * Gestiona el objeto que lleva Eric y los  depositados en el mapa.
  * C89: todas las variables declaradas al inicio del bloque.
- */
+ * ------------------------------------------------------------ */
 
 #include "engine.h"
 #include "game.h"

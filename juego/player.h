@@ -1,6 +1,6 @@
-/*
- * player.h - Sistema de Eric (jugador) en Tempus Fugit
- */
+/* -------------------------------------------------
+ * player.h - Sistema de Eric (jugador) en Time Daze
+ * ------------------------------------------------- */
 
 #ifndef PLAYER_H
 #define PLAYER_H

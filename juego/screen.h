@@ -1,6 +1,6 @@
-/*
- * screen.h - Sistema de pantallas de Tempus Fugit
- */
+/* ---------------------------------------------
+ * screen.h - Sistema de pantallas de Time Daze
+ * --------------------------------------------- */
 
 #ifndef SCREEN_SYS_H
 #define SCREEN_SYS_H

@@ -1,11 +1,11 @@
-/*
- * logic.c - Logica de puzzles y eventos de Tempus Fugit
+/* ----------------------------------------------------------------
+ * logic.c - Logica de puzzles y eventos de Time Daze
  *
- * Contiene la logica concreta de cada puzzle:
- * que pasa cuando Eric interactua con objetos y personajes.
+ * Contiene la logica concreta de cada puzzle: que pasa cuando Eric 
+ * interactua con objetos y personajes según diseño del GDD
  *
  * Todas las variables se declaran al inicio del bloque (C89).
- */
+ * ---------------------------------------------------------------- */
 
 #include "engine.h"
 #include "game.h"

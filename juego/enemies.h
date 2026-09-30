@@ -1,6 +1,6 @@
-/*
- * enemies.h - Sistema de enemigos de Tempus Fugit
- */
+/* ----------------------------------------------
+ * enemies.h - Sistema de enemigos de Time Daze
+ * ---------------------------------------------- */
 
 #ifndef ENEMIES_H
 #define ENEMIES_H

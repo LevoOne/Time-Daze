@@ -20,35 +20,35 @@ const char *g_hints[3][9][3] =
         { "Tengo que",                  "seguir bajando",        NULL },  /* P4 */
         { "Que mejor sitio",            "para guardar progreso",          NULL },  /* P5 */
         { "Nada por aqui",              "",                         NULL },  /* P6 */
-        { "Jodo floro con el lagarto",  "",                         NULL },  /* P7 */
-        { "Osti tu!! Que no me",        "rocen esos peces",         NULL },  /* P8 */
+        { "Lagarto, lagarto ...",       "literalmente.",                         NULL },  /* P7 */
+        { "Odio este rio.",             "Odio estos peces.",         NULL },  /* P8 */
         { "Parece que hay un",          "mensaje en la piedra",             NULL },  /* P9 */
     },
 
     /* EDAD MEDIA */
     {
         { "Alucina vecina",             "...donde estoy??",     NULL },  /* P1 */
-        { "Una casa...",                "Habra alguien?",   NULL },  /* P2 */
-        { "Parece util...",             "igual lo cojo",                       NULL },  /* P3 */
-        { "La fragua trabaja dia",      "y noche",               NULL },  /* P4 */
-        { "La capilla guarda",          "secretos del pasado",   NULL },  /* P5 */
-        { "El mercado oculta mas",      "de lo que vende",       NULL },  /* P6 */
-        { "Las mazmorras no",           "estan vacias",          NULL },  /* P7 */
-        { "El laboratorio del",         "alquimista humea",      NULL },  /* P8 */
-        { "La torre mas alta guarda",   "lo mas valioso",        NULL },  /* P9 */
+        { "Una casa...",                "habra alguien?",       NULL },  /* P2 */
+        { "Parece util...",             "igual lo cojo",        NULL },  /* P3 */
+        { "La fragua trabaja dia",      "y noche",              NULL },  /* P4 */
+        { "La capilla guarda",          "secretos del pasado",  NULL },  /* P5 */
+        { "El mercado oculta mas",      "de lo que vende",      NULL },  /* P6 */
+        { "Las mazmorras no",           "estan vacias",         NULL },  /* P7 */
+        { "El laboratorio del",         "alquimista humea",     NULL },  /* P8 */
+        { "La torre mas alta guarda",   "lo mas valioso",       NULL },  /* P9 */
     },
 
     /* FUTURO */
     {
-        { "Las maquinas hablan",        "si sabes escuchar",        NULL },  /* P1 */
-        { "La radiacion no",            "perdona errores",       NULL },  /* P2 */
-        { "Los drones patrullan",       "sin descanso",          NULL },  /* P3 */
-        { "Los drones patrullan",       "sin descanso",          NULL },  /* P4 */
-        { "El nucleo late en las",      "profundidades",         NULL },  /* P5 */
-        { "La puerta hermetica",        "lleva semanas cerrada", NULL },  /* P6 */
-        { "El aire aqui tiene",         "sabor metalico",        NULL },  /* P7 */
-        { "La terminal todavia",        "funciona",              NULL },  /* P8 */
-        { "El portal espera",           "ser activado",          NULL },  /* P9 */
+        { "Espero el hueco y corro.",    "Sin dramas.",             NULL },  /* P1 */
+        { "Ni un ruido...",             "tampoco me tranquiliza",   NULL },  /* P2 */
+        { "Los drones patrullan",       "sin descanso!!!",             NULL },  /* P3 */
+        { "Los drones patrullan",       "sin descanso",             NULL },  /* P4 */
+        { "El nucleo late en las",      "profundidades",            NULL },  /* P5 */
+        { "La puerta hermetica",        "lleva semanas cerrada",    NULL },  /* P6 */
+        { "El aire aqui tiene",         "sabor metalico",           NULL },  /* P7 */
+        { "La terminal todavia",        "funciona",                 NULL },  /* P8 */
+        { "El portal espera",           "ser activado",             NULL },  /* P9 */
     },
 };
 

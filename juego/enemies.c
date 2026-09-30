@@ -1,7 +1,7 @@
-/*
- * enemies.c - Sistema de enemigos de Tempus Fugit
+/* ---------------------------------------------------------
+ * enemies.c - Sistema de enemigos de Time Daze
  * C89: todas las variables declaradas al inicio del bloque.
- */
+ * --------------------------------------------------------- */
 
 #include "engine.h"
 #include "game.h"

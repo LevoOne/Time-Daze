@@ -1,5 +1,5 @@
-/*
- * screen.c - Sistema de pantallas de Tempus Fugit
+/* ----------------------------------------------------------------
+ * screen.c - Sistema de pantallas de Time Daze
  *
  * Gestiona:
  *   - Tabla de conexiones entre pantallas
@@ -9,7 +9,7 @@
  *   - Spritesheet de Eric
  *
  * C89: todas las variables declaradas al inicio del bloque.
- */
+ * ---------------------------------------------------------------- */
 
 #include <string.h>
 #include "engine.h"
