@@ -625,8 +625,8 @@ int main(void)
     /* ----------------------------
      * Secuencia de presentación 
      * ---------------------------- */
-     /* TEMP no olvidar des-comentar esta llamada en la versión final 
-    show_presentation();*/
+     /* TEMP no olvidar des-comentar esta llamada en la versión final */
+    show_presentation();
 
     /* Cargamos los assets gráficos */
     screen_init();
