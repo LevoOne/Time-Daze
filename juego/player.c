@@ -27,7 +27,7 @@ void player_init(void)
     g_game.player.anim_frame = 0;
     g_game.player.anim_timer = 0;
     g_game.player.lives      = PLAYER_LIVES;
-    invuln_timer = 0;
+    g_game.player.invuln_timer = 0;
 }
 
 /* ----------------------------------------------------------------
