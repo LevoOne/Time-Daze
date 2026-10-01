@@ -119,6 +119,7 @@ typedef struct {
     int   anim_frame;
     int   anim_timer;
     int   lives;
+    int invuln_timer;   /* ticks restantes de invulnerabilidad tras perder una vida */
 } Player;
 
 typedef struct {

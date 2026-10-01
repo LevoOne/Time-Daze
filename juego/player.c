@@ -27,6 +27,7 @@ void player_init(void)
     g_game.player.anim_frame = 0;
     g_game.player.anim_timer = 0;
     g_game.player.lives      = PLAYER_LIVES;
+    invuln_timer = 0;
 }
 
 /* ----------------------------------------------------------------
@@ -215,10 +216,19 @@ void player_hit(void)
     if (!g_debug_infinite_lives)
         g_game.player.lives--;
 
-    if (g_game.player.x < SCREEN_W / 2)
-        player_place(20, 100);                    /* estaba a la izquierda */
+     /* Caso específico para P3 Prehistoria: el oso bloquea el paso a proposito mientras la miel no este resuelta
+     *  (saltarlo es imposible por diseno). Si nso mata el oso en el lado derecho, el puzle quedaria sin resolver
+     *  ya que Eric aparecería en el lado derecho. Hacemos que reaparezca siempre en la izquierda. */
+    if (g_game.screen.current_epoch == EPOCH_PREHISTORY && g_game.screen.current_screen == 2)
+    {
+        player_place(20, 100);
+    }
+    else if (g_game.player.x < SCREEN_W / 2)
+        player_place(20, 100);      /* estaba en la izquierda */
     else
-        player_place(SCREEN_W - PLAYER_WIDTH - 20, 100);   /* estaba a la derecha */
+        player_place(SCREEN_W - PLAYER_WIDTH - 20, 100); /* Estaba en la derecha */
+
+    g_game.player.invuln_timer = 90;
 }
 
 /* ----------------------------------------------------------------

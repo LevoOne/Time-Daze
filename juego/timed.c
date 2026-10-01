@@ -184,7 +184,10 @@ static void game_loop(void)
         player_event = player_update();
 
         /* 4. COLISION CON ENEMIGOS */
-        if (!dialog_is_open() && enemies_check_collision())
+        if (g_game.player.invuln_timer > 0)
+            g_game.player.invuln_timer--;
+
+        if (!dialog_is_open() && g_game.player.invuln_timer == 0 && enemies_check_collision())
         {
             player_hit();
             screen_load(epoch, screen);
@@ -622,8 +625,8 @@ int main(void)
     /* ----------------------------
      * Secuencia de presentación 
      * ---------------------------- */
-     /* TEMP no olvidar des-comentar esta llamada en la versión final */
-    show_presentation();
+     /* TEMP no olvidar des-comentar esta llamada en la versión final 
+    show_presentation();*/
 
     /* Cargamos los assets gráficos */
     screen_init();
